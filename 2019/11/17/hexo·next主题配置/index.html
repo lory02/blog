@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Lory&#39;s Notes">
 <meta property="og:description" content="next主题配置我是按照next中文文档配置 — https:&#x2F;&#x2F;theme-next.iissnan.com&#x2F;  网站上已经写的很清楚了  遇到的问题 根据网站配置标签和分类导航点击进入空白页？ 猜测可能是最终生成的链接并没有处理配置项中的空格，导致生成链接中包含了字符导致了空白页 解决方法: 将 &#x2F; || home , 将原有的 ||前面的空格清除掉 123456menu:  home: &#x2F;|">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-11-18T07:32:49.336Z">
+<meta property="og:updated_time" content="2019-11-18T08:29:09.110Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -322,12 +322,12 @@
 <p>网站上已经写的很清楚了</p>
 <ul>
 <li><p>遇到的问题</p>
-<p>根据网站配置标签和分类导航点击进入空白页？</p>
+<p><strong>根据网站配置标签和分类导航点击进入空白页？</strong></p>
 <p>猜测可能是最终生成的链接并没有处理配置项中的空格，导致生成链接中包含了字符导致了空白页</p>
 <p>解决方法: 将 / || home , 将原有的 ||前面的空格清除掉</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">menu:</span><br><span class="line">  home: /||home</span><br><span class="line">  #about: /about/ || user</span><br><span class="line">  tags: /tags||tags</span><br><span class="line">  categories: /categories||th</span><br><span class="line">  archives: /archives</span><br></pre></td></tr></table></figure>
 
-<p>menu_icon</p>
+<p><strong>设置menu_icon无效</strong></p>
 <p>按照文档的方式分开设置menu 和 menu_icon，发现并不能显示icon , 所以最后还是将icon设置在menu中</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">menu_icons:</span><br><span class="line">  enable: true</span><br><span class="line">  # Icon Mapping.</span><br><span class="line">  home: home</span><br><span class="line">  about: user</span><br><span class="line">  categories: th</span><br><span class="line">  tags: tags</span><br><span class="line">  archives: archive</span><br><span class="line">  commonweal: heartbeat</span><br></pre></td></tr></table></figure>
 

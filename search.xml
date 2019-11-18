@@ -7,12 +7,12 @@
 <p>网站上已经写的很清楚了</p>
 <ul>
 <li><p>遇到的问题</p>
-<p>根据网站配置标签和分类导航点击进入空白页？</p>
+<p><strong>根据网站配置标签和分类导航点击进入空白页？</strong></p>
 <p>猜测可能是最终生成的链接并没有处理配置项中的空格，导致生成链接中包含了字符导致了空白页</p>
 <p>解决方法: 将 / || home , 将原有的 ||前面的空格清除掉</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">menu:</span><br><span class="line">  home: /||home</span><br><span class="line">  #about: /about/ || user</span><br><span class="line">  tags: /tags||tags</span><br><span class="line">  categories: /categories||th</span><br><span class="line">  archives: /archives</span><br></pre></td></tr></table></figure>
 
-<p>menu_icon</p>
+<p><strong>设置menu_icon无效</strong></p>
 <p>按照文档的方式分开设置menu 和 menu_icon，发现并不能显示icon , 所以最后还是将icon设置在menu中</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">menu_icons:</span><br><span class="line">  enable: true</span><br><span class="line">  # Icon Mapping.</span><br><span class="line">  home: home</span><br><span class="line">  about: user</span><br><span class="line">  categories: th</span><br><span class="line">  tags: tags</span><br><span class="line">  archives: archive</span><br><span class="line">  commonweal: heartbeat</span><br></pre></td></tr></table></figure>
 
@@ -72,25 +72,25 @@
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ theme: next</span><br></pre></td></tr></table></figure>
 
 <h5 id="6-github-pages"><a href="#6-github-pages" class="headerlink" title="6.github pages"></a>6.github pages</h5><ul>
-<li><p>新建仓库</p>
+<li><p><strong>新建仓库</strong></p>
 <ul>
 <li>仓库名：blog （名字可以随便取）</li>
 <li>注： 如果你希望你的站点能通过 <code>&lt;你的 GitHub 用户名&gt;.github.io</code> 域名访问，你的 repository 应该直接命名为 <code>&lt;你的 GitHub 用户名&gt;.github.io</code> 名</li>
 </ul>
 </li>
-<li><p>安装 hexo deploy插件（git部署）</p>
+<li><p><strong>安装 hexo deploy插件（git部署）</strong></p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm install --save hexo-deployer-git</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>修改本地blog目录下的_config.yaml</p>
+<li><p><strong>修改本地blog目录下的_config.yaml</strong></p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#注意格式，: 后面加空格</span><br><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repository: https://github.com/username/blog.git  #你的仓库地址</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>自定义域名访问 github page</p>
+<li><p><strong>自定义域名访问 github page</strong></p>
 <p>godaddy</p>
 <p>首先在godaddy网站买一个域名（这个网站可以用支付宝付款）</p>
 <p>然后再godaddy的DNS管理中，添加几条记录，用来配置域名指向的ip地址</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">A记录 ： 将域名指向ip地址</span><br><span class="line">@ 相当于 xxx.com</span><br><span class="line">185.199.108.153 : github的ip地址见官网</span><br><span class="line">A	    @	    185.199.108.153  （github的ip地址见官网）</span><br><span class="line"></span><br><span class="line">CNAME记录 ： 将域名指向另一个域名（用于多个域名指向同一个ip地址）</span><br><span class="line">blog：二级域名 相当于 blog.xxx.com</span><br><span class="line">CNAME	blog	username.github.io</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>github </p>
+<li><p><strong>github</strong> </p>
 <p>在github的博客仓库内创建一个CNAME（没有后缀），输入你购买的域名 （github服务器接收到请求后，会根据用户的CNAME文件，来判断显示哪个用户的github page）</p>
 <p>注：由于 hexo d 上传文件之后会覆盖github的CNAME文件，所以需要在hexo的source中重新新建CNAME</p>
 <p>配置完之后，就可以用blog.xxx.com域名访问github page了</p>
@@ -99,6 +99,42 @@
 ]]></content>
       <tags>
         <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>hexo deploy部署免去输入密码</title>
+    <url>/2019/11/17/hexo%20deploy%E9%83%A8%E7%BD%B2%E5%85%8D%E5%8E%BB%E8%BE%93%E5%85%A5%E5%AF%86%E7%A0%81/</url>
+    <content><![CDATA[<p>在本地打开git bash ，用 <code>ssh-keygen</code> 生成密钥 </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ ssh-keygen -t rsa -C &quot;your_email@example.com&quot;</span><br><span class="line">//之后一路按enter即可</span><br></pre></td></tr></table></figure>
+
+
+
+<p>然后在本地 /c/Users/username/.ssh 会多两个文件夹</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">id_rsa</span><br><span class="line">id_ras.pub</span><br></pre></td></tr></table></figure>
+
+
+
+<p>登陆github，进入博客的repo， 点击 Settings 》 Deploy keys 》Add deploy key ， 打开 id_ras.pub 复制内容，添加到 deploy key中</p>
+<p>接下来测试配置shifouchengg</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ ssh -T git@github.com</span><br></pre></td></tr></table></figure>
+
+
+
+<p>如果出现以下内容即表示配置完成</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Hi username! You&apos;ve successfully authenticated, but GitHub does not</span><br><span class="line">provide shell access.</span><br></pre></td></tr></table></figure>
+
+
+
+<p>更改hexo deploy配置</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: git@github.com:username/blog.git  #仓库地址</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>blog</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+        <tag>ssh</tag>
       </tags>
   </entry>
   <entry>
@@ -139,42 +175,6 @@
       <tags>
         <tag>dns</tag>
         <tag>net</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>hexo deploy部署免去输入密码</title>
-    <url>/2019/11/17/hexo%20deploy%E9%83%A8%E7%BD%B2%E5%85%8D%E5%8E%BB%E8%BE%93%E5%85%A5%E5%AF%86%E7%A0%81/</url>
-    <content><![CDATA[<p>在本地打开git bash ，用 <code>ssh-keygen</code> 生成密钥 </p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ ssh-keygen -t rsa -C &quot;your_email@example.com&quot;</span><br><span class="line">//之后一路按enter即可</span><br></pre></td></tr></table></figure>
-
-
-
-<p>然后在本地 /c/Users/username/.ssh 会多两个文件夹</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">id_rsa</span><br><span class="line">id_ras.pub</span><br></pre></td></tr></table></figure>
-
-
-
-<p>登陆github，进入博客的repo， 点击 Settings 》 Deploy keys 》Add deploy key ， 打开 id_ras.pub 复制内容，添加到 deploy key中</p>
-<p>接下来测试配置shifouchengg</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ ssh -T git@github.com</span><br></pre></td></tr></table></figure>
-
-
-
-<p>如果出现以下内容即表示配置完成</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Hi username! You&apos;ve successfully authenticated, but GitHub does not</span><br><span class="line">provide shell access.</span><br></pre></td></tr></table></figure>
-
-
-
-<p>更改hexo deploy配置</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: git@github.com:username/blog.git  #仓库地址</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>blog</category>
-      </categories>
-      <tags>
-        <tag>hexo</tag>
-        <tag>ssh</tag>
       </tags>
   </entry>
 </search>
