@@ -1,28 +1,180 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Hello World</title>
-    <url>/2019/11/16/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<p>testingtesting</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+    <title>hexo·next主题配置</title>
+    <url>/2019/11/17/hexo%C2%B7next%E4%B8%BB%E9%A2%98%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h5 id="next主题配置"><a href="#next主题配置" class="headerlink" title="next主题配置"></a>next主题配置</h5><p>我是按照next中文文档配置 — <a href="https://theme-next.iissnan.com/" target="_blank" rel="noopener">https://theme-next.iissnan.com/</a> </p>
+<p>网站上已经写的很清楚了</p>
+<ul>
+<li><p>遇到的问题</p>
+<p>根据网站配置标签和分类导航点击进入空白页？</p>
+<p>猜测可能是最终生成的链接并没有处理配置项中的空格，导致生成链接中包含了字符导致了空白页</p>
+<p>解决方法: 将 / || home , 将原有的 ||前面的空格清除掉</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">menu:</span><br><span class="line">  home: /||home</span><br><span class="line">  #about: /about/ || user</span><br><span class="line">  tags: /tags||tags</span><br><span class="line">  categories: /categories||th</span><br><span class="line">  archives: /archives</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>menu_icon</p>
+<p>按照文档的方式分开设置menu 和 menu_icon，发现并不能显示icon , 所以最后还是将icon设置在menu中</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">menu_icons:</span><br><span class="line">  enable: true</span><br><span class="line">  # Icon Mapping.</span><br><span class="line">  home: home</span><br><span class="line">  about: user</span><br><span class="line">  categories: th</span><br><span class="line">  tags: tags</span><br><span class="line">  archives: archive</span><br><span class="line">  commonweal: heartbeat</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>总结：与其浪费时间在配置上（跟着文档配也不一定是对的），真的还不如直接上网搜一键安装</p>
+</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>hexo·在文章中插入图片</title>
+    <url>/2019/11/17/hexo%C2%B7%E5%9C%A8%E6%96%87%E7%AB%A0%E4%B8%AD%E6%8F%92%E5%85%A5%E5%9B%BE%E7%89%87/</url>
+    <content><![CDATA[<h5 id="hexo配置"><a href="#hexo配置" class="headerlink" title="hexo配置"></a>hexo配置</h5><p>更改post_asset_folder为true，当你 hexo new article 时,除了在 \source_posts 会生成一个mk文件，还会在生成一个同名的文件夹，你可在这个文件夹保存你要插入的图片</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">post_asset_folder: true</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<h5 id="安装hexo-asset-image插件"><a href="#安装hexo-asset-image插件" class="headerlink" title="安装hexo-asset-image插件"></a>安装hexo-asset-image插件</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm install https://github.com/CodeFalling/hexo-asset-image --save</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+<h5 id="在mk中插入图片的方式"><a href="#在mk中插入图片的方式" class="headerlink" title="在mk中插入图片的方式"></a>在mk中插入图片的方式</h5><p>使用相对路径插入图片</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">![img](./article/imgName.PNG)</span><br><span class="line">![图片别名](./文章名/图片.png)</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>hexo使用</title>
+    <url>/2019/11/17/hexo%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<h5 id="1-安装"><a href="#1-安装" class="headerlink" title="1.安装"></a>1.安装</h5><ul>
+<li><p>安装node.js</p>
+</li>
+<li><p>安装git</p>
+</li>
+<li><p>安装Hexo</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h5 id="2-建站"><a href="#2-建站" class="headerlink" title="2.建站"></a>2.建站</h5><p>打开指定文件夹，在该文件夹中创建博客项目（我用的文件名是blog）</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo init blog</span><br><span class="line">$ cd blog</span><br><span class="line">$ npm install</span><br></pre></td></tr></table></figure>
+
+<h5 id="3-新建文章"><a href="#3-新建文章" class="headerlink" title="3.新建文章"></a>3.新建文章</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo new [layout] &lt;title&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>layout ：布局，包括了post（默认选项）、page、draft </li>
+<li>title：文章标题</li>
+</ul>
+<h5 id="4-生成静态文件"><a href="#4-生成静态文件" class="headerlink" title="4.生成静态文件"></a>4.生成静态文件</h5><p>​    hexo generate （简写：hexo g）：生成静态文件</p>
+<p>​    hexo clean ：每次修改文章后，先 hexo clean 一下，然后通过hexo g 重新生成</p>
+<p>​    hexo server （简写： hexo s）：启动本地服务器（端口为4000）</p>
+<h5 id="5-修改主题"><a href="#5-修改主题" class="headerlink" title="5.修改主题"></a>5.修改主题</h5><p>可以直接下载，然后解压到建站根目录的themes文件夹下，或者直接git clone</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> https://github.com/theme-next/hexo-theme-next themes/next</span><br></pre></td></tr></table></figure>
+
+<p>安装好之后，在hexo的_config.yml配置文件，更改them字段为新的主题名 next</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ theme: next</span><br></pre></td></tr></table></figure>
+
+<h5 id="6-github-pages"><a href="#6-github-pages" class="headerlink" title="6.github pages"></a>6.github pages</h5><ul>
+<li><p>新建仓库</p>
+<ul>
+<li>仓库名：blog （名字可以随便取）</li>
+<li>注： 如果你希望你的站点能通过 <code>&lt;你的 GitHub 用户名&gt;.github.io</code> 域名访问，你的 repository 应该直接命名为 <code>&lt;你的 GitHub 用户名&gt;.github.io</code> 名</li>
+</ul>
+</li>
+<li><p>安装 hexo deploy插件（git部署）</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm install --save hexo-deployer-git</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改本地blog目录下的_config.yaml</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#注意格式，: 后面加空格</span><br><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repository: https://github.com/username/blog.git  #你的仓库地址</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>自定义域名访问 github page</p>
+<p>godaddy</p>
+<p>首先在godaddy网站买一个域名（这个网站可以用支付宝付款）</p>
+<p>然后再godaddy的DNS管理中，添加几条记录，用来配置域名指向的ip地址</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">A记录 ： 将域名指向ip地址</span><br><span class="line">@ 相当于 xxx.com</span><br><span class="line">185.199.108.153 : github的ip地址见官网</span><br><span class="line">A	    @	    185.199.108.153  （github的ip地址见官网）</span><br><span class="line"></span><br><span class="line">CNAME记录 ： 将域名指向另一个域名（用于多个域名指向同一个ip地址）</span><br><span class="line">blog：二级域名 相当于 blog.xxx.com</span><br><span class="line">CNAME	blog	username.github.io</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>github </p>
+<p>在github的博客仓库内创建一个CNAME（没有后缀），输入你购买的域名 （github服务器接收到请求后，会根据用户的CNAME文件，来判断显示哪个用户的github page）</p>
+<p>注：由于 hexo d 上传文件之后会覆盖github的CNAME文件，所以需要在hexo的source中重新新建CNAME</p>
+<p>配置完之后，就可以用blog.xxx.com域名访问github page了</p>
+</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>DNS</title>
+    <url>/2019/11/17/DNS/</url>
+    <content><![CDATA[<h4 id="DNS简介"><a href="#DNS简介" class="headerlink" title="DNS简介"></a>DNS简介</h4><p>DNS 实质上是一个 <strong>域名</strong> 和 <strong>IP</strong> 相互映射的分布式数据库，可以理解未用于整理和识别各个域名的网络电话簿。类比电话簿是将“Acme Pizza”之类的名称转换为要拨打的正确电话号码，而 DNS 将www. google. com 之类的网络地址转换为托管该网站的计算机的物理 IP 地址，如“74.125.19.147”。 </p>
+<h4 id="DNS解析"><a href="#DNS解析" class="headerlink" title="DNS解析"></a>DNS解析</h4><p>通过DNS服务器，查询出域名对应的IP地址。</p>
+<p>域名解析的流程是：<strong>域名  -  DNS（域名解析服务器）-  网站空间（主机）</strong></p>
+<h4 id="DNS资源记录"><a href="#DNS资源记录" class="headerlink" title="DNS资源记录"></a>DNS资源记录</h4><p>资源记录，即购买域名的用户设置域名对应IP所产生的注册信息。（类似于域名和ip的对照表）</p>
+<p>DNS服务器上保存的注册信息，上面包含用户购买的域名和该域名所设置的ip地址</p>
+<p><img src="/2019/11/17/DNS/dns.png" alt="dns"></p>
+<ul>
+<li><p>域名 ： 服务器、邮件服务器（邮件地址中@后面的部分）的名称 </p>
+</li>
+<li><p>class ： 在最早设计DNS方案时，DNS在互联网以外的其他网络中的应用也被考虑到了，而Class就是用来识别网络的信息。不过，如今除了 互联网并没有其他的网络了，因此Class的值永远是代表互联网的IN </p>
+</li>
+<li><p>记录类型：表示域名对应何种类型的记录。。例如，当类型为A时，表示域名 对应的是IP地址；当类型为MX时，表示域名对应的是邮件服务 器。对于不同的记录类型，服务器向客户端返回的信息也会不同</p>
+<hr>
+</li>
+</ul>
+<p><strong>A记录和CNAME记录</strong></p>
+<p><strong>A记录</strong></p>
+<p>用于将域名指向一个IPv4地址（例如：100.100.100.100） 。使用github page时，可以添加github的ip地址，将自己购买域名执行github</p>
+<p><strong>CNAME记录</strong></p>
+<p> CNAME 记录，将一个别名关联到另一个真正的或规范的域名，设置别名来访问网站。例如，将 blog.mydomainname.com 指向 username.github.io</p>
+<p><strong>A记录与CNAME记录的关系</strong></p>
+<p>A记录是把域名解析到IP地址，而CNAME记录是把域名解析到另外一个域名，而这个域名最终会指向A记录，在功能实现在上A记录与CNAME记录没有区别。</p>
+<p>CNAME记录在做IP地址变更时要A记录方便。CNAME记录允许将多个名字映射到同一台计算机，当有多个域名需要指向同一服务器IP，此时可以将一个域名做A记录指向服务器IP，然后将其他的域名做别名(即：CNAME)到A记录的域名上。当服务器IP地址变更时，只需要更改A记录的那个域名到新IP上，其它做别名的域名会自动更改到新的IP地址上，而不必对每个域名做更改。</p>
+<h4 id="管理DNS"><a href="#管理DNS" class="headerlink" title="管理DNS"></a>管理DNS</h4><p>如果想自己搭服务器做自己的网站，可以购买一个域名（Godaddy.com或者name.com上面），然后在域名服务商的DNS管理页面，配置域名所指向的ip地址。例如，添加一条A记录，填写自己服务器的ip地址，这样访问域名，就可以在DNS服务器上查到配置的信息，访问到自己的服务器了</p>
+<hr>
+<p>参考：</p>
+<p>  <a href="https://skyao.io/learning-dns/" target="_blank" rel="noopener">DNS学习笔记</a>  by skyao </p>
+<p>《网络是怎样连接的》by 户根勤</p>
 ]]></content>
       <categories>
-        <category>Testing</category>
+        <category>网络</category>
       </categories>
       <tags>
-        <tag>hello</tag>
+        <tag>dns</tag>
+        <tag>net</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>hexo deploy部署免去输入密码</title>
+    <url>/2019/11/17/hexo%20deploy%E9%83%A8%E7%BD%B2%E5%85%8D%E5%8E%BB%E8%BE%93%E5%85%A5%E5%AF%86%E7%A0%81/</url>
+    <content><![CDATA[<p>在本地打开git bash ，用 <code>ssh-keygen</code> 生成密钥 </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ ssh-keygen -t rsa -C &quot;your_email@example.com&quot;</span><br><span class="line">//之后一路按enter即可</span><br></pre></td></tr></table></figure>
+
+
+
+<p>然后在本地 /c/Users/username/.ssh 会多两个文件夹</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">id_rsa</span><br><span class="line">id_ras.pub</span><br></pre></td></tr></table></figure>
+
+
+
+<p>登陆github，进入博客的repo， 点击 Settings 》 Deploy keys 》Add deploy key ， 打开 id_ras.pub 复制内容，添加到 deploy key中</p>
+<p>接下来测试配置shifouchengg</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ ssh -T git@github.com</span><br></pre></td></tr></table></figure>
+
+
+
+<p>如果出现以下内容即表示配置完成</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Hi username! You&apos;ve successfully authenticated, but GitHub does not</span><br><span class="line">provide shell access.</span><br></pre></td></tr></table></figure>
+
+
+
+<p>更改hexo deploy配置</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: git@github.com:username/blog.git  #仓库地址</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>blog</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+        <tag>ssh</tag>
       </tags>
   </entry>
 </search>
