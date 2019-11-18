@@ -102,42 +102,6 @@
       </tags>
   </entry>
   <entry>
-    <title>hexo deploy部署免去输入密码</title>
-    <url>/2019/11/17/hexo%20deploy%E9%83%A8%E7%BD%B2%E5%85%8D%E5%8E%BB%E8%BE%93%E5%85%A5%E5%AF%86%E7%A0%81/</url>
-    <content><![CDATA[<p>在本地打开git bash ，用 <code>ssh-keygen</code> 生成密钥 </p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ ssh-keygen -t rsa -C &quot;your_email@example.com&quot;</span><br><span class="line">//之后一路按enter即可</span><br></pre></td></tr></table></figure>
-
-
-
-<p>然后在本地 /c/Users/username/.ssh 会多两个文件夹</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">id_rsa</span><br><span class="line">id_ras.pub</span><br></pre></td></tr></table></figure>
-
-
-
-<p>登陆github，进入博客的repo， 点击 Settings 》 Deploy keys 》Add deploy key ， 打开 id_ras.pub 复制内容，添加到 deploy key中</p>
-<p>接下来测试配置shifouchengg</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ ssh -T git@github.com</span><br></pre></td></tr></table></figure>
-
-
-
-<p>如果出现以下内容即表示配置完成</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Hi username! You&apos;ve successfully authenticated, but GitHub does not</span><br><span class="line">provide shell access.</span><br></pre></td></tr></table></figure>
-
-
-
-<p>更改hexo deploy配置</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: git@github.com:username/blog.git  #仓库地址</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>blog</category>
-      </categories>
-      <tags>
-        <tag>hexo</tag>
-        <tag>ssh</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>DNS</title>
     <url>/2019/11/17/DNS/</url>
     <content><![CDATA[<h4 id="DNS简介"><a href="#DNS简介" class="headerlink" title="DNS简介"></a>DNS简介</h4><p>DNS 实质上是一个 <strong>域名</strong> 和 <strong>IP</strong> 相互映射的分布式数据库，可以理解未用于整理和识别各个域名的网络电话簿。类比电话簿是将“Acme Pizza”之类的名称转换为要拨打的正确电话号码，而 DNS 将www. google. com 之类的网络地址转换为托管该网站的计算机的物理 IP 地址，如“74.125.19.147”。 </p>
@@ -175,6 +139,42 @@
       <tags>
         <tag>dns</tag>
         <tag>net</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>hexo deploy部署免去输入密码</title>
+    <url>/2019/11/17/hexo%20deploy%E9%83%A8%E7%BD%B2%E5%85%8D%E5%8E%BB%E8%BE%93%E5%85%A5%E5%AF%86%E7%A0%81/</url>
+    <content><![CDATA[<p>在本地打开git bash ，用 <code>ssh-keygen</code> 生成密钥 </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ ssh-keygen -t rsa -C &quot;your_email@example.com&quot;</span><br><span class="line">//之后一路按enter即可</span><br></pre></td></tr></table></figure>
+
+
+
+<p>然后在本地 /c/Users/username/.ssh 会多两个文件夹</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">id_rsa</span><br><span class="line">id_ras.pub</span><br></pre></td></tr></table></figure>
+
+
+
+<p>登陆github，进入博客的repo， 点击 Settings 》 Deploy keys 》Add deploy key ， 打开 id_ras.pub 复制内容，添加到 deploy key中</p>
+<p>接下来测试配置shifouchengg</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ ssh -T git@github.com</span><br></pre></td></tr></table></figure>
+
+
+
+<p>如果出现以下内容即表示配置完成</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Hi username! You&apos;ve successfully authenticated, but GitHub does not</span><br><span class="line">provide shell access.</span><br></pre></td></tr></table></figure>
+
+
+
+<p>更改hexo deploy配置</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: git@github.com:username/blog.git  #仓库地址</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>blog</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+        <tag>ssh</tag>
       </tags>
   </entry>
 </search>
