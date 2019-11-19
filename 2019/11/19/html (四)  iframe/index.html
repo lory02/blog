@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="hexo,ssh," />
+  <meta name="keywords" content="html,iframe,clickjacking," />
 
 
 
@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="在本地打开git bash ，用 ssh-keygen 生成密钥  12$ ssh-keygen -t rsa -C &amp;quot;your_email@example.com&amp;quot;&#x2F;&#x2F;之后一路按enter即可    然后在本地 &#x2F;c&#x2F;Users&#x2F;username&#x2F;.ssh 会多两个文件夹 12id_rsaid_ras.pub    登陆github，进入博客的repo， 点击 Setting">
-<meta name="keywords" content="hexo,ssh">
+<meta name="description" content="iframe是用于在网页中加载页面 iframe和a标签结合利用target在何处打开网页，通过iframe的id或者name和a标签进行关联，id和name需要取相同的名字。 1234&amp;lt;a href=&amp;quot;https:&#x2F;&#x2F;www.baidu.com&#x2F;&amp;quot; target=&amp;quot;iframe1&amp;quot;&amp;gt;baidu&amp;lt;&#x2F;a&amp;gt;&amp;lt;iframe id=&amp;q">
+<meta name="keywords" content="html,iframe,clickjacking">
 <meta property="og:type" content="article">
-<meta property="og:title" content="hexo deploy部署免去输入密码">
-<meta property="og:url" content="http:&#x2F;&#x2F;blog.eatcode.com&#x2F;2019&#x2F;11&#x2F;17&#x2F;hexo%20deploy%E9%83%A8%E7%BD%B2%E5%85%8D%E5%8E%BB%E8%BE%93%E5%85%A5%E5%AF%86%E7%A0%81&#x2F;index.html">
+<meta property="og:title" content="html (四)  iframe">
+<meta property="og:url" content="http:&#x2F;&#x2F;blog.eatcode.com&#x2F;2019&#x2F;11&#x2F;19&#x2F;html%20(%E5%9B%9B)%20%20iframe&#x2F;index.html">
 <meta property="og:site_name" content="Lory&#39;s Notes">
-<meta property="og:description" content="在本地打开git bash ，用 ssh-keygen 生成密钥  12$ ssh-keygen -t rsa -C &amp;quot;your_email@example.com&amp;quot;&#x2F;&#x2F;之后一路按enter即可    然后在本地 &#x2F;c&#x2F;Users&#x2F;username&#x2F;.ssh 会多两个文件夹 12id_rsaid_ras.pub    登陆github，进入博客的repo， 点击 Setting">
+<meta property="og:description" content="iframe是用于在网页中加载页面 iframe和a标签结合利用target在何处打开网页，通过iframe的id或者name和a标签进行关联，id和name需要取相同的名字。 1234&amp;lt;a href=&amp;quot;https:&#x2F;&#x2F;www.baidu.com&#x2F;&amp;quot; target=&amp;quot;iframe1&amp;quot;&amp;gt;baidu&amp;lt;&#x2F;a&amp;gt;&amp;lt;iframe id=&amp;q">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-11-18T08:29:12.352Z">
+<meta property="og:updated_time" content="2019-11-19T08:33:43.257Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -118,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://blog.eatcode.com/2019/11/17/hexo deploy部署免去输入密码/"/>
+  <link rel="canonical" href="http://blog.eatcode.com/2019/11/19/html (四)  iframe/"/>
 
 
 
 
 
-  <title>hexo deploy部署免去输入密码 | Lory's Notes</title>
+  <title>html (四)  iframe | Lory's Notes</title>
   
 
 
@@ -251,7 +251,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.eatcode.com/2019/11/17/hexo%20deploy%E9%83%A8%E7%BD%B2%E5%85%8D%E5%8E%BB%E8%BE%93%E5%85%A5%E5%AF%86%E7%A0%81/">
+    <link itemprop="mainEntityOfPage" href="http://blog.eatcode.com/2019/11/19/html%20(%E5%9B%9B)%20%20iframe/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="lory">
@@ -268,7 +268,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">hexo deploy部署免去输入密码</h1>
+          <h1 class="post-title" itemprop="name headline">html (四)  iframe</h1>
         
 
         <div class="post-meta">
@@ -280,8 +280,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-17T12:14:28+08:00">
-                2019-11-17
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-19T15:39:39+08:00">
+                2019-11-19
               </time>
             
 
@@ -303,8 +303,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/blog/" itemprop="url" rel="index">
-                    <span itemprop="name">blog</span>
+                  <a href="/categories/html/" itemprop="url" rel="index">
+                    <span itemprop="name">html</span>
                   </a>
                 </span>
 
@@ -340,30 +340,62 @@
       
 
       
-        <p>在本地打开git bash ，用 <code>ssh-keygen</code> 生成密钥 </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-keygen -t rsa -C &quot;your_email@example.com&quot;</span><br><span class="line">//之后一路按enter即可</span><br></pre></td></tr></table></figure>
+        <p>iframe是用于在网页中加载页面</p>
+<h5 id="iframe和a标签结合"><a href="#iframe和a标签结合" class="headerlink" title="iframe和a标签结合"></a>iframe和a标签结合</h5><p>利用target在何处打开网页，通过iframe的id或者name和a标签进行关联，id和name需要取相同的名字。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;a href=&quot;https://www.baidu.com/&quot; target=&quot;iframe1&quot;&gt;baidu&lt;/a&gt;</span><br><span class="line">&lt;iframe id=&quot;iframe1&quot; name=&quot;iframe1&quot; src=&quot;https://nodejs.org/en/&quot;&gt; </span><br><span class="line"> &lt;!-- 可以在标签之间写上不支持此标签时的退化内容 --&gt;</span><br><span class="line">&lt;/iframe&gt;</span><br></pre></td></tr></table></figure>
 
 
 
-<p>然后在本地 /c/Users/username/.ssh 会多两个文件夹</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">id_rsa</span><br><span class="line">id_ras.pub</span><br></pre></td></tr></table></figure>
+<h5 id="iframe-嵌套"><a href="#iframe-嵌套" class="headerlink" title="iframe 嵌套"></a>iframe 嵌套</h5><p>多个iframe进行嵌套</p>
+<p>a.html</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"https://www.baidu.com/"</span> <span class="attr">target</span>=<span class="string">"iframe1"</span>&gt;</span>baidu<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">iframe</span> <span class="attr">name</span>=<span class="string">"iframe1"</span> <span class="attr">src</span>=<span class="string">"https://nodejs.org/en/"</span> &gt;</span> </span><br><span class="line">	<span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
+<p>b.html （b.html中的iframe嵌套a.html的iframe）</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"https://www.baidu.com/"</span> <span class="attr">target</span>=<span class="string">"iframe"</span>&gt;</span>baidu<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">iframe</span> <span class="attr">name</span>=<span class="string">"iframe"</span> <span class="attr">src</span>=<span class="string">"./a.html"</span> &gt;</span> </span><br><span class="line">    <span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
-
-<p>登陆github，进入博客的repo， 点击 Settings 》 Deploy keys 》Add deploy key ， 打开 id_ras.pub 复制内容，添加到 deploy key中</p>
-<p>接下来测试配置shifouchengg</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh -T git@github.com</span><br></pre></td></tr></table></figure>
-
-
-
-<p>如果出现以下内容即表示配置完成</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Hi username! You&apos;ve successfully authenticated, but GitHub does not</span><br><span class="line">provide shell access.</span><br></pre></td></tr></table></figure>
-
-
-
-<p>更改hexo deploy配置</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: git@github.com:username/blog.git  #仓库地址</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
-
+<p>![iframe嵌套](./html (四)  iframe/iframe嵌套.png)</p>
+<h5 id="X-Frame-Options"><a href="#X-Frame-Options" class="headerlink" title="X-Frame-Options"></a>X-Frame-Options</h5><p>The <strong><code>X-Frame-Options</code></strong>是http响应头，是用来给浏览器 指示允许一个页面 可否在frame，iframe，embed或者object中展现的标记。站点可以通过确保网站没有被嵌入到别人的站点里面，从而避免 <strong>clickjacking</strong>攻击。 如果frame中就不能加载google.com(因为google设置了X-Frame-Options为SAMEORIGIN)</p>
+<ul>
+<li><p>X-Frame-Options 选项的值</p>
+<ul>
+<li>DENY :  表示该页面不允许在 frame 中展示，即便是在相同域名的页面中嵌套也不允许。</li>
+<li>SAMEORIGIN:表示该页面可以在相同域名页面的 frame 中展示。</li>
+<li>ALLOW-FROM<em>uri</em>  :表示该页面可以在指定来源的 frame 中展示。</li>
+</ul>
+</li>
+<li><p>clickjacking-劫持攻击</p>
+<p>点击劫持（ClickJacking）是一种视觉上的欺骗手段。大概有两种方式，一是攻击者使用一个透明的iframe，覆盖在一个网页上，然后诱使用户在该页面上进行操作，此时用户将在不知情的情况下点击透明的iframe页面；二是攻击者使用一张图片覆盖在网页，遮挡网页原有位置的含义。这样将导致</p>
+<ul>
+<li>例如利用点击劫持增加facebook的点赞</li>
+</ul>
+</li>
+</ul>
+<h5 id="frame-iframe-frameset之间的关系与区别"><a href="#frame-iframe-frameset之间的关系与区别" class="headerlink" title="frame,iframe,frameset之间的关系与区别"></a>frame,iframe,frameset之间的关系与区别</h5><ul>
+<li><p>frameset(已废弃)  </p>
+<ul>
+<li><p>它称为框架标记，是用来告知HTML文件是框架模式，并且设定可视窗口怎么分割 </p>
+</li>
+<li><p>不能嵌套在body标签里</p>
+</li>
+</ul>
+</li>
+<li><p>frame(不推荐) </p>
+<ul>
+<li>它只是设定某一个框架窗口中的参数属性</li>
+</ul>
+</li>
+<li><p>iframe</p>
+<ul>
+<li>它是在一个页面中嵌入一个框架窗口</li>
+</ul>
+</li>
+<li><p>frameset&amp;frame </p>
+<p>在页面中展示多个框架，显示不同的网站</p>
+<p>![frameset](./html (四)  iframe/frameset.png)</p>
+</li>
+</ul>
+<h5 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h5><p> <a href="https://zh.javascript.info/clickjacking" target="_blank" rel="noopener">https://zh.javascript.info/clickjacking</a> </p>
+<p> <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/X-Frame-Options" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/docs/Web/HTTP/X-Frame-Options</a> </p>
 
       
     </div>
@@ -381,9 +413,11 @@
       
         <div class="post-tags">
           
-            <a href="/tags/hexo/" rel="tag"># hexo</a>
+            <a href="/tags/html/" rel="tag"># html</a>
           
-            <a href="/tags/ssh/" rel="tag"># ssh</a>
+            <a href="/tags/iframe/" rel="tag"># iframe</a>
+          
+            <a href="/tags/clickjacking/" rel="tag"># clickjacking</a>
           
         </div>
       
@@ -396,15 +430,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2019/11/19/html%20(%E4%BA%8C)%20%20%E8%A1%A8%E5%8D%95/" rel="next" title="html（二）表单">
+                <i class="fa fa-chevron-left"></i> html（二）表单
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/11/17/DNS/" rel="prev" title="DNS">
-                DNS <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -456,8 +490,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -531,6 +574,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#iframe和a标签结合"><span class="nav-number">1.</span> <span class="nav-text">iframe和a标签结合</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#iframe-嵌套"><span class="nav-number">2.</span> <span class="nav-text">iframe 嵌套</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#X-Frame-Options"><span class="nav-number">3.</span> <span class="nav-text">X-Frame-Options</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#frame-iframe-frameset之间的关系与区别"><span class="nav-number">4.</span> <span class="nav-text">frame,iframe,frameset之间的关系与区别</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#参考"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

@@ -250,6 +250,882 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.eatcode.com/2019/11/19/html%20(%E5%9B%9B)%20%20iframe/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="lory">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lory's Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/19/html%20(%E5%9B%9B)%20%20iframe/" itemprop="url">html (四)  iframe</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-19T15:39:39+08:00">
+                2019-11-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/html/" itemprop="url" rel="index">
+                    <span itemprop="name">html</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>iframe是用于在网页中加载页面</p>
+<h5 id="iframe和a标签结合"><a href="#iframe和a标签结合" class="headerlink" title="iframe和a标签结合"></a>iframe和a标签结合</h5><p>利用target在何处打开网页，通过iframe的id或者name和a标签进行关联，id和name需要取相同的名字。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;a href=&quot;https://www.baidu.com/&quot; target=&quot;iframe1&quot;&gt;baidu&lt;/a&gt;</span><br><span class="line">&lt;iframe id=&quot;iframe1&quot; name=&quot;iframe1&quot; src=&quot;https://nodejs.org/en/&quot;&gt; </span><br><span class="line"> &lt;!-- 可以在标签之间写上不支持此标签时的退化内容 --&gt;</span><br><span class="line">&lt;/iframe&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="iframe-嵌套"><a href="#iframe-嵌套" class="headerlink" title="iframe 嵌套"></a>iframe 嵌套</h5><p>多个iframe进行嵌套</p>
+<p>a.html</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"https://www.baidu.com/"</span> <span class="attr">target</span>=<span class="string">"iframe1"</span>&gt;</span>baidu<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">iframe</span> <span class="attr">name</span>=<span class="string">"iframe1"</span> <span class="attr">src</span>=<span class="string">"https://nodejs.org/en/"</span> &gt;</span> </span><br><span class="line">	<span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>b.html （b.html中的iframe嵌套a.html的iframe）</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"https://www.baidu.com/"</span> <span class="attr">target</span>=<span class="string">"iframe"</span>&gt;</span>baidu<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">iframe</span> <span class="attr">name</span>=<span class="string">"iframe"</span> <span class="attr">src</span>=<span class="string">"./a.html"</span> &gt;</span> </span><br><span class="line">    <span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>![iframe嵌套](./html (四)  iframe/iframe嵌套.png)</p>
+<h5 id="X-Frame-Options"><a href="#X-Frame-Options" class="headerlink" title="X-Frame-Options"></a>X-Frame-Options</h5><p>The <strong><code>X-Frame-Options</code></strong>是http响应头，是用来给浏览器 指示允许一个页面 可否在frame，iframe，embed或者object中展现的标记。站点可以通过确保网站没有被嵌入到别人的站点里面，从而避免 <strong>clickjacking</strong>攻击。 如果frame中就不能加载google.com(因为google设置了X-Frame-Options为SAMEORIGIN)</p>
+<ul>
+<li><p>X-Frame-Options 选项的值</p>
+<ul>
+<li>DENY :  表示该页面不允许在 frame 中展示，即便是在相同域名的页面中嵌套也不允许。</li>
+<li>SAMEORIGIN:表示该页面可以在相同域名页面的 frame 中展示。</li>
+<li>ALLOW-FROM<em>uri</em>  :表示该页面可以在指定来源的 frame 中展示。</li>
+</ul>
+</li>
+<li><p>clickjacking-劫持攻击</p>
+<p>点击劫持（ClickJacking）是一种视觉上的欺骗手段。大概有两种方式，一是攻击者使用一个透明的iframe，覆盖在一个网页上，然后诱使用户在该页面上进行操作，此时用户将在不知情的情况下点击透明的iframe页面；二是攻击者使用一张图片覆盖在网页，遮挡网页原有位置的含义。这样将导致</p>
+<ul>
+<li>例如利用点击劫持增加facebook的点赞</li>
+</ul>
+</li>
+</ul>
+<h5 id="frame-iframe-frameset之间的关系与区别"><a href="#frame-iframe-frameset之间的关系与区别" class="headerlink" title="frame,iframe,frameset之间的关系与区别"></a>frame,iframe,frameset之间的关系与区别</h5><ul>
+<li><p>frameset(已废弃)  </p>
+<ul>
+<li><p>它称为框架标记，是用来告知HTML文件是框架模式，并且设定可视窗口怎么分割 </p>
+</li>
+<li><p>不能嵌套在body标签里</p>
+</li>
+</ul>
+</li>
+<li><p>frame(不推荐) </p>
+<ul>
+<li>它只是设定某一个框架窗口中的参数属性</li>
+</ul>
+</li>
+<li><p>iframe</p>
+<ul>
+<li>它是在一个页面中嵌入一个框架窗口</li>
+</ul>
+</li>
+<li><p>frameset&amp;frame </p>
+<p>在页面中展示多个框架，显示不同的网站</p>
+<p>![frameset](./html (四)  iframe/frameset.png)</p>
+</li>
+</ul>
+<h5 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h5><p> <a href="https://zh.javascript.info/clickjacking" target="_blank" rel="noopener">https://zh.javascript.info/clickjacking</a> </p>
+<p> <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/X-Frame-Options" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/docs/Web/HTTP/X-Frame-Options</a> </p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.eatcode.com/2019/11/19/html%20(%E4%BA%8C)%20%20%E8%A1%A8%E5%8D%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="lory">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lory's Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/19/html%20(%E4%BA%8C)%20%20%E8%A1%A8%E5%8D%95/" itemprop="url">html（二）表单</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-19T12:39:39+08:00">
+                2019-11-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/html/" itemprop="url" rel="index">
+                    <span itemprop="name">html</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h5 id="1-form"><a href="#1-form" class="headerlink" title="1.form"></a>1.form</h5><p>用于为用户输入创建 HTML 表单，表单用于向服务器传输数据。</p>
+<ul>
+<li><strong>form属性</strong>：（涉及到http协议的内容，后续再细写）<ul>
+<li>action :action=“URL”, 点击按钮提交表单，向何处提交表单数据。</li>
+<li><a href="http://www.w3school.com.cn/tags/att_form_target.asp" target="_blank" rel="noopener">target</a>:规定在何处打开 action URL。</li>
+<li>method ：get&amp;post，规定用于发送 form-data 的 HTTP 方法。</li>
+<li>enctype，编码方式。表单数据提交时使用的编码类型，默认使用”pplication/x-www-form-urlencoded”，如果是使用POST请求，则请求头中的content-type指定值就是该值。如果表单中有上传文件，编码类型需要使用”multipart/form-data”，类型，才能完成传递文件数据。<br>（content-type用于填写数据格式，服务器根据该信息可以知道如何对数据进行解码）<ul>
+<li>application/x-www-form-urlencoded<ul>
+<li>数据之间用&amp;相连 key1=val1&amp;key2=val2 </li>
+</ul>
+</li>
+<li>multipart/form-data <ul>
+<li>传输文件</li>
+</ul>
+</li>
+<li>text/plain </li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-input"><a href="#2-input" class="headerlink" title="2.input"></a>2.input</h5><p> 用于搜集用户信息。根据不同的type属性值，输入字段拥有很多形式。</p>
+<ul>
+<li><p><strong>type属性</strong></p>
+<ul>
+<li><p>text ： 当行文本输入</p>
+</li>
+<li><p>password： 密码输入框</p>
+</li>
+<li><p>radio : 单选</p>
+</li>
+<li><p>checkbox ： 复选框</p>
+</li>
+<li><p>button :  普通按钮</p>
+</li>
+<li><p>sumbit : 提交按钮</p>
+</li>
+<li><p>reset ： 重置按钮</p>
+</li>
+<li><p>file ： 文件上传 （  accept=“ <em>MIME_type</em>”）</p>
+<ul>
+<li><p>accept ： 可接受的文件类型</p>
+<ul>
+<li><pre><code> &lt;input type=&quot;file&quot; name=&quot;&quot; id=&quot;&quot; accept=&quot;image/*,text/*&quot;&gt;
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">      - accept=“ *MIME_type*”</span><br><span class="line"></span><br><span class="line">    - multiple ： 选择多文件，布尔值</span><br><span class="line"></span><br><span class="line">  - image ： 图像按钮</span><br><span class="line"></span><br><span class="line">  - hidden ： 隐藏</span><br><span class="line"></span><br><span class="line">    -  存放一些用户不可见、不可改的数据，在用户提交表单时，这些数据会一并发送出 </span><br><span class="line"></span><br><span class="line">  - color: 颜色选择器</span><br><span class="line"></span><br><span class="line">  - number : 数字字段</span><br><span class="line"></span><br><span class="line">  - range ： 输入数值控件</span><br><span class="line"></span><br><span class="line">  - month : 年月控件</span><br><span class="line"></span><br><span class="line">  - date : 日期控件</span><br><span class="line"></span><br><span class="line">- **其他属性**</span><br><span class="line">  - name </span><br><span class="line">    -  表单提交时，这个域/字段/框/FormControl的名字 </span><br><span class="line">    -  在radio和checkbox阵列里，name相同的元素被分在一组里 </span><br><span class="line">  - value :  input元素的值</span><br><span class="line">    - date-value：&quot;2019-01-10&quot; (数据格式用 “-” 相连)</span><br><span class="line">  - placeholder</span><br><span class="line">  - required ： 必选项</span><br><span class="line">  - disabled ： 进用</span><br><span class="line"></span><br><span class="line">##### 3.button  </span><br><span class="line"></span><br><span class="line">按钮标签</span><br><span class="line"></span><br><span class="line">- button有三种属性：</span><br><span class="line"></span><br><span class="line">  - submit（默认值）</span><br><span class="line">  - reset重置</span><br><span class="line">  - button 常规按钮</span><br><span class="line">- **&lt; button &gt;**与&lt; input type=button&gt;用法类似，但是在 **&lt; button &gt;** 元素内部，可以放置内容，比如文本或图像。`&lt;button type=&quot;button&quot;&gt;点我!&lt;/button&gt;`</span><br><span class="line"></span><br><span class="line">##### 4.label </span><br><span class="line"></span><br><span class="line">一般与checkbox及radio一起用，以扩大这两个按钮的可点击区域，提升用户体验。（比较典型的是与input:file一起用）。当用户选择该标签内容时，就会触发相关联的控件。</span><br><span class="line"></span><br><span class="line">**使用方式** ： 使用for属性 或者 利用标签嵌套 </span><br><span class="line"></span><br><span class="line">```html</span><br><span class="line">  &lt;!-- 使用for，利用id和for来关联input元素和label --&gt;</span><br><span class="line">  &lt;form&gt;</span><br><span class="line">    &lt;input type=&quot;radio&quot; name=&quot;sex&quot; id=&quot;male&quot; /&gt;</span><br><span class="line">    &lt;label for=&quot;male&quot;&gt;Male&lt;/label&gt;</span><br><span class="line">  &lt;/form&gt;</span><br><span class="line">  &lt;!-- 不使用for，而是嵌套的方式 --&gt;</span><br><span class="line">  &lt;form&gt;</span><br><span class="line">    &lt;label &gt;&lt;input type=&quot;radio&quot; name=&quot;sex&quot; &gt;Female&lt;/label&gt;</span><br><span class="line">  &lt;/form&gt;</span><br></pre></td></tr></table></figure>
+</code></pre></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="5-select"><a href="#5-select" class="headerlink" title="5.select"></a>5.select</h5><p>可创建单选或多选菜单</p>
+<ul>
+<li><p>select元素的value值 = 选中选项的value值 （如果选项没有value属性，默认value为选项的textContent值）</p>
+</li>
+<li><p>option： 用于定义列表选项</p>
+</li>
+<li><p>opgroup： 用于选项分组</p>
+</li>
+<li><p>opgoup的label属性 ： 选项组描述</p>
+</li>
+<li><pre><code class="html"><span class="tag">&lt;<span class="name">select</span> <span class="attr">name</span>=<span class="string">"age"</span>&gt;</span>
+    <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">""</span> <span class="attr">hidden</span>&gt;</span>请选择<span class="tag">&lt;/<span class="name">option</span>&gt;</span>
+    <span class="tag">&lt;<span class="name">optgroup</span> <span class="attr">label</span>=<span class="string">"少年"</span>&gt;</span>
+        <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">"1-6"</span>&gt;</span>1-6岁<span class="tag">&lt;/<span class="name">option</span>&gt;</span>
+        <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">"6-12"</span>&gt;</span>6-12岁<span class="tag">&lt;/<span class="name">option</span>&gt;</span>
+    <span class="tag">&lt;/<span class="name">optgroup</span>&gt;</span>
+    <span class="tag">&lt;<span class="name">optgroup</span> <span class="attr">label</span>=<span class="string">"青年"</span>&gt;</span>
+        <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">"13-15"</span>&gt;</span>13-15岁<span class="tag">&lt;/<span class="name">option</span>&gt;</span>
+        <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">"16-18"</span>&gt;</span>16-18岁<span class="tag">&lt;/<span class="name">option</span>&gt;</span>
+        <span class="tag">&lt;/<span class="name">optgroup</span>&gt;</span>
+    <span class="tag">&lt;<span class="name">optgroup</span> <span class="attr">label</span>=<span class="string">"少年"</span>&gt;</span>
+        <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">"18-22"</span>&gt;</span>18-22岁<span class="tag">&lt;/<span class="name">option</span>&gt;</span>
+        <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">"23-30"</span>&gt;</span>23-30岁<span class="tag">&lt;/<span class="name">option</span>&gt;</span>
+    <span class="tag">&lt;/<span class="name">optgroup</span>&gt;</span>
+<span class="tag">&lt;/<span class="name">select</span>&gt;</span>
+<span class="comment"><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">##### 6.textarea </span><br><span class="line"></span><br><span class="line">定义多行的文本输入控件。可以通过 cols 和 rows 属性来规定 textarea 的尺寸，不过更好的办法是使用 CSS 的 height 和 width 属性。</span><br><span class="line"></span><br><span class="line">##### 7.filedset</span><br><span class="line"></span><br><span class="line">可将表单内的相关元元素分组</span><br><span class="line"></span><br><span class="line">- legend  ： 为filedset第一标题</span><br><span class="line"></span><br><span class="line">- disabled ; 可以禁用表单</span><br><span class="line"></span><br><span class="line">- ```html</span><br><span class="line">  &lt;form&gt;</span><br><span class="line">    &lt;fieldset disabled&gt;</span><br><span class="line">      &lt;legend&gt;健康信息&lt;/legend&gt;</span><br><span class="line">      身高：&lt;input type=&quot;text&quot; /&gt;</span><br><span class="line">      体重：&lt;input type=&quot;text&quot; /&gt;</span><br><span class="line">    &lt;/fieldset&gt;</span><br><span class="line">  &lt;/form&gt;</span><br></pre></td></tr></table></figure></span>
+</code></pre>
+</li>
+</ul>
+<hr>
+<p><strong>参考</strong>：</p>
+<p> <a href="https://www.zhangxinxu.com/" target="_blank" rel="noopener">https://www.zhangxinxu.com/</a> </p>
+<p> <a href="https://babopo.github.io/" target="_blank" rel="noopener">https://babopo.github.io/</a> </p>
+<p> <a href="https://www.w3school.com.cn/" target="_blank" rel="noopener">https://www.w3school.com.cn/</a> </p>
+<p> <a href="https://www.runoob.com/" target="_blank" rel="noopener">https://www.runoob.com/</a> </p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.eatcode.com/2019/11/19/html%20(%E4%B8%89)%20%20%E5%88%97%E8%A1%A8&%E8%A1%A8%E6%A0%BC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="lory">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lory's Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/19/html%20(%E4%B8%89)%20%20%E5%88%97%E8%A1%A8&%E8%A1%A8%E6%A0%BC/" itemprop="url">html (三)  列表&表格</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-19T12:39:39+08:00">
+                2019-11-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/html/" itemprop="url" rel="index">
+                    <span itemprop="name">html</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h4><ul>
+<li><p><strong>ol&amp;li</strong> </p>
+<ul>
+<li><p>ordered  list &amp; list item）</p>
+</li>
+<li><p>有序列表，&lt; ol &gt;中只能嵌套&lt; li &gt;,&lt; li &gt;中可以嵌套其他元素</p>
+</li>
+</ul>
+</li>
+<li><p><strong>ul&amp;li</strong>  </p>
+<ul>
+<li><p>unordered list &amp; list item</p>
+</li>
+<li><p>无序列表，&lt; ul &gt;中只能嵌套&lt; li &gt;,&lt; li &gt;中可以嵌套其他元素</p>
+</li>
+</ul>
+</li>
+<li><p><strong>dl&amp;dt&amp;dd</strong>  </p>
+<ul>
+<li><p>desciption list &amp;   description term  &amp;   description description </p>
+</li>
+<li><p>自定义列表</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;dl&gt;</span><br><span class="line">   &lt;dt&gt;计算机&lt;/dt&gt;</span><br><span class="line">   &lt;dd&gt;用来计算的仪器 ... ...&lt;/dd&gt;</span><br><span class="line">   &lt;dt&gt;显示器&lt;/dt&gt;</span><br><span class="line">   &lt;dd&gt;以视觉方式显示信息的装置 ... ...&lt;/dd&gt;</span><br><span class="line">&lt;/dl&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<h4 id="表格"><a href="#表格" class="headerlink" title="表格"></a>表格</h4><p><strong>table</strong> 标签定义 HTML 表格。简单的 HTML 表格由 table 元素以及一个或多个 <strong>tr</strong>、<strong>th</strong> 或 <strong>td</strong> 元素组成；由<strong>thead</strong>（一个tabel只能有一个thead），<strong>tbody，tfoot</strong>组成表单结构。</p>
+<p><strong>标签</strong></p>
+<ul>
+<li><p>table ： 表格</p>
+</li>
+<li><p>tr 行</p>
+</li>
+<li><p>th 表头</p>
+</li>
+<li><p>td 表数据</p>
+</li>
+<li><p>colgroup</p>
+<ul>
+<li>用于对<strong>col标签</strong>进行组合，以便对其进行格式化。添加class属性就能用css来设置样式。</li>
+</ul>
+</li>
+</ul>
+<p><strong>属性</strong></p>
+<ul>
+<li><p>colspan ： 设置跨列</p>
+</li>
+<li><p>rowspan： 设置跨行</p>
+<ul>
+<li>设置了跨行或跨列，相应需要删除多余的表格（td）</li>
+</ul>
+</li>
+<li><p>border-spacing：边框间距</p>
+</li>
+<li><p>cellspacing：边框间距</p>
+<p><strong>实例1</strong></p>
+</li>
+</ul>
+<p>![table](./html (三)  列表&amp;表格/table.png)</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">table</span> <span class="attr">border</span>=<span class="string">1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">caption</span>&gt;</span>表格标题<span class="tag">&lt;/<span class="name">caption</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">thead</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">th</span>&gt;</span>姓名<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">th</span>&gt;</span>性别<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">th</span>&gt;</span>年龄<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">th</span>&gt;</span>籍贯<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">th</span>&gt;</span>寝室<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">thead</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">tbody</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 第一行元素设置了跨行和跨列 ，相应需要减少第一行的td(5=2+2+1)，减少第二行的td（5=1+1+2+1）--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span> <span class="attr">colspan</span>=<span class="string">"2"</span> &gt;</span>tom<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span> <span class="attr">colspan</span>=<span class="string">"2"</span> <span class="attr">rowspan</span>=<span class="string">"2"</span>&gt;</span>男<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>201<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>1<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>2<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>3<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">tbody</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>实例2</strong></p>
+<p>![colgroup](./html (三)  列表&amp;表格/colgroup.png)</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">table</span> <span class="attr">border</span>=<span class="string">"1"</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 用于对列进行分组，以列为单位设置样式 --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">colgroup</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">col</span> <span class="attr">span</span>=<span class="string">"2"</span> <span class="attr">style</span>=<span class="string">"background-color:red"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">col</span> <span class="attr">style</span>=<span class="string">"background-color:yellow"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">colgroup</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">th</span>&gt;</span>ISBN<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">th</span>&gt;</span>Title<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">th</span>&gt;</span>Price<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>3476896<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>My first HTML<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>$53<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>5869207<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>My first CSS<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>$49<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="map-amp-area"><a href="#map-amp-area" class="headerlink" title="map &amp; area"></a>map &amp; area</h4><ul>
+<li><p>map :  映射标签</p>
+<ul>
+<li>usemap的属性值和map元素的“id”或者“name”相等</li>
+</ul>
+</li>
+<li><p>area ： 圈定map中位置</p>
+<blockquote>
+<p>​    shape=”rect”  矩形对角点坐标 “ x1，y1，x2，y2 ”</p>
+<p>​    shape=”circle” 圆坐标 圆心+半径  “  x1，y1，r “</p>
+<p>​    shape=”poly” 路径坐标 “ x1，y1，x2，y2，x3，y3，xn，yn ”    </p>
+</blockquote>
+</li>
+<li><p><a href="https://www.w3school.com.cn/tiy/t.asp?f=html_areamap" target="_blank" rel="noopener">实例</a></p>
+</li>
+</ul>
+<hr>
+<p><strong>参考</strong>：</p>
+<p> <a href="https://www.zhangxinxu.com/" target="_blank" rel="noopener">https://www.zhangxinxu.com/</a> </p>
+<p> <a href="https://babopo.github.io/" target="_blank" rel="noopener">https://babopo.github.io/</a> </p>
+<p> <a href="https://www.w3school.com.cn/" target="_blank" rel="noopener">https://www.w3school.com.cn/</a> </p>
+<p> <a href="https://www.runoob.com/" target="_blank" rel="noopener">https://www.runoob.com/</a> </p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.eatcode.com/2019/11/19/html%EF%BC%88%E4%B8%80%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="lory">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lory's Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/19/html%EF%BC%88%E4%B8%80%EF%BC%89/" itemprop="url">html（一）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-19T12:39:39+08:00">
+                2019-11-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/html/" itemprop="url" rel="index">
+                    <span itemprop="name">html</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>html（全称  HyperText Markup Language ）,是一种超文本标记语言，html使用标记标签来描述网页，它包含了html标签及文本内容</p>
+<h4 id="html基本结构"><a href="#html基本结构" class="headerlink" title="html基本结构"></a>html基本结构</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">“icon”href</span>=<span class="string">“http://example.com/favicon.ico”</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>html<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    </span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>&lt; !DOCTYPE html &gt; 声明为 HTML5 文档（用于区分不同版本的html）</p>
+</li>
+<li><p>html根元素</p>
+</li>
+<li><p>head元素包含文档的元数据</p>
+</li>
+<li><p>body元素包含了可见的页面内容</p>
+</li>
+<li><p>icon ：显示网页图标</p>
+<ul>
+<li>如果没有插入link，默认浏览器会读取名为favicon.ico的文件（有时候没有设置图标浏览器会在控制台报错）</li>
+</ul>
+</li>
+<li><p>title 标题元素</p>
+<ul>
+<li>如果不出现在head内，将自动移到head内</li>
+<li>出现多个的话，仅第一个生效</li>
+</ul>
+</li>
+<li><p>在 vscode 中输入感叹号，可以自动生成html模板</p>
+</li>
+</ul>
+<hr>
+<h4 id="html标签"><a href="#html标签" class="headerlink" title="html标签"></a>html标签</h4><h5 id="头部标签"><a href="#头部标签" class="headerlink" title="头部标签"></a>头部标签</h5><ul>
+<li><p>meta ：用来描述HTML文档的描述，关键词，作者，字符集等。 </p>
+<ul>
+<li><pre><code class="html"><span class="comment">&lt;!-- 设置字符集：用于中文编码 --&gt;</span>
+<span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span> 
+<span class="comment">&lt;!-- 适配 --&gt;</span>
+<span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span>
+<span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"ie=edge"</span>&gt;</span>
+<span class="comment"><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- link: 通常用于引入css文件 </span><br><span class="line"></span><br><span class="line">  - ```html</span><br><span class="line">    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;mystyle.css&quot;&gt;</span><br></pre></td></tr></table></figure></span></code></pre>
+</li>
+</ul>
+</li>
+<li><p>script ： src引入js文件</p>
+</li>
+<li><p>style：在style标签中写css</p>
+</li>
+<li><p>title ： 文档标题</p>
+</li>
+<li><p>base：基本的链接地址</p>
+<ul>
+<li><pre><code class="html"><span class="tag">&lt;<span class="name">head</span>&gt;</span>
+    <span class="comment">&lt;!-- 设置文档的基准地址 --&gt;</span>
+    <span class="tag">&lt;<span class="name">base</span> <span class="attr">href</span>=<span class="string">"https://www.baidu.com/images/"</span> <span class="attr">target</span>=<span class="string">"_blank"</span>&gt;</span>
+<span class="tag">&lt;/<span class="name">head</span>&gt;</span>
+
+<span class="tag">&lt;<span class="name">body</span>&gt;</span>
+    <span class="comment">&lt;!-- 完整地址: base地址与img地址的拼接 "https://www.baidu.com/images/logo.png"--&gt;</span>
+    <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"logo.png"</span>&gt;</span> 
+<span class="tag">&lt;/<span class="name">body</span>&gt;</span>
+<span class="comment"><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">##### 常用标签</span><br><span class="line"></span><br><span class="line">- h1  -  h6  : 标题</span><br><span class="line"></span><br><span class="line">- p：段落</span><br><span class="line"></span><br><span class="line">- a：链接</span><br><span class="line">  - href : 链接地址</span><br><span class="line">  - ref</span><br><span class="line">  - 结合id属性，创建html文档书签</span><br><span class="line">  - a 标签的 css 样式</span><br><span class="line"></span><br><span class="line">- img：图像</span><br><span class="line">  - src : 图片地址</span><br><span class="line">- hr ：水平线</span><br><span class="line">- canvas: 画布，用于图形的绘制</span><br><span class="line">- q - 引用</span><br><span class="line">- blockquote - 一段或长篇引用</span><br><span class="line"></span><br><span class="line">##### html 文本格式化标签 </span><br><span class="line"></span><br><span class="line">用于对文本进行格式化，例如 b (粗体)、 em （加重）、i、strong、sub、sup...</span><br><span class="line"></span><br><span class="line">- strong em ：语义都为强调，strong更强一些</span><br><span class="line">- i ： 用于区分普通文本</span><br><span class="line"></span><br><span class="line">##### 多媒体标签</span><br><span class="line"></span><br><span class="line">- [vedio](https://www.runoob.com/html/html5-video.html)</span><br><span class="line"></span><br><span class="line">  - ```html</span><br><span class="line">    &lt;!--  &lt;video&gt; 元素提供了 width 和 height 属性控制视频的尺寸 --&gt;</span><br><span class="line">    &lt;video width=&quot;320&quot; height=&quot;240&quot; controls&gt;</span><br><span class="line">    &lt;!-- &lt;video&gt; 元素支持多个 &lt;source&gt; 元素. &lt;source&gt; 元素可以链接不同的视频文件。浏览器将使用第一个可识别的格式 --&gt;</span><br><span class="line">        &lt;source src=&quot;movie.mp4&quot; type=&quot;video/mp4&quot;&gt;</span><br><span class="line">        &lt;source src=&quot;movie.ogg&quot; type=&quot;video/ogg&quot;&gt;</span><br><span class="line">        您的浏览器不支持Video标签。</span><br><span class="line">    &lt;/video&gt;</span><br></pre></td></tr></table></figure></span></code></pre>
+</li>
+</ul>
+</li>
+<li><p><a href="https://www.runoob.com/html/html5-audio.html" target="_blank" rel="noopener">autdio</a></p>
+</li>
+<li><p><a href="https://www.zhangxinxu.com/wordpress/2013/02/html5-progress-element-style-control/" target="_blank" rel="noopener">progress</a> ： 进度条 （可以通过改变value值来，来显示加载情况）</p>
+<ul>
+<li><pre><code>&lt;progress value=&quot;50&quot; max=&quot;100&quot;&gt;&lt;/progress&gt;
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- embed ：嵌入的内容</span><br><span class="line"></span><br><span class="line">- [object](https://www.runoob.com/try/try.php?filename=tryhtml_object_html) : 嵌入对象。 该标签用于插入对象 (例如在网页中嵌入 Java 小程序, PDF 阅读器, Flash 播放器) 。 </span><br><span class="line"></span><br><span class="line">##### 其他标签</span><br><span class="line"></span><br><span class="line">- code</span><br><span class="line">  - 行内标签</span><br><span class="line">  - 计算机代码</span><br><span class="line">- pre</span><br><span class="line">  - 块级标签</span><br><span class="line">  - 有预定义格式的文本</span><br><span class="line">  - 标签内文本格式都会保留</span><br><span class="line">- [template](https://www.zhangxinxu.com/wordpress/2014/07/hello-html5-template-tag/)</span><br><span class="line">  - 模板标签，相当于display：none，不会出现在dom树</span><br><span class="line"></span><br><span class="line">html语义化标签</span><br><span class="line"></span><br><span class="line">语义化： 为了让浏览器引擎更好的理解网页代码</span><br><span class="line"></span><br><span class="line">![语义化](./html（一）/语义化.png)</span><br><span class="line"></span><br><span class="line">- header</span><br><span class="line">- nav</span><br><span class="line">- section</span><br><span class="line">- article</span><br><span class="line">- aside</span><br><span class="line">- footer</span><br><span class="line">- main</span><br><span class="line"></span><br><span class="line">##### html通用属性</span><br><span class="line"></span><br><span class="line">class：class = ”className“</span><br><span class="line"></span><br><span class="line">id : id=“idName”</span><br><span class="line"></span><br><span class="line">style: style=&quot;color : red&quot;</span><br><span class="line"></span><br><span class="line">target : 规定在何处打开url</span><br><span class="line"></span><br><span class="line">- _blank : 在新窗口打开</span><br><span class="line">- _self: 默认。在相同的框架中打开</span><br><span class="line">- _parent: 在父框架中打开</span><br><span class="line">- _top: 在整个窗口中打开</span><br><span class="line">- framename： 在指定的框架中打开</span><br><span class="line"></span><br><span class="line">html字符实体</span><br><span class="line"></span><br><span class="line">在html中，某些字符是预留的，需要用[字符实体](https://www.runoob.com/html/html-entities.html)表示那些与预留字符（例如 在 HTML 中不能使用小于号（&lt;）和大于号（&gt;），这是因为浏览器会误认为它们是标签。 ）</span><br></pre></td></tr></table></figure>
+&lt;p&gt;a&amp;nbsp;b&lt;/p&gt;</code></pre></li>
+</ul>
+</li>
+</ul>
+<p><strong>参考</strong>：</p>
+<p> <a href="https://www.zhangxinxu.com/" target="_blank" rel="noopener">https://www.zhangxinxu.com/</a> </p>
+<p> <a href="https://babopo.github.io/" target="_blank" rel="noopener">https://babopo.github.io/</a> </p>
+<p> <a href="https://www.w3school.com.cn/" target="_blank" rel="noopener">https://www.w3school.com.cn/</a> </p>
+<p> <a href="https://www.runoob.com/" target="_blank" rel="noopener">https://www.runoob.com/</a> </p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://blog.eatcode.com/2019/11/17/hexo%C2%B7next%E4%B8%BB%E9%A2%98%E9%85%8D%E7%BD%AE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1055,7 +1931,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1066,7 +1942,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -1077,7 +1953,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
