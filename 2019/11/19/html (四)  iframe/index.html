@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next pisces use-motion" lang="zh-Hans">
+<html class="theme-next gemini use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -79,16 +79,19 @@
 
 
 
-<meta name="description" content="iframe是用于在网页中加载页面 iframe和a标签结合利用target在何处打开网页，通过iframe的id或者name和a标签进行关联，id和name需要取相同的名字。 1234&amp;lt;a href=&amp;quot;https:&#x2F;&#x2F;www.baidu.com&#x2F;&amp;quot; target=&amp;quot;iframe1&amp;quot;&amp;gt;baidu&amp;lt;&#x2F;a&amp;gt;&amp;lt;iframe id=&amp;q">
+<meta name="description" content="iframe是用于在网页中加载页面 iframe和a标签结合利用target在何处打开网页，通过iframe的id或者name和a标签进行关联，id和name需要取相同的名字。 1234&amp;lt;a href=&quot;https:&#x2F;&#x2F;www.baidu.com&#x2F;&quot; target=&quot;iframe1&quot;&amp;gt;baidu&amp;lt;&#x2F;a&amp;gt;&amp;lt;iframe id=&quot;iframe1&quot; name=&quot;iframe">
 <meta name="keywords" content="html,iframe,clickjacking">
 <meta property="og:type" content="article">
 <meta property="og:title" content="html (四)  iframe">
 <meta property="og:url" content="http:&#x2F;&#x2F;blog.eatcode.com&#x2F;2019&#x2F;11&#x2F;19&#x2F;html%20(%E5%9B%9B)%20%20iframe&#x2F;index.html">
 <meta property="og:site_name" content="Lory&#39;s Notes">
-<meta property="og:description" content="iframe是用于在网页中加载页面 iframe和a标签结合利用target在何处打开网页，通过iframe的id或者name和a标签进行关联，id和name需要取相同的名字。 1234&amp;lt;a href=&amp;quot;https:&#x2F;&#x2F;www.baidu.com&#x2F;&amp;quot; target=&amp;quot;iframe1&amp;quot;&amp;gt;baidu&amp;lt;&#x2F;a&amp;gt;&amp;lt;iframe id=&amp;q">
+<meta property="og:description" content="iframe是用于在网页中加载页面 iframe和a标签结合利用target在何处打开网页，通过iframe的id或者name和a标签进行关联，id和name需要取相同的名字。 1234&amp;lt;a href=&quot;https:&#x2F;&#x2F;www.baidu.com&#x2F;&quot; target=&quot;iframe1&quot;&amp;gt;baidu&amp;lt;&#x2F;a&amp;gt;&amp;lt;iframe id=&quot;iframe1&quot; name=&quot;iframe">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-11-19T08:33:43.257Z">
+<meta property="og:image" content="http:&#x2F;&#x2F;blog.eatcode.com&#x2F;2019&#x2F;11&#x2F;19&#x2F;html%20(%E5%9B%9B)%20%20iframe&#x2F;iframe%E5%B5%8C%E5%A5%97.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;blog.eatcode.com&#x2F;2019&#x2F;11&#x2F;19&#x2F;html%20(%E5%9B%9B)%20%20iframe&#x2F;frameset.png">
+<meta property="og:updated_time" content="2019-11-19T09:01:12.832Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;blog.eatcode.com&#x2F;2019&#x2F;11&#x2F;19&#x2F;html%20(%E5%9B%9B)%20%20iframe&#x2F;iframe%E5%B5%8C%E5%A5%97.png">
 
 
 
@@ -96,7 +99,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Pisces',
+    scheme: 'Gemini',
     version: '5.1.4',
     sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
@@ -342,7 +345,7 @@
       
         <p>iframe是用于在网页中加载页面</p>
 <h5 id="iframe和a标签结合"><a href="#iframe和a标签结合" class="headerlink" title="iframe和a标签结合"></a>iframe和a标签结合</h5><p>利用target在何处打开网页，通过iframe的id或者name和a标签进行关联，id和name需要取相同的名字。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;a href=&quot;https://www.baidu.com/&quot; target=&quot;iframe1&quot;&gt;baidu&lt;/a&gt;</span><br><span class="line">&lt;iframe id=&quot;iframe1&quot; name=&quot;iframe1&quot; src=&quot;https://nodejs.org/en/&quot;&gt; </span><br><span class="line"> &lt;!-- 可以在标签之间写上不支持此标签时的退化内容 --&gt;</span><br><span class="line">&lt;/iframe&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"https://www.baidu.com/"</span> <span class="attr">target</span>=<span class="string">"iframe1"</span>&gt;</span>baidu<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">id</span>=<span class="string">"iframe1"</span> <span class="attr">name</span>=<span class="string">"iframe1"</span> <span class="attr">src</span>=<span class="string">"https://nodejs.org/en/"</span>&gt;</span> </span><br><span class="line"> <span class="comment">&lt;!-- 可以在标签之间写上不支持此标签时的退化内容 --&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 
 
@@ -353,7 +356,7 @@
 <p>b.html （b.html中的iframe嵌套a.html的iframe）</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"https://www.baidu.com/"</span> <span class="attr">target</span>=<span class="string">"iframe"</span>&gt;</span>baidu<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">iframe</span> <span class="attr">name</span>=<span class="string">"iframe"</span> <span class="attr">src</span>=<span class="string">"./a.html"</span> &gt;</span> </span><br><span class="line">    <span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
-<p>![iframe嵌套](./html (四)  iframe/iframe嵌套.png)</p>
+<p><img src="/2019/11/19/html%20(%E5%9B%9B)%20%20iframe/iframe%E5%B5%8C%E5%A5%97.png" alt="iframe"></p>
 <h5 id="X-Frame-Options"><a href="#X-Frame-Options" class="headerlink" title="X-Frame-Options"></a>X-Frame-Options</h5><p>The <strong><code>X-Frame-Options</code></strong>是http响应头，是用来给浏览器 指示允许一个页面 可否在frame，iframe，embed或者object中展现的标记。站点可以通过确保网站没有被嵌入到别人的站点里面，从而避免 <strong>clickjacking</strong>攻击。 如果frame中就不能加载google.com(因为google设置了X-Frame-Options为SAMEORIGIN)</p>
 <ul>
 <li><p>X-Frame-Options 选项的值</p>
@@ -391,7 +394,7 @@
 </li>
 <li><p>frameset&amp;frame </p>
 <p>在页面中展示多个框架，显示不同的网站</p>
-<p>![frameset](./html (四)  iframe/frameset.png)</p>
+<p><img src="/2019/11/19/html%20(%E5%9B%9B)%20%20iframe/frameset.png" alt="frameset"></p>
 </li>
 </ul>
 <h5 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h5><p> <a href="https://zh.javascript.info/clickjacking" target="_blank" rel="noopener">https://zh.javascript.info/clickjacking</a> </p>
@@ -430,8 +433,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/11/19/html%20(%E4%BA%8C)%20%20%E8%A1%A8%E5%8D%95/" rel="next" title="html（二）表单">
-                <i class="fa fa-chevron-left"></i> html（二）表单
+              <a href="/2019/11/19/html%20(%E4%B8%89)%20%20%E5%88%97%E8%A1%A8&%E8%A1%A8%E6%A0%BC/" rel="next" title="html (三)  列表&表格">
+                <i class="fa fa-chevron-left"></i> html (三)  列表&表格
               </a>
             
           </div>
@@ -622,7 +625,7 @@
 
 
 
-  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
 
 
 
