@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="css,box-model," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="盒模型 每个元素都会生成一个或多盒子，行内元素在跨行时会生成多个盒子。盒模型简单说是由content，padding，border，margin组成。  边框及以内是可见及可交互的，margin部分不可交互 外边距是透明的，透过它看到下方的内容 width和height设置的是content-box的宽高  可以通过box-sizing来改变设定的盒子 box-sizing：content-box">
+<meta name="keywords" content="css,box-model">
+<meta property="og:type" content="article">
+<meta property="og:title" content="盒模型">
+<meta property="og:url" content="http:&#x2F;&#x2F;blog.eatcode.com&#x2F;2019&#x2F;11&#x2F;19&#x2F;%E7%9B%92%E6%A8%A1%E5%9E%8B&#x2F;index.html">
+<meta property="og:site_name" content="Lory&#39;s Notes">
+<meta property="og:description" content="盒模型 每个元素都会生成一个或多盒子，行内元素在跨行时会生成多个盒子。盒模型简单说是由content，padding，border，margin组成。  边框及以内是可见及可交互的，margin部分不可交互 外边距是透明的，透过它看到下方的内容 width和height设置的是content-box的宽高  可以通过box-sizing来改变设定的盒子 box-sizing：content-box">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http:&#x2F;&#x2F;blog.eatcode.com&#x2F;2019&#x2F;11&#x2F;19&#x2F;%E7%9B%92%E6%A8%A1%E5%9E%8B&#x2F;.%5C%E7%9B%92%E6%A8%A1%E5%9E%8B%5C%E7%9B%92%E6%A8%A1%E5%9E%8B.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;blog.eatcode.com&#x2F;2019&#x2F;11&#x2F;19&#x2F;%E7%9B%92%E6%A8%A1%E5%9E%8B&#x2F;.%5C%E7%9B%92%E6%A8%A1%E5%9E%8B%5Cpadding.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;blog.eatcode.com&#x2F;2019&#x2F;11&#x2F;19&#x2F;%E7%9B%92%E6%A8%A1%E5%9E%8B&#x2F;.%5C%E7%9B%92%E6%A8%A1%E5%9E%8B%5Cborder.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;blog.eatcode.com&#x2F;2019&#x2F;11&#x2F;19&#x2F;%E7%9B%92%E6%A8%A1%E5%9E%8B&#x2F;.%5C%E7%9B%92%E6%A8%A1%E5%9E%8B%5Cborder1.png">
+<meta property="og:updated_time" content="2019-11-20T03:47:26.807Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;blog.eatcode.com&#x2F;2019&#x2F;11&#x2F;19&#x2F;%E7%9B%92%E6%A8%A1%E5%9E%8B&#x2F;.%5C%E7%9B%92%E6%A8%A1%E5%9E%8B%5C%E7%9B%92%E6%A8%A1%E5%9E%8B.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.eatcode.com/2019/11/19/盒模型/"/>
+
+
+
+
+
+  <title>盒模型 | Lory's Notes</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Lory's Notes</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.eatcode.com/2019/11/19/%E7%9B%92%E6%A8%A1%E5%9E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="lory">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lory's Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">盒模型</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-19T23:39:39+08:00">
+                2019-11-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/css/" itemprop="url" rel="index">
+                    <span itemprop="name">css</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="盒模型"><a href="#盒模型" class="headerlink" title="盒模型"></a>盒模型</h4><p><img src="/2019/11/19/%E7%9B%92%E6%A8%A1%E5%9E%8B/.%5C%E7%9B%92%E6%A8%A1%E5%9E%8B%5C%E7%9B%92%E6%A8%A1%E5%9E%8B.png" alt="盒模型"></p>
+<p>每个元素都会生成一个或多盒子，行内元素在跨行时会生成多个盒子。盒模型简单说是由content，padding，border，margin组成。</p>
+<ul>
+<li>边框及以内是可见及可交互的，margin部分不可交互</li>
+<li>外边距是透明的，透过它看到下方的内容</li>
+<li>width和height设置的是content-box的宽高</li>
+</ul>
+<p>可以通过box-sizing来改变设定的盒子</p>
+<p><strong>box-sizing</strong>：content-box （默认）|  border-box  | inherit</p>
+<hr>
+<h4 id="内联盒模型"><a href="#内联盒模型" class="headerlink" title="内联盒模型"></a>内联盒模型</h4><ul>
+<li>内容区域(content area)</li>
+<li>内联盒子(inline box)</li>
+<li>行框盒子(line box)</li>
+<li>包含盒子(containing box)</li>
+</ul>
+<p><strong>内容区域(content area</strong>) 内容区域指的是一种围绕文字看不见的盒子，其大小仅受字符本身特性控制，本质上是一个字符盒子(character box)；但是图片这样的替换元素，其显示内容不是文字，因此内容区域可以看成是元素自身。</p>
+<p><strong>内联盒子(inline box)</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;p&gt;</span><br><span class="line">这是内联匿名盒子&lt;em&gt;这里有内联标签，是内联盒子&lt;/em&gt;</span><br><span class="line">&lt;/p&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>行框盒子(line box)</strong>。每一行就是一个行框盒子，每个行框盒子都是由一个个内联盒子组成，</p>
+<p>注意：<strong>line-height</strong>是作用在行框盒子上的，行框盒子的高度由line-height决定</p>
+<p>(替换元素除外，后面会讲解什么是替换元素)。</p>
+<p><strong>包含盒子(containing box)</strong>。此盒子由一行一行的“行框盒子”组成</p>
+<hr>
+<h4 id="盒子属性"><a href="#盒子属性" class="headerlink" title="盒子属性"></a>盒子属性</h4><h5 id="width"><a href="#width" class="headerlink" title="width"></a>width</h5><ul>
+<li>width：auto 和 width：100%<ul>
+<li>width：100% 指的是内容区的宽度，设边框会超出父元素；</li>
+<li>width：auto，水平的7个属性等于父元素的内容区，设置边框不会超出父元素</li>
+</ul>
+</li>
+</ul>
+<h5 id="height"><a href="#height" class="headerlink" title="height"></a>height</h5><p>height的默认值也是auto，指的是其高度由内部元素堆叠而成，内部元素盒子有多高，元素就有多高。<strong>但在绝对定位中，若同时设置了top与bottom，则其高度由父盒子高度减去top与bottom</strong>。</p>
+<h5 id="paddings"><a href="#paddings" class="headerlink" title="paddings"></a>paddings</h5><ul>
+<li><p>padding与内联元素</p>
+</li>
+<li><ul>
+<li><p>padding在内联元素上，不会影响<strong>垂直布局</strong>，但是padding部分仍然存在。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#html</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span>Lorem ipsum<span class="tag">&lt;/<span class="name">span</span>&gt;</span> dolor sit amet, consectetur adipisicing elit. Eaque odit magni, repellendus dignissimos hic quasi rerum molestias animi. Repellat excepturi quis autem nihil blanditiis nisi rem reprehenderit odio, facilis aperiam.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"></span><br><span class="line">#css</span><br><span class="line">span&#123;</span><br><span class="line">  padding: 20px;</span><br><span class="line">  background-color: pink;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><img src="/2019/11/19/%E7%9B%92%E6%A8%A1%E5%9E%8B/.%5C%E7%9B%92%E6%A8%A1%E5%9E%8B%5Cpadding.png" alt="padding"></p>
+</li>
+<li><p>利用padding的这个特性，可以在垂直方向上添加padding增大可点击区域，这样既不会破坏现有布局，也能很好地响应用户的点击。</p>
+</li>
+</ul>
+</li>
+<li><p>padding的百分比值</p>
+</li>
+<li><ul>
+<li>padding不支持负值，padding百分比无论宽高都是相对于width的百分比</li>
+</ul>
+</li>
+</ul>
+<h5 id="margin"><a href="#margin" class="headerlink" title="margin"></a>margin</h5><ul>
+<li><p>margin 简写属性</p>
+<ul>
+<li><strong>margin:25px 50px 75px 100px;</strong>  (逆时针，上右下左)</li>
+<li><strong>margin:25px 50px 75px;</strong>  （上： 25px ； 左右 50px ； 下75px）</li>
+<li><strong>margin:25px 50px;</strong>  （上下25px ，左右50px）</li>
+<li><strong>margin:25px;</strong>  （上下左右 25px）</li>
+</ul>
+</li>
+<li><p>margin: auto</p>
+</li>
+<li><p>margin负值</p>
+</li>
+<li><p>margin合并</p>
+</li>
+<li><ul>
+<li><p>相邻兄弟元素的margin合并</p>
+</li>
+<li><p>父子合并</p>
+</li>
+<li><ul>
+<li><p>解决父子margin合并</p>
+</li>
+<li><ul>
+<li><strong>父元素</strong>设置为BFC</li>
+<li><strong>父元素</strong>设置border和padding</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>空块级元素的margin合并</p>
+</li>
+<li><ul>
+<li>margin无效的情况，即自身有margin-top和margin-bottom，但元素是空的，此时会合并为一个margin。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="border"><a href="#border" class="headerlink" title="border"></a>border</h5><ul>
+<li><p>border ： 1px solid red； （border是 border-width / boder-style / boder-color 的简写形式）</p>
+</li>
+<li><p><a href="https://segmentfault.com/a/1190000002780453" target="_blank" rel="noopener">制作图形</a></p>
+<ul>
+<li><p>基准：利用了box没有width和height只有border，会形成四个三角形组成的矩形</p>
+<p><img src="/2019/11/19/%E7%9B%92%E6%A8%A1%E5%9E%8B/.%5C%E7%9B%92%E6%A8%A1%E5%9E%8B%5Cborder.png" alt="border"></p>
+</li>
+</ul>
+</li>
+<li><p>等高布局</p>
+<p><img src="/2019/11/19/%E7%9B%92%E6%A8%A1%E5%9E%8B/.%5C%E7%9B%92%E6%A8%A1%E5%9E%8B%5Cborder1.png" alt="border1"></p>
+<p>html</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>会员中心<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>颠沛设置<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span>&gt;</span>content<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>css</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 父元素设置左边框 */</span></span><br><span class="line">div&#123;</span><br><span class="line">  border-left: <span class="number">150</span>px solid;</span><br><span class="line">  background-color: <span class="meta">#fff;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* 清除浮动，不让父元素塌陷 */</span></span><br><span class="line">div::after&#123;</span><br><span class="line">  content:<span class="string">''</span>;</span><br><span class="line">  display:block;</span><br><span class="line">  clear:both;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* 子元素左浮动到content-box最左边，设置负margin，移动到border上面*/</span></span><br><span class="line">ul &#123;</span><br><span class="line">  color: <span class="meta">#fff;</span></span><br><span class="line">  <span class="keyword">float</span>: left;</span><br><span class="line">  margin-left: <span class="number">-150</span>px;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<h4 id="替换元素"><a href="#替换元素" class="headerlink" title="替换元素"></a>替换元素</h4><p>img，video，canvas，input，textarea，iframe都是替换元素</p>
+<h4 id="css尺寸"><a href="#css尺寸" class="headerlink" title="css尺寸"></a>css尺寸</h4><ul>
+<li>height    设置元素的高度。</li>
+<li>line-height    设置行高。</li>
+<li>max-height    设置元素的最大高度。</li>
+<li>max-width    设置元素的最大宽度。</li>
+<li>min-height    设置元素的最小高度。</li>
+<li>min-width    设置元素的最小宽度。</li>
+<li>width    设置元素的宽度</li>
+</ul>
+<p><strong>参考</strong></p>
+<p><a href="https://developer.mozilla.org/zh-CN/" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/</a> </p>
+<p><a href="https://segmentfault.com/a/1190000002780453" target="_blank" rel="noopener">https://segmentfault.com/a/1190000002780453</a></p>
+<p>《css权威指南》</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/css/" rel="tag"># css</a>
+          
+            <a href="/tags/box-model/" rel="tag"># box-model</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/19/html%20(%E5%9B%9B)%20%20iframe/" rel="next" title="html (四)  iframe">
+                <i class="fa fa-chevron-left"></i> html (四)  iframe
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/11/20/%E5%AE%9A%E4%BD%8D(position)/" rel="prev" title="定位(position)">
+                定位(position) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="lory" />
+            
+              <p class="site-author-name" itemprop="name">lory</p>
+              <p class="site-description motion-element" itemprop="description">(●'◡'●)</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/lory02" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#盒模型"><span class="nav-number">1.</span> <span class="nav-text">盒模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#内联盒模型"><span class="nav-number">2.</span> <span class="nav-text">内联盒模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#盒子属性"><span class="nav-number">3.</span> <span class="nav-text">盒子属性</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#width"><span class="nav-number">3.1.</span> <span class="nav-text">width</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#height"><span class="nav-number">3.2.</span> <span class="nav-text">height</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#paddings"><span class="nav-number">3.3.</span> <span class="nav-text">paddings</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#margin"><span class="nav-number">3.4.</span> <span class="nav-text">margin</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#border"><span class="nav-number">3.5.</span> <span class="nav-text">border</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#替换元素"><span class="nav-number">4.</span> <span class="nav-text">替换元素</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#css尺寸"><span class="nav-number">5.</span> <span class="nav-text">css尺寸</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lory</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

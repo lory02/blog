@@ -1,6 +1,877 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>你不知道的js（上）- this和对象原型</title>
+    <url>/2019/11/24/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84js%EF%BC%88%E4%B8%8A%EF%BC%89this%E5%92%8C%E5%AF%B9%E8%B1%A1%E5%8E%9F%E5%9E%8B/</url>
+    <content><![CDATA[<h4 id="第一章-关于this"><a href="#第一章-关于this" class="headerlink" title="第一章 关于this"></a>第一章 关于this</h4><p>this是用于传递上下文对象的一种机制。</p>
+<p>this的绑定和函数声明为u管，只取决于函数的调用方式。this实在函数被调用时发生的绑定，它指向什么完全取决于函数在哪里被调用。</p>
+<h5 id="this绑定的4种情况"><a href="#this绑定的4种情况" class="headerlink" title="this绑定的4种情况"></a><font color="LightCoral">this绑定的4种情况</font></h5><ol>
+<li><p>foo()</p>
+<p>默认绑定，this指向全局对象（window）, 严格模式下，this指向undefined</p>
+</li>
+<li><p>obj.foo()</p>
+<p>隐式绑定，this指向obj </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">//隐式绑定很容易脱绑，bar此时指向的foo函数本身</span><br><span class="line">var bar = obj.foo()</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>foo.call(obj)</p>
+<p>foo.apply(obj)</p>
+<p>foo.bind(obj)</p>
+<ul>
+<li>⭐<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind" target="_blank" rel="noopener">bind实现</a></li>
+</ul>
+<p>显示绑定，this被强绑定为obj</p>
+</li>
+<li><p>var bar = new foo() </p>
+<p>this 指向新创建的对象</p>
+<blockquote>
+<p>使用 new 来调用函数，或者说发生构造函数调用时，会自动执行下面的操作。</p>
+<ol>
+<li>创建（或者说构造）一个全新的对象。 </li>
+<li>这个新对象会被执行 [[ 原型 ]] 连接。 </li>
+<li>这个新对象会绑定到函数调用的 this。 </li>
+<li>如果函数没有返回其他对象，那么 new 表达式中的函数调用会自动返回这个新对象</li>
+</ol>
+</blockquote>
+</li>
+</ol>
+<h5 id="优先级"><a href="#优先级" class="headerlink" title="优先级"></a>优先级</h5><p>new 绑定 &gt; 显示绑定 &gt; 隐式绑定 &gt;默认绑定</p>
+<h5 id="被忽略的this"><a href="#被忽略的this" class="headerlink" title="被忽略的this"></a>被忽略的this</h5><p>把 null 或者 undefined 作为 this 的绑定对象传入 call、apply 或者 bind，这些值 在调用时会被忽略，实际应用的是默认绑定规则。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">function foo() &#123;</span><br><span class="line">	console.log(this.a)</span><br><span class="line">&#125;</span><br><span class="line">var a = 2</span><br><span class="line">//null被忽略，this为window</span><br><span class="line">foo.call(null)</span><br></pre></td></tr></table></figure>
+
+<p>🙃 注：使用null忽略this的方式有可能会造成修改全局对象</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">function foo()&#123;</span><br><span class="line">	//修改全局变量</span><br><span class="line">	this.a = 2</span><br><span class="line">&#125;</span><br><span class="line">var a = 1</span><br><span class="line">foo.call(null)</span><br><span class="line">console.log(a)</span><br></pre></td></tr></table></figure>
+
+<p>解决方法：⭐创建一个特殊的空对象，作为this的占位符</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">a, b</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"a:"</span> + a + <span class="string">", b:"</span> + b);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 我们的 DMZ 空对象 </span></span><br><span class="line"><span class="keyword">var</span> ø = <span class="built_in">Object</span>.create(<span class="literal">null</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 把数组展开成参数 </span></span><br><span class="line">foo.apply(ø, [<span class="number">2</span>, <span class="number">3</span>]); <span class="comment">// a:2, b:3 </span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用 bind(..) 进行柯里化 </span></span><br><span class="line"><span class="keyword">var</span> bar = foo.bind(ø, <span class="number">2</span>);</span><br><span class="line">bar(<span class="number">3</span>); <span class="comment">// a:2, b:3</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="软绑定"><a href="#软绑定" class="headerlink" title="软绑定"></a>软绑定</h5><p>bind(), 硬绑定之后无法使用隐式或显示绑定修改this（除了new）</p>
+<p>⭐softbind()，绑定之后还可以用隐式或者显示绑定修改this</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (!<span class="built_in">Function</span>.prototype.softBind) &#123;</span><br><span class="line">    <span class="built_in">Function</span>.prototype.softBind = <span class="function"><span class="keyword">function</span> (<span class="params">obj</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> fn = <span class="keyword">this</span>; <span class="comment">// 捕获所有 curried 参数         </span></span><br><span class="line">        <span class="keyword">var</span> curried = [].slice.call(<span class="built_in">arguments</span>, <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">var</span> bound = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> fn.apply(</span><br><span class="line">                (!<span class="keyword">this</span> || <span class="keyword">this</span> === (<span class="built_in">window</span> || global)) ? </span><br><span class="line">                obj : <span class="keyword">this</span> </span><br><span class="line">                curried.concat.apply(curried, <span class="built_in">arguments</span>));</span><br><span class="line">            &#125;;</span><br><span class="line">        bound.prototype = <span class="built_in">Object</span>.create(fn.prototype);</span><br><span class="line">        <span class="keyword">return</span> bound;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;      <span class="keyword">return</span> bound;      &#125;; &#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="箭头函数"><a href="#箭头函数" class="headerlink" title="箭头函数"></a>箭头函数</h5><p>箭头函数不使用 this 的四种标准规则，而是根据外层（函数或者全局）作用域来决 定 this。所以箭头函数的this是在创建词法作用域的时候就确定了。</p>
+<p>箭头函数常用于回调函数</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123; <span class="comment">// 这里的 this 在此法上继承自 foo()         </span></span><br><span class="line">        <span class="built_in">console</span>.log(<span class="keyword">this</span>.a);</span><br><span class="line">    &#125;, <span class="number">100</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> obj = &#123;</span><br><span class="line">    a: <span class="number">2</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">foo.call(obj); <span class="comment">// 2</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h5><ul>
+<li><p>四条规则判断this绑定的对象</p>
+</li>
+<li><p>foo.apply(null) 使用null作为this占位符</p>
+<p>foo.apply( ø ), 更安全的忽略this绑定的方式，使用DMZ对象，</p>
+<p>ø = Object.create(null)</p>
+</li>
+<li><p>箭头函数的this绑定，取决于外层词法作用域，箭头函数会继承外层函数调用的this绑定</p>
+</li>
+</ul>
+<h4 id="第三章-对象"><a href="#第三章-对象" class="headerlink" title="第三章 对象"></a>第三章 对象</h4><h5 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h5><ul>
+<li>定义对象的两种形式<ul>
+<li>声明形式  {key:value}</li>
+<li>构造形式  new obj()</li>
+</ul>
+</li>
+</ul>
+<h5 id="javascript-类型（6钟）"><a href="#javascript-类型（6钟）" class="headerlink" title="javascript 类型（6钟）"></a>javascript 类型（6钟）</h5><ul>
+<li>string</li>
+<li>number</li>
+<li>boolean</li>
+<li>null  (注：typeof null  //object，这是语言本身的一个bug)</li>
+<li>undefined </li>
+<li>object</li>
+</ul>
+<blockquote>
+<p>typeof null 的原理是这样的，不同的对象在底层都表示为二进制，在 JavaScript 中二进制前三位都为 0 的话会被判 断为 object 类型， null 的二进制表示是全 0，自然前三位也是 0，所以执行 typeof 时会返回“object”。 </p>
+</blockquote>
+<h5 id="内置对象"><a href="#内置对象" class="headerlink" title="内置对象"></a>内置对象</h5><ul>
+<li>String</li>
+<li>Number</li>
+<li>Boolean</li>
+<li>Object</li>
+<li>Function</li>
+<li>Array</li>
+<li>Date</li>
+<li>RegExp</li>
+<li>Error</li>
+</ul>
+<p>对于原始值string，number，boolean调用方法，默认会将原始值转换为对应内置对象，获取的是内置对象上的方法和属性。</p>
+<h5 id="内容"><a href="#内容" class="headerlink" title="内容"></a>内容</h5><p>对象的内容是由一些存储在特定命名位置的（任意类型的）值组成的。</p>
+<ul>
+<li>这些值并没有被存储在对象钟，这只是一种表现形式</li>
+<li>实际上，对象的属性就像指针（从技术角度讲就是引用），指向这些值真正的存储位置</li>
+</ul>
+<p>读取属性的方式</p>
+<ul>
+<li>.a      (属性名需要满足变量的命名规范)</li>
+<li>[“a”] （[..]里面的内容会被当做表达式求值）</li>
+</ul>
+<p>⭐注意</p>
+<p>在对象中，<strong>属性名永远是都是字符串</strong>。如果你使用string（字面量）以外的其他值作为属性名，那么它首先会被转换为一个字符串</p>
+<h5 id="属性与方法"><a href="#属性与方法" class="headerlink" title="属性与方法"></a>属性与方法</h5><p>方法：实际上，函数永远不会“属于”一个对象，只不过是对函数的一种引用，通过obj.foo()调用时，this会动态绑定为obj</p>
+<h5 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h5><p>myArray = [“foo”,”bar”，42]，数组期望的下标为数值</p>
+<ul>
+<li><p>当你通过 myArray.baz = “baz” ,虽然myArray上多了一个命名属性baz，但实际上数组的长度仍然没有发生变化</p>
+</li>
+<li><p>如果属性名看起来是一个数字，那它就会变成一个数值下标</p>
+<p>myArray[“3”] = “baz” ，数组多了一个元素</p>
+</li>
+</ul>
+<h5 id="复制对象"><a href="#复制对象" class="headerlink" title="复制对象"></a>复制对象</h5><p>关于复制对象分为两种情况  a = {code：1 ，person： {name: tom, age: 18}}</p>
+<ul>
+<li>浅拷贝 ： shallowCopy(a) ,  简单的属性和数组值的复制，对于person只是一种对象的引用，并没有重新创建一个新的person对象</li>
+<li>深拷贝：deepCopy(a)，而对于深拷贝来说，不再是引用原有的对象，而是重新创建一个新的person对象</li>
+</ul>
+<p>⭐循环引用的问题</p>
+<p>关于复制对象的方法</p>
+<ul>
+<li>var newObj = JSON.parse( JSON.stringify( someObj ) ); 只适用于部分情况</li>
+<li>var newObj = Object.assign( {}, myObject );  浅拷贝</li>
+<li>lodash，deepClone</li>
+</ul>
+<h5 id="Object的特性"><a href="#Object的特性" class="headerlink" title="Object的特性"></a>Object的特性</h5><ul>
+<li><p>属性描述符</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Object</span>.defineProperty( myObject, <span class="string">"a"</span>, &#123;     </span><br><span class="line">	value: <span class="number">2</span>,     </span><br><span class="line">	writable: <span class="literal">true</span>,      </span><br><span class="line">	configurable: <span class="literal">true</span>,      </span><br><span class="line">	enumerable: <span class="literal">true</span> </span><br><span class="line"> &#125; );</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Writable ： 是否可以修改属性的值</li>
+<li>Configurable  ： 是否可配置，可以使用 defineProperty(..) 方法来修改属性描述符</li>
+<li>Enumerable ：是否可枚举</li>
+</ul>
+</li>
+<li><p>不变性，浅不变性(只影响目标对象的和它的直接属性，如果目标对象引用了其他对象，其他对象的内容还是可变的)</p>
+<ul>
+<li>writable:false ， configurable:false  ： 不可修改，重定义或者删除</li>
+<li>Object.preventExtensions( ) ： 禁止扩展</li>
+<li>Object.seal(..)  ： 这个方法实际上会在一个现有对象上调用 Object.preventExtensions(..) 并把所有现有属性标记为 configurable:false</li>
+<li>Object.freeze(..) ： 这个方法实际上会在一个现有对象上调用 Object.seal(..) 并把所有“数据访问”属性标记为 writable:false，这样就无法修改它们 的值。</li>
+</ul>
+</li>
+</ul>
+<h5 id="⭐内部属性"><a href="#⭐内部属性" class="headerlink" title="⭐内部属性"></a>⭐内部属性</h5><p>[[Get]] ： 用来读取属性的值</p>
+<ul>
+<li>在obj.a读取属性a的值时，实际上时使用了[[Get]]操作（有点像函数调 用：[[Get]] ()）。</li>
+<li>对象默认的内置[[Get]]操作首先在对象钟查找是否由名称相同的属性，如果找到就会返回这个属性的值。</li>
+<li>如果没有找到，就会遍历可能存在的原型链。</li>
+<li>如果无论如何都没有找到名称相同的属性，那么会返回undefined</li>
+</ul>
+<p>[[Put]] :  用来设置或者创建这个属性 obj.a = “a”</p>
+<ul>
+<li><p>是否已经存在该属性？</p>
+</li>
+<li><p>属性存在</p>
+<ul>
+<li><p>是否由访问描述符 （setter），如果由就调用setter</p>
+</li>
+<li><p>数据描述符的writtable 是否为false</p>
+</li>
+<li><p>如果都不是，将该值设置为属性的值</p>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="Getter和Setter"><a href="#Getter和Setter" class="headerlink" title="Getter和Setter"></a>Getter和Setter</h5><p>在es5中可以用getter和setter部分改写默认操作，但是只能应用在单个属性中，无法应用在整个对象上。</p>
+<ul>
+<li>获取属性值，会调用getter函数</li>
+<li>设置属性值，会调用setter函数</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> myObject = &#123; <span class="comment">// 给 a 定义一个 getter    </span></span><br><span class="line">    <span class="keyword">get</span> a() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>._a_;</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 给 a 定义一个 setter     </span></span><br><span class="line">    <span class="keyword">set</span> a(val) &#123;</span><br><span class="line">        <span class="keyword">this</span>._a_ = val * <span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">myObject.a = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">myObject.a; <span class="comment">// 4</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="存在性"><a href="#存在性" class="headerlink" title="存在性"></a>存在性</h5><p>读取属性结果为undefined有两种可能</p>
+<ul>
+<li>属性值为undefined</li>
+<li>没有这个属性，返回undefined</li>
+</ul>
+<p>如何区别这两种可能？</p>
+<ul>
+<li><p>“a” in myObject</p>
+</li>
+<li><p>myObject.hasOwnProperty( “a” )</p>
+</li>
+</ul>
+<h5 id="枚举和遍历"><a href="#枚举和遍历" class="headerlink" title="枚举和遍历"></a>枚举和遍历</h5><p>条件 ： 是否在原型链上查找，是否包括不可枚举属性</p>
+<ul>
+<li><p>for…in</p>
+<ul>
+<li>在整个原型链上遍历属性</li>
+<li>只包括可枚举属性</li>
+</ul>
+</li>
+<li><p>hasOwnProperty(..)</p>
+<ul>
+<li>只查找对象是否包含某属性</li>
+<li>包括可枚举和不可枚举的属性</li>
+</ul>
+</li>
+<li><p>Object.keys(..)</p>
+<ul>
+<li>只在当前对象中查找</li>
+<li>返回一个数组，包含所有可枚举属性</li>
+</ul>
+</li>
+<li><p>Object.getOwnPropertyNames(..)</p>
+<ul>
+<li>只在当前对象中插嘴</li>
+<li>返回一个数组，包含了所有属性（包括可枚举和不可枚举）</li>
+</ul>
+</li>
+<li><p>⭐for .. of ： 用来遍历数组元素值</p>
+<p>原理 ： 使用迭代器对象，通过调用得带起对象的next（）方法来遍历所有的返回值</p>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> myArray = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"><span class="comment">//使用Symbol.iterator 来获取对象的 @@iterator 内部属性</span></span><br><span class="line"><span class="comment">// @@iterator 本身并不是一个迭代器对象，而是一个返回迭代器对象的函数</span></span><br><span class="line"><span class="keyword">var</span> it = myArray[<span class="built_in">Symbol</span>.iterator]();</span><br><span class="line"></span><br><span class="line">it.next(); <span class="comment">// &#123; value:1, done:false &#125;  </span></span><br><span class="line">it.next(); <span class="comment">// &#123; value:2, done:false &#125;  </span></span><br><span class="line">it.next(); <span class="comment">// &#123; value:3, done:false &#125;  </span></span><br><span class="line">it.next(); <span class="comment">// &#123; done:true &#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>注： 因为普通的对象没有内置的 @@iterator，所以无法使用for ..of遍历，但是我们也可以给任何想遍历对象定时 @@iterator</p>
+<h5 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h5><ul>
+<li><p>js数据类型</p>
+<ul>
+<li>基础类型</li>
+<li>引用类型</li>
+</ul>
+</li>
+<li><p>对象就是键/值对的集合</p>
+</li>
+<li><p>对象的属性描述符</p>
+</li>
+<li><p>for .. of遍历数据结构中的值，，for..of 会寻找内置或者自定义的 @@iterator 对象并调用它的 next() 方法来遍历数据值</p>
+</li>
+</ul>
+<h4 id="第四章-混合对象“类”"><a href="#第四章-混合对象“类”" class="headerlink" title="第四章 混合对象“类”"></a>第四章 混合对象“类”</h4><p>类是一种可选的设计模式</p>
+<h5 id="类的机制"><a href="#类的机制" class="headerlink" title="类的机制"></a>类的机制</h5><p>在面向类的语言中，“标准库”会提供Stack类，但是stack类不是’栈‘，它仅仅是一个抽象的表示，你必须先实例化stack类然后才能对它进行操作</p>
+<h5 id="建造"><a href="#建造" class="headerlink" title="建造"></a>建造</h5><p>类和实例的概念来自于房屋建造</p>
+<ul>
+<li>类 = 建筑蓝图</li>
+<li>实例化 = 按照蓝图来建造 一个东西</li>
+</ul>
+<h5 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h5><p>new Foo() , 通过调用构造函数来生成一个实例</p>
+<h5 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h5><h5 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h5><p>在面向对象的语言中，多态是同一个行为具有多个不同表现形式或形态的能力。</p>
+<p>多态就是同一个接口，使用不同实列而执行不同操作</p>
+<p><img src="/2019/11/24/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84js%EF%BC%88%E4%B8%8A%EF%BC%89this%E5%92%8C%E5%AF%B9%E8%B1%A1%E5%8E%9F%E5%9E%8B/%E7%B1%BB.png" alt="类"></p>
+<ul>
+<li><p>super：在子类中相对引用它继承的父类</p>
+<ul>
+<li>相对：继承的基础上，可以进行改写</li>
+</ul>
+</li>
+<li><p>多态并不表示子类和父类有关联，子类得到的只是父类的一份副本。类的继承其实就是 复制。</p>
+</li>
+</ul>
+<h5 id="多重继承"><a href="#多重继承" class="headerlink" title="多重继承"></a>多重继承</h5><p><img src="/2019/11/24/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84js%EF%BC%88%E4%B8%8A%EF%BC%89this%E5%92%8C%E5%AF%B9%E8%B1%A1%E5%8E%9F%E5%9E%8B/%E5%A4%9A%E6%80%81.png" alt="多态"></p>
+<h5 id="混入"><a href="#混入" class="headerlink" title="混入"></a>混入</h5><p>在其他语言中，类表现除的都是复制行为，子类得到的只是父类的一份副本</p>
+<p>而js中只有对象（引用类型），对象并不会被复制到其他对象中，而是被引用</p>
+<ul>
+<li>显示混入</li>
+<li>隐式混入<ul>
+<li>（OtherObj.methodName.call(this, …)</li>
+</ul>
+</li>
+</ul>
+<h4 id="第五章-原型"><a href="#第五章-原型" class="headerlink" title="第五章 原型"></a>第五章 原型</h4><h5 id="Prototype-：内置属性"><a href="#Prototype-：内置属性" class="headerlink" title="[[Prototype]]：内置属性"></a>[[Prototype]]：内置属性</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">funtion Foo() &#123;&#125;</span><br><span class="line">var foo = new Foo()</span><br><span class="line"></span><br><span class="line">Object.getPrototypeOf( foo ) === Foo.prototype; // true</span><br></pre></td></tr></table></figure>
+
+<p>Foo是一个函数，每个函数都有一个特殊的属性prototype，它指向一个对象</p>
+<p>每个对象都有一个内置属性 – [[Prototype]]，通过new实例化一个foo对象，foo对象中有一个[[Prototype]]指向了</p>
+<p>Foo.prototype对象。</p>
+<ul>
+<li>有别于其他语言中的类中的继承（完全复制一份），js中的原型继承，只是在对象加入一个特殊的指针，与其他对象进行关联。</li>
+</ul>
+<h5 id="属性设置和屏蔽"><a href="#属性设置和屏蔽" class="headerlink" title="属性设置和屏蔽"></a>属性设置和屏蔽</h5><p>设置</p>
+<ul>
+<li>沿着原型链寻找是否存在该属性（writeable: true）<ul>
+<li>如果找到，将值赋值给第一个遍历到的属性</li>
+<li>如果没找到，直接在当前对象中创建属性</li>
+</ul>
+</li>
+</ul>
+<p>屏蔽</p>
+<ul>
+<li>如果当前对象的属性，在原型链上也有该属性<ul>
+<li>则原型上层属性会被屏蔽，只读取当前对象的属性</li>
+</ul>
+</li>
+</ul>
+<h5 id="⭐“构造函数”"><a href="#⭐“构造函数”" class="headerlink" title="⭐“构造函数”"></a>⭐“构造函数”</h5><p><strong>构造函数</strong>，其实就是一个普通的调用，只是在通过new 调用整个函数，会创建一个新对象并返回（如果函数本身并没有return语句），在 JavaScript 中对于“构造函数”最准确的解释是，所有带 new 的函数调用</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">funtion Foo() &#123;&#125;</span><br><span class="line">var foo = new Foo()</span><br><span class="line"></span><br><span class="line">Object.getPrototypeOf( foo ) === Foo.prototype; // true</span><br><span class="line">Foo.prototype.constructor === Foo  //true</span><br><span class="line">foo.constructor === Foo  //true</span><br><span class="line">foo.hasOwnProperty(constructor)  //false</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Foo.prototype 默认有一个公有并且不可枚举 的属性 .constructor，这个属性引用的是对象关联的函数</li>
+<li>foo其实本身并不存在constructor属性，foo.constructor === Foo 为什么等于true，其实是因为foo.constructor引用了Foo.prototype.constructor（机制：前面的原型链查找）</li>
+</ul>
+<p>⭐是否是Foo构造了foo？</p>
+<p>好吧，原来之前的理解有问题。看了书对原型好像开始有了新的理解。</p>
+<ul>
+<li><p>所谓的构造函数，并存在特殊的“构造函数”，无非还是普通的函数调用，只是在前面加上了一个new，new 会劫持所有普通函数并用构造对象的形式来调用它（本值上其实函数还是在被调用，只是隐藏了部分操作，只通过new这一个关键词代表了这部分操作）</p>
+</li>
+<li><p>js中的原型，其实就是一种关联机制，通过一个特殊指针引用对象，然后通过指针引用形成链（有点类似与数据结构中的单向链表）</p>
+</li>
+<li><p>foo.constructor === Foo，并不能解释为foo是有Foo构造的，其实foo这个对象不过是用[[Prototype]]与Foo.prototype对象关联起来，通过原型链查找，在Foo.prototype对象上找到了constructor属性，如果Foo.prototype对象上没有constructor属性，它还会沿着原型链继续向上查找</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Foo</span>(<span class="params"></span>) </span>&#123; <span class="comment">/* .. */</span> &#125; </span><br><span class="line"> </span><br><span class="line">Foo.prototype = &#123; <span class="comment">/* .. */</span> &#125;; <span class="comment">// 创建一个新原型对象 ，该对象中没有添加constructor属性</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">var</span> foo = <span class="keyword">new</span> Foo(); </span><br><span class="line">foo.constructor === Foo; <span class="comment">// false!  </span></span><br><span class="line">foo.constructor === <span class="built_in">Object</span>; <span class="comment">// true!</span></span><br></pre></td></tr></table></figure>
+
+<p>修复constructor属性</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">/* .. */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Foo.prototype = &#123;</span><br><span class="line">    <span class="comment">/* .. */</span></span><br><span class="line">&#125;; <span class="comment">// 创建一个新原型对象 </span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 需要在 Foo.prototype 上“修复”丢失的 .constructor 属性 </span></span><br><span class="line"><span class="comment">// 新对象属性起到 Foo.prototype 的作用 </span></span><br><span class="line"><span class="comment">// 关于 defineProperty(..)，参见第 3 章</span></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(Foo.prototype, <span class="string">"constructor"</span>, &#123;</span><br><span class="line">    enumerable: <span class="literal">false</span>,</span><br><span class="line">    writable: <span class="literal">true</span>,</span><br><span class="line">    configurable: <span class="literal">true</span>,</span><br><span class="line">    value: Foo</span><br><span class="line">    <span class="comment">// 让 .constructor 指向 Foo </span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h5 id="⭐原型继承"><a href="#⭐原型继承" class="headerlink" title="⭐原型继承"></a>⭐原型继承</h5><p> Bar.prototype = Object.create( Foo.prototype ) </p>
+<ul>
+<li>调用 Object.create(..) 会凭空创建一个“新”对象并把新对象内部的 [[Prototype]] 关联到你指定的对象（本例中是 Foo.prototype）</li>
+<li>指向一个新对象的好处是，执行Bar.prototype. myLabel = …，只会修改空对象的属性，而不会修改Foo.prototype对象</li>
+</ul>
+<p>Bar.prototype = Foo.prototype （这种形式会产生一些问题）</p>
+<ul>
+<li>并不会创建一个关联到 Bar.prototype 的新对象，它只 是让Bar.prototype 直接引用 Foo.prototype 对象。</li>
+<li>当你执行类似 Bar.prototype. myLabel = … 的赋值语句时会直接修改 Foo.prototype 对象本身</li>
+</ul>
+<p>Bar.prototype = new Foo()</p>
+<ul>
+<li><p>虽然会创建一个关联到 Bar.prototype 的新对象，如果函数Foo不是空函数，有一些副作用会影响，可能会通过过this的方式添加到Bar.prototype 上，这样不仅继承了Foo的原型，还添加了别的属性，影响Bar的后代</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">function Foo() &#123;</span><br><span class="line">	this.other = &quot;side effect&quot;  //原型对象上会添加other属性</span><br><span class="line">&#125; </span><br><span class="line">//实例化</span><br><span class="line">var Bar.prototype  = new Foo();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果Foo是空函数就不影响了</p>
+</li>
+</ul>
+<h5 id="es6之后出现的新方法"><a href="#es6之后出现的新方法" class="headerlink" title="es6之后出现的新方法"></a>es6之后出现的新方法</h5><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// ES6 之前需要抛弃默认的 Bar.prototype </span></span><br><span class="line">Bar.ptototype = <span class="built_in">Object</span>.create( Foo.prototype ); </span><br><span class="line">=&gt;类似于</span><br><span class="line">Bar.ptototype = &#123;&#125; (&#123;&#125;._proto = Foo.prototype)</span><br><span class="line"> </span><br><span class="line"><span class="comment">// ES6 开始可以直接修改现有的 Bar.prototype =&gt; 来修改对象的 [[Prototype]] 关联 </span></span><br><span class="line"><span class="built_in">Object</span>.setPrototypeOf( Bar.prototype, Foo.prototype );</span><br><span class="line">=&gt; 相当于</span><br><span class="line">Bar.prototype._proto = Foo.prototype <span class="comment">//.__proto__ 属性非标准无法兼容</span></span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ul>
+<h5 id="检查类的关系"><a href="#检查类的关系" class="headerlink" title="检查类的关系"></a>检查类的关系</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">function Foo() &#123;      // ... &#125; </span><br><span class="line">  </span><br><span class="line">var a = new Foo();</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>a instanceof Foo</p>
+<ul>
+<li>在 a 的整条 [[Prototype]] 链中是否有指向 Foo.prototype 的对象？</li>
+<li>只能处理对象（a) 和‘构造函数’( Foo )之间的关系</li>
+</ul>
+</li>
+<li><p>Foo.prototype.isPrototypeOf( a )  =&gt;  b.isPrototypeOf( c )</p>
+<ul>
+<li>在 a 的整 条 [[Prototype]] 链中是否出现过 Foo.prototype ？</li>
+<li>可以判断两个对象之间的关系</li>
+</ul>
+</li>
+<li><p>Object.getPrototypeOf( a ) === Foo.prototype</p>
+<ul>
+<li>getPrototypeOf可以获取一个对象的[[Prototype]] 链</li>
+</ul>
+</li>
+</ul>
+<h5 id="⭐总结（就copy书本上的文字把-，这一章介绍的角度确实很深刻）"><a href="#⭐总结（就copy书本上的文字把-，这一章介绍的角度确实很深刻）" class="headerlink" title="⭐总结（就copy书本上的文字把~，这一章介绍的角度确实很深刻）"></a>⭐总结（就copy书本上的文字把~，这一章介绍的角度确实很深刻）</h5><p>如果要访问对象中并不存在的一个属性，[[Get]] 操作（参见第 3 章）就会查找对象内部 [[Prototype]] 关联的对象。这个关联关系实际上定义了一条“原型链”（有点像嵌套的作用域链），在查找属性时会对它进行遍历。<br><strong>所有普通对象都有内置的 Object.prototype，指向原型链的顶端（比如说全局作用域），如 果在原型链中找不到指定的属性就会停止。</strong>toString()、valueOf() 和其他一些通用的功能 都存在于 Object.prototype 对象上，因此语言中所有的对象都可以使用它们。<br>关联两个对象最常用的方法是使用 new 关键词进行函数调用，在调用的 4 个步骤（第 2 章）中会创建一个关联其他对象的新对象。<br>使用 new 调用函数时会把新对象的 .prototype 属性关联到“其他对象” 。带 new 的函数调用 通常被称为“构造函数调用” ，尽管它们实际上和传统面向类语言中的类构造函数不一样。<br>虽然这些 JavaScript 机制和传统面向类语言中的“类初始化”和“类继承”很相似，但 是 JavaScript 中的机制有一个核心区别，那就是不会进行复制，对象之间是通过内部的 [[Prototype]] 链关联的。<br>出于各种原因，以“继承”结尾的术语（包括“原型继承”）和其他面向对象的术语都无 法帮助你理解 JavaScript 的真实机制（不仅仅是限制我们的思维模式）。<br>相比之下，“委托”是一个更合适的术语，因为<font color="LightCoral"><strong>对象之间的关系不是复制而是委托</strong></font></p>
+<h5 id="概括"><a href="#概括" class="headerlink" title="概括"></a>概括</h5><ul>
+<li>只要是对象，就有一个内部属性[[prototype]]</li>
+<li>只要是函数，就有一个特殊的属性prototype，指向一个原型对象<ul>
+<li>该原型对象也是一个对象，内部也有[[prototyoe]]属性，指向另一个对象（串着串着…就产生了原型链）</li>
+</ul>
+</li>
+<li>var foo = new Foo() <ul>
+<li>new 操作符，就是通过实例化，创建新对象，然后将新创建的对象的[[prototype]]属性与Foo.prototyoe对象关联</li>
+</ul>
+</li>
+</ul>
+<h4 id="第六章-行为委托"><a href="#第六章-行为委托" class="headerlink" title="第六章 行为委托"></a>第六章 行为委托</h4><p>[[prototype]]机制就是指对象中一个内部链接引用另一个对象</p>
+<p>如果在第一个对象上没有找到需要的属性或者方法引用，引擎会继续在[[prototype]]关联的对象上进行查找。同理，如果在后者中也没有找到需要的引用就会继续查找它的[[prototype]]，以此类推。这一系列对象的链接被称为“原型链”。</p>
+<p>换句话说，javascript中这个机制的本质就是对象之间的关联关系。</p>
+<hr>
+<p><strong><font color="LightCoral">一些委托和“继承”的语法差异</font></strong></p>
+<ul>
+<li><p>js中的class语法糖,用super-继承父类属性和方法</p>
+<ul>
+<li>super（width，height） ：相当于 parent.call( this, width, height );<ul>
+<li>执行parent函数，this绑定为child，将属性挂载到child对象上</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>关于对象委托和“原型继承”代码风格的差异</p>
+<ul>
+<li>对象委托，重点是关联两个对象 （讨论的是两个对象的关系）<ul>
+<li>属性写在对象的init函数中</li>
+<li>方法也写在对象中</li>
+</ul>
+</li>
+<li>原型“继承”，关联的是构造函数的[[prototype]]对象 （讨论的是三者之间的关系）<ul>
+<li>属性放在构造函数中（通过parent.call(this,attrName)继承）</li>
+<li>方法放在构造函数的prototype对象上（通过原型链访问）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><strong>参考</strong></p>
+<p>《你不知道的js》</p>
+<p> <a href="https://developer.mozilla.org/zh-CN/" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/</a> </p>
+]]></content>
+      <categories>
+        <category>books</category>
+      </categories>
+      <tags>
+        <tag>你不知道的js</tag>
+        <tag>javascript</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>你不知道的js（上）- 作用域和闭包</title>
+    <url>/2019/11/22/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84js%EF%BC%88%E4%B8%8A%EF%BC%89-%20%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%92%8C%E9%97%AD%E5%8C%85/</url>
+    <content><![CDATA[<p>花了几天时间断断续续的读完了这本书，这确实是一本进阶和巩固js的书。</p>
+<p>这本书的一开始的节奏，其实有点让我犯困，不过第二部分实在是惊艳（从动态和静态来解析this，从[[prototype]]属性来关联对象，介绍委托设计模式…），它的观点很直接，从语言本身的设计角度来剖析对象和原型，用一些更深层的原理来解析，Javascript中的代码细节。发现之前，自己遇到一些的困惑，在这里都得到了解答。</p>
+<p>不过不建议一开始初学就看这本书，建议在对语言有了一定了解之后，再来读这本书，肯定会有收获。</p>
+<h4 id="第一章作用域是什么？"><a href="#第一章作用域是什么？" class="headerlink" title="第一章作用域是什么？"></a>第一章作用域是什么？</h4><h5 id="编译原理"><a href="#编译原理" class="headerlink" title="编译原理"></a>编译原理</h5><ul>
+<li>分词/词法分析<ul>
+<li>将代码分解成词法单元（分割代码—面包原料）<ul>
+<li>分词和词法分析的区别：有状态还是无状态</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>解析/语法分析<ul>
+<li>将词法单元流转换成一个AST抽象语法树<ul>
+<li>{type : ‘’,value :’’ …}  ， 识别每个单元具体作用（盐-调料，烤箱-厨具）</li>
+<li>AST（img）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>代码生成<ul>
+<li>生成机器码</li>
+</ul>
+</li>
+</ul>
+<p><strong>总结</strong>： 分解成词法单元=》 构建语法树 =》 生成机器码</p>
+<h5 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h5><p>学习作用域的方式，是要取了解在代码编译和执行的过程中，作用域扮演何种角色。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">var a = 1;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>编译  var a  （是否需要创建变量a）<ul>
+<li>在当前作用域中寻找变量a，如果无则声明，有则忽略</li>
+</ul>
+</li>
+<li>执行  a = 1  （给哪个变量a赋值）<ul>
+<li>在当前作用域中寻找变量a，有则赋值，没有则沿着作用域链向上查找</li>
+<li>如果在全局作用域中也未找到a，则新建一个全局变量a</li>
+</ul>
+</li>
+</ul>
+<p><strong>总结</strong>: 变量的赋值操作会执行两个动作，首先编译器会在当前作用域中声明一个变量（如 果之前没有声明过），然后在运行时引擎会在作用域中查找该变量，如果能够找到就会对 它赋值。</p>
+<h5 id="LHS-和-RHS"><a href="#LHS-和-RHS" class="headerlink" title="LHS 和 RHS"></a>LHS 和 RHS</h5><p>LHS : 左侧查询，用于赋值  var a = 1</p>
+<p>RHS : 右侧查询，用于取值  console.log(a)</p>
+<h5 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h5><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> b </span><br><span class="line"><span class="built_in">console</span>.log(b)  <span class="comment">//undefined</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">b</span><br><span class="line"><span class="comment">//Uncaught ReferenceError: b is not defined</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="第二章词法作用域"><a href="#第二章词法作用域" class="headerlink" title="第二章词法作用域"></a>第二章词法作用域</h4><h5 id="词法阶段"><a href="#词法阶段" class="headerlink" title="词法阶段"></a>词法阶段</h5><p>编译器的第一个工作阶段，叫作词法化（也叫单词化-词法分析）。词法化的过程会对源代码中的字符进行检查，如果是有状态的解析过程，还会赋予单词语义。</p>
+<h5 id="词法作用域"><a href="#词法作用域" class="headerlink" title="词法作用域"></a>词法作用域</h5><p>词法作用域就是定义在词法阶段的作用域。（<em>也就是在执行之前就确定了作用域</em>）换句话说，词法作用域是由你在写 代码时将变量和块作用域写在哪里来决定的，因此当词法分析器处理代码时会保持作用域 不变（大部分情况下是这样的。</p>
+<h5 id="作用域查找"><a href="#作用域查找" class="headerlink" title="作用域查找"></a><strong>作用域查找</strong></h5><p>当前的作用域位置，向外查找至全局作用域</p>
+<h5 id="函数作用域"><a href="#函数作用域" class="headerlink" title="函数作用域"></a>函数作用域</h5><p>函数中没有var是全局变量，有var是局部变量</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">b</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	a = <span class="number">1</span></span><br><span class="line">&#125;</span><br><span class="line">b()</span><br><span class="line"><span class="built_in">window</span>.a === <span class="number">1</span> </span><br><span class="line"><span class="comment">//函数中没有var的变量为全局变量</span></span><br><span class="line"><span class="comment">//a = 1 ，现在函数作用域中查找，然后再全局作用域中查找，没有则在全局作用域中创建a</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="欺骗词法"><a href="#欺骗词法" class="headerlink" title="欺骗词法"></a>欺骗词法</h5><ul>
+<li><p><strong>eval( )</strong></p>
+<ul>
+<li><p>执行时才运行eval中的代码，可能会改变原有作用域结构</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">str, a</span>) </span>&#123;     </span><br><span class="line">  <span class="built_in">eval</span>( str ); <span class="comment">// 欺骗！     </span></span><br><span class="line">  <span class="built_in">console</span>.log( a, b ); </span><br><span class="line">&#125; </span><br><span class="line"><span class="keyword">var</span> b = <span class="number">2</span>; </span><br><span class="line">foo( <span class="string">"var b = 3;"</span>, <span class="number">1</span> ); <span class="comment">// 1, 3</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在严格模式的程序中，eval(..) 在运行时有其自己的词法作用域，意味着其 中的声明无法修改所在的作用域</p>
+</li>
+</ul>
+</li>
+<li><p><strong>with()</strong></p>
+<ul>
+<li><p>with 通常被当作重复引用同一个对象中的多个属性的快捷方式，可以不需要重复引用对象 本身</p>
+</li>
+<li><p>with 可以将一个没有或有多个属性的对象处理为一个完全隔离的词法作用域 (相当于区别于函数或者全局作用域的第三种作用域，即对象作用域</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">with</span>(obj) &#123;</span><br><span class="line">        a = <span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> o1 = &#123;</span><br><span class="line">    a: <span class="number">3</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> o2 = &#123;</span><br><span class="line">    b: <span class="number">3</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">foo(o1);</span><br><span class="line"><span class="built_in">console</span>.log(o1.a); <span class="comment">// 2 </span></span><br><span class="line"></span><br><span class="line">foo(o2);</span><br><span class="line"><span class="built_in">console</span>.log(o2.a); </span><br><span class="line"><span class="comment">// undefined console.log( a ); // 2——不好，a 被泄漏到全局作用域上了！</span></span><br><span class="line"><span class="comment">// obj对象中没有a属性，向外查找a，全局中也没有，创建一个全局作用域a，赋值为2</span></span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h5><p>  词法作用域意味着作用域是由书写代码时函数声明的位置来决定的。编译的词法分析阶段基本能够知道全部标识符在哪里以及是如何声明的，从而能够预测在执行过程中如何对它 们进行查找。</p>
+<h4 id="第三章-函数作用域和块作用域"><a href="#第三章-函数作用域和块作用域" class="headerlink" title="第三章 函数作用域和块作用域"></a>第三章 函数作用域和块作用域</h4><h5 id="函数作用域-1"><a href="#函数作用域-1" class="headerlink" title="函数作用域"></a>函数作用域</h5><ul>
+<li><p>隐藏内部实现： 私有化变量，防止外部修改私有变量</p>
+</li>
+<li><p>规避冲突：防止同名标识符之间的冲突</p>
+</li>
+<li><p>函数表达式和函数声明的差别</p>
+<ul>
+<li><p>表达式：包装函数的声明以 (function… 而不仅是以 function… 开始</p>
+<ul>
+<li><p>foo 被绑定在所在作用域中，可以直接通过 foo() 来调用它</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123; <span class="comment">// &lt;-- 添加这一行 </span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> a = <span class="number">3</span>;</span><br><span class="line">    <span class="built_in">console</span>.log(a); <span class="comment">// 3 </span></span><br><span class="line"></span><br><span class="line">&#125; <span class="comment">// &lt;-- 以及这一行 foo(); // &lt;-- 以及这一行 </span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(a); <span class="comment">// 2</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>声明：function 开头</p>
+<ul>
+<li><p>foo 被绑定在函数表达式自身的函数中而不是所在作用域中</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123; <span class="comment">// &lt;-- 添加这一行 </span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> a = <span class="number">3</span>;</span><br><span class="line">    <span class="built_in">console</span>.log(a); <span class="comment">// 3 </span></span><br><span class="line"></span><br><span class="line">&#125;)(); <span class="comment">// &lt;-- 以及这一行 </span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(a); <span class="comment">// 2</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>IIFE，立即执行函数表达式 </p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">//两种写法</span></span><br><span class="line">(<span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>)</span>&#123; .. &#125;)()</span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123; .. &#125;())</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h5 id="块作用域"><a href="#块作用域" class="headerlink" title="块作用域"></a>块作用域</h5><ul>
+<li>with<ul>
+<li>用 with 从对象中创建出的作用域仅在 with 声明中而非外 部作用域中有效</li>
+</ul>
+</li>
+<li>try/catch<ul>
+<li>try/catch 的 catch 分句会创建一个块作 用域，其中声明的变量仅在 catch 内部有效</li>
+<li>⭐ 在同一个作用域使用多个catch，如果都使用err作为形参，很多静态工具会发出警告，但其实所有变量都被安全地限制在块级作用域内，很多开发者会将 catch 的参数命名为 err1、 err2 等。也有开发者干脆关闭了静态检查工具对重复变量名的检查。</li>
+</ul>
+</li>
+<li>let<ul>
+<li>let 关键字可以将变量绑定到所在的任意作用域中（通常是 { .. } 内部）</li>
+<li>for 循环</li>
+</ul>
+</li>
+<li>const<ul>
+<li>const，同样可以用来创建块作用域变量，但其值是固定的 （常量）。之后任何试图修改值的操作都会引起错误</li>
+</ul>
+</li>
+</ul>
+<h4 id="第四章-提升"><a href="#第四章-提升" class="headerlink" title="第四章 提升"></a>第四章 提升</h4><blockquote>
+<p>当你看到 var a = 2; 时，可能会认为这是一个声明。但 JavaScript 实际上会将其看成两个 声明：var a; 和 a = 2;。第一个定义声明是在编译阶段进行的。第二个赋值声明会被留在 原地等待执行阶段。</p>
+</blockquote>
+<p><strong>函数优先</strong> ： 函数声明和变量都会被提升，函数会首先被提升，然后才是变量（这个细节可以出现在有多个 “重复”声明的代码中）</p>
+<h4 id="第五章-作用域闭包"><a href="#第五章-作用域闭包" class="headerlink" title="第五章 作用域闭包"></a>第五章 作用域闭包</h4><h5 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h5><p>闭包使得函数可以继续访问定义时的词法作用域。(作用域查找和闭包的区别)</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">//作用域查询</span></span><br><span class="line"><span class="keyword">var</span> b = <span class="number">1</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">a</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(b)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">//闭包</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">a</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="keyword">var</span> b = <span class="number">1</span></span><br><span class="line">	<span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">		<span class="built_in">console</span>.log(b)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> c = a()</span><br><span class="line">c()</span><br><span class="line"><span class="comment">//如果没有闭包，调用完a，就会正常的销毁函数a（垃圾回收机制	），但是闭包，可以阻止函数作用域被销毁</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h5><p>将功能封装在函数中，通过函数调用的返回值暴露接口，通过返回值来获取模块的中方法，或者取值。（利用了闭包的特性）</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">CoolModule</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="keyword">var</span> something = <span class="string">"cool"</span></span><br><span class="line">	<span class="keyword">var</span> another = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">doSomthing</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">		<span class="built_in">console</span>.log(something)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">		<span class="built_in">console</span>.log( another.join(<span class="string">"!"</span>))</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//es6简写：（name和value命名相同，可省略value）</span></span><br><span class="line">	<span class="comment">//返回接口（模块的公共API）</span></span><br><span class="line">	<span class="keyword">return</span> &#123;</span><br><span class="line">		doSomthing,</span><br><span class="line">		doAnother</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> foo = CoolModule()</span><br><span class="line">foo.doSomething()  <span class="comment">// cool</span></span><br><span class="line">foo.doAnother() <span class="comment">// 1!2!3</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>一个具有函数属性的对象本身并不是真正的模块</li>
+<li>一个函数调用所返回的，只有数据属性而没有闭包函数的对象并不是真正的闭包</li>
+</ul>
+<h5 id="⭐现代的模块机制"><a href="#⭐现代的模块机制" class="headerlink" title="⭐现代的模块机制"></a>⭐现代的模块机制</h5><p>大多数模块依赖加载器 / 管理器本质上都是将这种模块定义封装进一个友好的 API</p>
+<ul>
+<li>核心： 函数调用（封装） +  返回对象（接口）<ul>
+<li>模块函数（内部定义多个变量或函数），调用模块函数</li>
+<li>返回对象（API接口），对象内的属性是对内部变量或函数的一个引用</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">//manager ： 包装函数</span></span><br><span class="line"><span class="keyword">var</span> MyModules = (<span class="function"><span class="keyword">function</span> <span class="title">Manager</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="comment">//存放模块： name为模块名，value为模块函数返回的接口</span></span><br><span class="line">	<span class="keyword">var</span> modules = &#123;&#125;</span><br><span class="line">	<span class="comment">/* </span></span><br><span class="line"><span class="comment">	* define 定义模块</span></span><br><span class="line"><span class="comment">	* @param name &#123;string&#125; 模块名</span></span><br><span class="line"><span class="comment">	* @param deps &#123;Array&#125; 依赖的模块</span></span><br><span class="line"><span class="comment">	* @impl impl &#123;function&#125; 模块函数</span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">define</span>(<span class="params">name, deps, impl</span>) </span>&#123;</span><br><span class="line">        <span class="comment">//从modules读取依赖模块接口</span></span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; deps.length; i++)&#123;</span><br><span class="line">			deps[i] = modules[deps[i]]</span><br><span class="line">		&#125;</span><br><span class="line">        <span class="comment">//该句很关键，将执行模块函数，返回模块接口，以key=value的形式存入modules中</span></span><br><span class="line">        <span class="comment">//apply: 第二个参数为数组，数组元素将作为函数的参数</span></span><br><span class="line">        	<span class="comment">//@param deps &#123;Array&#125; 依赖模块的接口的集合</span></span><br><span class="line">		modules[name] = impl.apply(impl, deps)</span><br><span class="line">	&#125;</span><br><span class="line">    </span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">get</span>(<span class="params">name</span>) </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> modules[name]</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="comment">//返回接口（包括了定义模块和获取模块的接口）</span></span><br><span class="line">	<span class="keyword">return</span> &#123;</span><br><span class="line">		define,</span><br><span class="line">		<span class="keyword">get</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;)()</span><br></pre></td></tr></table></figure>
+
+<p>定义模块</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">MyModules.define(<span class="string">"bar"</span>, [], <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">hello</span>(<span class="params">who</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Let me introduce: "</span> + who;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        hello: hello</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">MyModules.define(<span class="string">"foo"</span>, [<span class="string">"bar"</span>], <span class="function"><span class="keyword">function</span> (<span class="params">bar</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> hungry = <span class="string">"hippo"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">awesome</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(bar.hello(hungry).toUpperCase());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        awesome: awesome</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> bar = MyModules.get(<span class="string">"bar"</span>);</span><br><span class="line"><span class="keyword">var</span> foo = MyModules.get(<span class="string">"foo"</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(bar.hello(<span class="string">"hippo"</span>)); <span class="comment">// Let me introduce: hippo </span></span><br><span class="line"></span><br><span class="line">foo.awesome(); <span class="comment">// LET ME INTRODUCE: HIPPO</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="未来的模块机制"><a href="#未来的模块机制" class="headerlink" title="未来的模块机制"></a>未来的模块机制</h5><p>es6模块 export 和 import</p>
+<p>export : 将当前模块的一个标识符（变量、函数）导出为公 共 API</p>
+<p>import:  将一个模块中的一个或多个 API 导入到当前作用域中，并分别绑定在一个变量 上</p>
+<p>module:  会将整个模块的 API 导入并绑定到一个变量上</p>
+<ul>
+<li><p>bar.js</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">hello</span>(<span class="params">who</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"Let me introduce: "</span> + who;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">export</span> hello;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>foo.js</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 仅从 "bar" 模块导入 hello() </span></span><br><span class="line"><span class="keyword">import</span> hello <span class="keyword">from</span> <span class="string">"bar"</span>; </span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> hungry = <span class="string">"hippo"</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">awesome</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(hello(hungry).toUpperCase());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> awesome;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>baz.js</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 导入完整的 "foo" 和 "bar" 模块 </span></span><br><span class="line"><span class="built_in">module</span> foo <span class="keyword">from</span> <span class="string">"foo"</span>;</span><br><span class="line"><span class="built_in">module</span> bar <span class="keyword">from</span> <span class="string">"bar"</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(bar.hello(<span class="string">"rhino"</span>)); <span class="comment">// Let me introduce: rhino </span></span><br><span class="line"></span><br><span class="line">foo.awesome(); <span class="comment">// LET ME INTRODUCE: HIPPO</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>比起require, es6 模块加载还是略微不同，还有一些其他的细节，后续再补。</p>
+<hr>
+<h5 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h5><p><font color="LightCoral"><strong>闭包</strong></font> ：</p>
+<p>当函数可以记住并访问所在的词法作用域，即使函数是在当前词法作用域之外执行，这时 就产生了闭包。</p>
+<p><font color="LightCoral"><strong>模块的两个主要的特征</strong></font>：</p>
+<ol>
+<li>为创建内部作用域二调用了一个包装函数</li>
+<li>包装函数的返回值必须至少包括一个内部函数引用，这样就会创建涵盖整个包装函数内部作用域的闭包</li>
+</ol>
+<h4 id="动态作用域"><a href="#动态作用域" class="headerlink" title="动态作用域"></a>动态作用域</h4><p>动态作用域不关心函数和作用域在何处被声明，只关心它们从何处调用。<font color="LightCoral" size="3">动态作用域是基于调用栈的</font>，而不是代码中的作用域嵌套。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">//bar() =&gt; foo() , 基于调用栈的作用域链 </span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(a); <span class="comment">// 3（不是 2 ！）</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">bar</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> a = <span class="number">3</span>;</span><br><span class="line">    foo();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> a = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">bar();</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>词法作用域和动态作用域的差别</p>
+<p>词法作用域是在写代码或者说定义时确定的，而动态作用域是在运行时确定 的。（this 也是！）词法作用域关注函数在何处声明，而动态作用域关注函数从何处调用</p>
+</blockquote>
+<h4 id="块作用域的替代方案"><a href="#块作用域的替代方案" class="headerlink" title="块作用域的替代方案"></a>块作用域的替代方案</h4><p>es6之前如何实现块级作用域的效果？</p>
+<p>使用catch</p>
+<ul>
+<li><p>es6实现方式 – let</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;     </span><br><span class="line">	<span class="keyword">let</span> a = <span class="number">2</span>;     </span><br><span class="line">	<span class="built_in">console</span>.log( a ); <span class="comment">// 2 </span></span><br><span class="line">&#125; </span><br><span class="line"> </span><br><span class="line"><span class="built_in">console</span>.log( a ); <span class="comment">// ReferenceError</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>catch</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="number">2</span>;</span><br><span class="line">&#125; <span class="keyword">catch</span> (a) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(a); <span class="comment">// 2 </span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(a); <span class="comment">// ReferenceError</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//强制抛出错误的 try/catch，但是它抛出块作用域的替代方案的错误就是一个值 2，然后 catch 分句中的变量声明会接收到这个值。catch会形成一个块级作用域</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>google 的 Traceur项目 </p>
+<p>该项目正式用来将ES6代码转换成兼容ES6之前的环境</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="literal">undefined</span>;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (a) &#123;</span><br><span class="line">        a = <span class="number">2</span>;</span><br><span class="line">        <span class="built_in">console</span>.log(a);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(a);</span><br></pre></td></tr></table></figure>
+
+<h4 id="this词法"><a href="#this词法" class="headerlink" title="this词法"></a>this词法</h4><p>解决函数丢失与this绑定的问题</p>
+<p>⭐解决方式</p>
+<ul>
+<li><p>var self = this （作用域和闭包）</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = &#123;</span><br><span class="line">    count: <span class="number">0</span>,</span><br><span class="line">    cool: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> self = <span class="keyword">this</span></span><br><span class="line">        <span class="keyword">if</span>(self.count &lt; <span class="number">1</span>) &#123;</span><br><span class="line">            setTimeout(<span class="function"><span class="keyword">function</span> <span class="title">timer</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">                self.count++</span><br><span class="line">            &#125;,<span class="number">100</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">obj.cool()</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>箭头函数： 箭头函数本身不存在this，箭头函数的this取决于定义时的词法作用域</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = &#123;</span><br><span class="line">    count: <span class="number">0</span>,</span><br><span class="line">    cool: <span class="function"><span class="keyword">function</span> <span class="title">coolFn</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.count &lt; <span class="number">1</span>) &#123;</span><br><span class="line">            setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">            	<span class="comment">//继承了cool（）的this绑定，this指向obj</span></span><br><span class="line">                <span class="keyword">this</span>.count++;</span><br><span class="line">                <span class="built_in">console</span>.log(<span class="string">"awesome?"</span>);</span><br><span class="line">            &#125;, <span class="number">100</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">obj.cool();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>bind() 强绑定</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">setTimeout(<span class="function"><span class="keyword">function</span> <span class="title">timer</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.count++</span><br><span class="line">&#125;.bind(<span class="keyword">this</span>),<span class="number">100</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<p><strong>参考</strong></p>
+<p>《你不知道的js》</p>
+<p> <a href="https://developer.mozilla.org/zh-CN/" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/</a> </p>
+]]></content>
+      <categories>
+        <category>books</category>
+      </categories>
+      <tags>
+        <tag>你不知道的js</tag>
+        <tag>javascript</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>块级元素和行内元素</title>
+    <url>/2019/11/20/%E5%9D%97%E7%BA%A7%E5%85%83%E7%B4%A0%E5%92%8C%E8%A1%8C%E5%86%85%E5%85%83%E7%B4%A0/</url>
+    <content><![CDATA[<p>块级元素</p>
+<ul>
+<li><p>特性 </p>
+<ul>
+<li>独占一行，在不设置自己的宽度的情况下，块级元素会默认填满父级元素的宽度</li>
+<li>能够改变元素的height，width的值</li>
+<li>可以设置padding，margin的各个属性值，top，left，bottom，right都能够产生边距效果.</li>
+</ul>
+</li>
+<li><p>块级元素主要有：</p>
+<p>h1 - h6 ，table , ul , li , ol , p  , div, form , fieldset  , hr  ,pre ,blockquote  ….</p>
+</li>
+</ul>
+<p>行内元素</p>
+<ul>
+<li><p>特性：</p>
+</li>
+<li><p>内联元素有：</p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>css</category>
+      </categories>
+      <tags>
+        <tag>css</tag>
+        <tag>块级元素</tag>
+        <tag>行内元素</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>定位(position)</title>
+    <url>/2019/11/20/%E5%AE%9A%E4%BD%8D(position)/</url>
+    <content><![CDATA[<p>position属性用于指定一个元素在文档中的定位方式。top，right，bottom 和 left 属性则决定了该元素的最终位置。</p>
+<h4 id="定位类型"><a href="#定位类型" class="headerlink" title="定位类型"></a>定位类型</h4><p>position：static（默认） | fixed | relative | absolute | sticky ，用于指定参照物</p>
+<h5 id="固定定位-position：fixed"><a href="#固定定位-position：fixed" class="headerlink" title="固定定位 position：fixed"></a>固定定位 position：fixed</h5><ul>
+<li>元素脱离常规流</li>
+<li>相对于视口定位</li>
+</ul>
+<h5 id="相对定位-position：relative"><a href="#相对定位-position：relative" class="headerlink" title="相对定位 position：relative"></a>相对定位 position：relative</h5><ul>
+<li>元素保留常规流中的位置</li>
+<li>相对原来的位置定位</li>
+</ul>
+<h5 id="绝对定位-position：absolute"><a href="#绝对定位-position：absolute" class="headerlink" title="绝对定位 position：absolute"></a>绝对定位 position：absolute</h5><ul>
+<li>元素脱离常规流</li>
+<li><strong>相对于最近的定位祖先的padding-box定位</strong></li>
+<li>如果无法找到定位祖先，相对于页面的第一屏定位</li>
+<li>四个方位未设置值：和static一样在原位置</li>
+</ul>
+<p>⭐通常：会将父元素设置为relative，然后相对父元素绝对定位</p>
+<ul>
+<li><p>可以利用top，bottom，left，right和margin-auto，使元素居中</p>
+</li>
+<li><p>元素width或height为auto，可以利用top，bottom，left，right撑大元素，填充剩余空间</p>
+</li>
+</ul>
+<p><strong>position:sticky</strong></p>
+<ul>
+<li>relative和fixed的结合体（必须指定 top, right, bottom ,left其中之一的值）</li>
+<li>当元素在屏幕（包含块）内，表现为relative，就要滚出屏幕（包含块）的时候（达到阈值），表现为fixed(相对视口)</li>
+<li><a href="https://www.runoob.com/try/try.php?filename=trycss_position_sticky" target="_blank" rel="noopener">实例</a> </li>
+</ul>
+<h5 id="top-right-bottom-left"><a href="#top-right-bottom-left" class="headerlink" title="top   right   bottom   left"></a>top   right   bottom   left</h5><p>取值：auto (初始值) | length | percentage | inherit  ，用于设置相对参照物的位置</p>
+<p>percentage</p>
+<ul>
+<li>元素<strong>包含块</strong>的宽度或高度的百分比</li>
+</ul>
+<p>length</p>
+<ul>
+<li>可以是负的也可以的正的</li>
+</ul>
+<h5 id><a href="#" class="headerlink" title></a></h5><h5 id="z-index"><a href="#z-index" class="headerlink" title="z-index"></a>z-index</h5><p>元素重叠时, 设置元素的重叠顺序，z-index 大的元素，在最上面</p>
+<p>其他 ： </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;div&gt;</span><br><span class="line">  &lt;section&gt;&lt;/section&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">div&#123;</span><br><span class="line">  border: 1px solid;</span><br><span class="line">  height: 200px;</span><br><span class="line">  position : relative;</span><br><span class="line">&#125;</span><br><span class="line">/* section 设置top和bottom，height被撑开，占满160px（200-20-20） */</span><br><span class="line">section&#123;</span><br><span class="line">  position : absolute;</span><br><span class="line">  top: 20px;</span><br><span class="line">  bottom: 20px;</span><br><span class="line">  background-color: green;</span><br><span class="line">  width: 100%;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2019/11/20/%E5%AE%9A%E4%BD%8D(position)/C:%5CUsers%5C12%5CDesktop%5Ctop.png" alt="top"></p>
+<p>当top和bottom同时指定，并且 height没有被指定或者指定为auto或100%的时候，top和bottom都会生效，在其他情况下，如果 height被限制，则top属性会优先设置，bottom属性则会被忽略。</p>
+]]></content>
+      <categories>
+        <category>css</category>
+      </categories>
+      <tags>
+        <tag>css</tag>
+        <tag>position</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>盒模型</title>
+    <url>/2019/11/19/%E7%9B%92%E6%A8%A1%E5%9E%8B/</url>
+    <content><![CDATA[<h4 id="盒模型"><a href="#盒模型" class="headerlink" title="盒模型"></a>盒模型</h4><p><img src="/2019/11/19/%E7%9B%92%E6%A8%A1%E5%9E%8B/.%5C%E7%9B%92%E6%A8%A1%E5%9E%8B%5C%E7%9B%92%E6%A8%A1%E5%9E%8B.png" alt="盒模型"></p>
+<p>每个元素都会生成一个或多盒子，行内元素在跨行时会生成多个盒子。盒模型简单说是由content，padding，border，margin组成。</p>
+<ul>
+<li>边框及以内是可见及可交互的，margin部分不可交互</li>
+<li>外边距是透明的，透过它看到下方的内容</li>
+<li>width和height设置的是content-box的宽高</li>
+</ul>
+<p>可以通过box-sizing来改变设定的盒子</p>
+<p><strong>box-sizing</strong>：content-box （默认）|  border-box  | inherit</p>
+<hr>
+<h4 id="内联盒模型"><a href="#内联盒模型" class="headerlink" title="内联盒模型"></a>内联盒模型</h4><ul>
+<li>内容区域(content area)</li>
+<li>内联盒子(inline box)</li>
+<li>行框盒子(line box)</li>
+<li>包含盒子(containing box)</li>
+</ul>
+<p><strong>内容区域(content area</strong>) 内容区域指的是一种围绕文字看不见的盒子，其大小仅受字符本身特性控制，本质上是一个字符盒子(character box)；但是图片这样的替换元素，其显示内容不是文字，因此内容区域可以看成是元素自身。</p>
+<p><strong>内联盒子(inline box)</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;p&gt;</span><br><span class="line">这是内联匿名盒子&lt;em&gt;这里有内联标签，是内联盒子&lt;/em&gt;</span><br><span class="line">&lt;/p&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>行框盒子(line box)</strong>。每一行就是一个行框盒子，每个行框盒子都是由一个个内联盒子组成，</p>
+<p>注意：<strong>line-height</strong>是作用在行框盒子上的，行框盒子的高度由line-height决定</p>
+<p>(替换元素除外，后面会讲解什么是替换元素)。</p>
+<p><strong>包含盒子(containing box)</strong>。此盒子由一行一行的“行框盒子”组成</p>
+<hr>
+<h4 id="盒子属性"><a href="#盒子属性" class="headerlink" title="盒子属性"></a>盒子属性</h4><h5 id="width"><a href="#width" class="headerlink" title="width"></a>width</h5><ul>
+<li>width：auto 和 width：100%<ul>
+<li>width：100% 指的是内容区的宽度，设边框会超出父元素；</li>
+<li>width：auto，水平的7个属性等于父元素的内容区，设置边框不会超出父元素</li>
+</ul>
+</li>
+</ul>
+<h5 id="height"><a href="#height" class="headerlink" title="height"></a>height</h5><p>height的默认值也是auto，指的是其高度由内部元素堆叠而成，内部元素盒子有多高，元素就有多高。<strong>但在绝对定位中，若同时设置了top与bottom，则其高度由父盒子高度减去top与bottom</strong>。</p>
+<h5 id="paddings"><a href="#paddings" class="headerlink" title="paddings"></a>paddings</h5><ul>
+<li><p>padding与内联元素</p>
+</li>
+<li><ul>
+<li><p>padding在内联元素上，不会影响<strong>垂直布局</strong>，但是padding部分仍然存在。</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">#html</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span>Lorem ipsum<span class="tag">&lt;/<span class="name">span</span>&gt;</span> dolor sit amet, consectetur adipisicing elit. Eaque odit magni, repellendus dignissimos hic quasi rerum molestias animi. Repellat excepturi quis autem nihil blanditiis nisi rem reprehenderit odio, facilis aperiam.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"></span><br><span class="line">#css</span><br><span class="line">span&#123;</span><br><span class="line">  padding: 20px;</span><br><span class="line">  background-color: pink;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><img src="/2019/11/19/%E7%9B%92%E6%A8%A1%E5%9E%8B/.%5C%E7%9B%92%E6%A8%A1%E5%9E%8B%5Cpadding.png" alt="padding"></p>
+</li>
+<li><p>利用padding的这个特性，可以在垂直方向上添加padding增大可点击区域，这样既不会破坏现有布局，也能很好地响应用户的点击。</p>
+</li>
+</ul>
+</li>
+<li><p>padding的百分比值</p>
+</li>
+<li><ul>
+<li>padding不支持负值，padding百分比无论宽高都是相对于width的百分比</li>
+</ul>
+</li>
+</ul>
+<h5 id="margin"><a href="#margin" class="headerlink" title="margin"></a>margin</h5><ul>
+<li><p>margin 简写属性</p>
+<ul>
+<li><strong>margin:25px 50px 75px 100px;</strong>  (逆时针，上右下左)</li>
+<li><strong>margin:25px 50px 75px;</strong>  （上： 25px ； 左右 50px ； 下75px）</li>
+<li><strong>margin:25px 50px;</strong>  （上下25px ，左右50px）</li>
+<li><strong>margin:25px;</strong>  （上下左右 25px）</li>
+</ul>
+</li>
+<li><p>margin: auto</p>
+</li>
+<li><p>margin负值</p>
+</li>
+<li><p>margin合并</p>
+</li>
+<li><ul>
+<li><p>相邻兄弟元素的margin合并</p>
+</li>
+<li><p>父子合并</p>
+</li>
+<li><ul>
+<li><p>解决父子margin合并</p>
+</li>
+<li><ul>
+<li><strong>父元素</strong>设置为BFC</li>
+<li><strong>父元素</strong>设置border和padding</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>空块级元素的margin合并</p>
+</li>
+<li><ul>
+<li>margin无效的情况，即自身有margin-top和margin-bottom，但元素是空的，此时会合并为一个margin。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="border"><a href="#border" class="headerlink" title="border"></a>border</h5><ul>
+<li><p>border ： 1px solid red； （border是 border-width / boder-style / boder-color 的简写形式）</p>
+</li>
+<li><p><a href="https://segmentfault.com/a/1190000002780453" target="_blank" rel="noopener">制作图形</a></p>
+<ul>
+<li><p>基准：利用了box没有width和height只有border，会形成四个三角形组成的矩形</p>
+<p><img src="/2019/11/19/%E7%9B%92%E6%A8%A1%E5%9E%8B/.%5C%E7%9B%92%E6%A8%A1%E5%9E%8B%5Cborder.png" alt="border"></p>
+</li>
+</ul>
+</li>
+<li><p>等高布局</p>
+<p><img src="/2019/11/19/%E7%9B%92%E6%A8%A1%E5%9E%8B/.%5C%E7%9B%92%E6%A8%A1%E5%9E%8B%5Cborder1.png" alt="border1"></p>
+<p>html</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>会员中心<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>颠沛设置<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span>&gt;</span>content<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>css</p>
+<figure class="highlight cs"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* 父元素设置左边框 */</span></span><br><span class="line">div&#123;</span><br><span class="line">  border-left: <span class="number">150</span>px solid;</span><br><span class="line">  background-color: <span class="meta">#fff;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* 清除浮动，不让父元素塌陷 */</span></span><br><span class="line">div::after&#123;</span><br><span class="line">  content:<span class="string">''</span>;</span><br><span class="line">  display:block;</span><br><span class="line">  clear:both;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* 子元素左浮动到content-box最左边，设置负margin，移动到border上面*/</span></span><br><span class="line">ul &#123;</span><br><span class="line">  color: <span class="meta">#fff;</span></span><br><span class="line">  <span class="keyword">float</span>: left;</span><br><span class="line">  margin-left: <span class="number">-150</span>px;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<h4 id="替换元素"><a href="#替换元素" class="headerlink" title="替换元素"></a>替换元素</h4><p>img，video，canvas，input，textarea，iframe都是替换元素</p>
+<h4 id="css尺寸"><a href="#css尺寸" class="headerlink" title="css尺寸"></a>css尺寸</h4><ul>
+<li>height    设置元素的高度。</li>
+<li>line-height    设置行高。</li>
+<li>max-height    设置元素的最大高度。</li>
+<li>max-width    设置元素的最大宽度。</li>
+<li>min-height    设置元素的最小高度。</li>
+<li>min-width    设置元素的最小宽度。</li>
+<li>width    设置元素的宽度</li>
+</ul>
+<p><strong>参考</strong></p>
+<p><a href="https://developer.mozilla.org/zh-CN/" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/</a> </p>
+<p><a href="https://segmentfault.com/a/1190000002780453" target="_blank" rel="noopener">https://segmentfault.com/a/1190000002780453</a></p>
+<p>《css权威指南》</p>
+]]></content>
+      <categories>
+        <category>css</category>
+      </categories>
+      <tags>
+        <tag>css</tag>
+        <tag>box-model</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>html (四)  iframe</title>
     <url>/2019/11/19/html%20(%E5%9B%9B)%20%20iframe/</url>
     <content><![CDATA[<p>iframe是用于在网页中加载页面</p>
@@ -500,11 +1371,92 @@
 <h5 id="安装hexo-asset-image插件"><a href="#安装hexo-asset-image插件" class="headerlink" title="安装hexo-asset-image插件"></a>安装hexo-asset-image插件</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm install https://github.com/CodeFalling/hexo-asset-image --save</span><br></pre></td></tr></table></figure>
 
 <h5 id="在mk中插入图片的方式"><a href="#在mk中插入图片的方式" class="headerlink" title="在mk中插入图片的方式"></a>在mk中插入图片的方式</h5><p>使用相对路径插入图片</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">![img](./article/imgName.PNG)</span><br><span class="line">![图片别名](./文章名/图片.png)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">![img](./article/imgName.PNG)</span><br><span class="line">![图片别名](./文章名/图片.png)</span><br><span class="line">或</span><br><span class="line">![img](imgName.PNG)</span><br></pre></td></tr></table></figure>
 
 ]]></content>
       <tags>
         <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>float & BFC</title>
+    <url>/2019/11/17/float%20&amp;%20BFC/</url>
+    <content><![CDATA[<h4 id="BFC"><a href="#BFC" class="headerlink" title="BFC"></a>BFC</h4><p>BFC：块格式化上下文（Block Formatting Context）</p>
+<p><strong>BFC会包含创建它的元素内部的所有内容。具有BFC特性的元素可以看做是隔离了的独立容器，容器里面的元素不会在布局上影响到外面的元素</strong>   (A block formatting context contains everything inside of the element creating it)</p>
+<h5 id="创建BFC的方法"><a href="#创建BFC的方法" class="headerlink" title="创建BFC的方法"></a>创建BFC的方法</h5><ul>
+<li><p>根元素</p>
+</li>
+<li><p>float的值不为none</p>
+</li>
+<li><p>overflow的值不为visible的块元素</p>
+<ul>
+<li>父元素：overflow：hidden | overflow: auto | overflow: visible</li>
+</ul>
+</li>
+<li><p>display:  inline-block、table-cell、table-caption</p>
+</li>
+<li><p>display：flow-root</p>
+</li>
+<li><ul>
+<li>一个新的 display 属性的值，它可以创建无副作用的BFC</li>
+</ul>
+</li>
+<li><p>position : absolute或fixed</p>
+</li>
+</ul>
+<h5 id="BFC的应用"><a href="#BFC的应用" class="headerlink" title="BFC的应用"></a>BFC的应用</h5><ol>
+<li>清除浮动</li>
+<li>防止相邻兄弟元素margin合并</li>
+</ol>
+<hr>
+<h4 id="float"><a href="#float" class="headerlink" title="float"></a>float</h4><h5 id="folat简介"><a href="#folat简介" class="headerlink" title="folat简介"></a>folat简介</h5><p>float ，指定一个元素应沿其容器的左侧或右侧放置，允许文本和内联元素环绕它。该元素从网页的常规流中移除，尽管仍然保持部分的流动性。</p>
+<p>当一个元素浮动之后，它会被<strong>移出常规流</strong>，然后向左或者向右平移，一直平移直到碰到了所处的容器的边框，或者碰到另外一个浮动的元素</p>
+<ul>
+<li><p>浮动元素触发BFC，所以浮动元素外边距不会合并</p>
+</li>
+<li><p>除了块级元素，元素width都会尽然窄，元素设置float，<strong>如果元素没有指定width，会被压缩成0</strong>。为了浮动非替换元素，需要给定一个指定width。</p>
+</li>
+<li><p>浮动元素的包含块，是最近的块级祖先元素</p>
+</li>
+<li><p>与浮动元素重叠，行内元素浮于上方，块级元素在下方</p>
+</li>
+<li><p>块级元素不会浮动到之前的块级元素，后面的块级元素会忽略浮动元素，会重叠在float元素底部。</p>
+</li>
+<li><p>取值： left | right | none | inline-start | inline-end</p>
+</li>
+</ul>
+<h5 id="如何清除浮动带来的影响？"><a href="#如何清除浮动带来的影响？" class="headerlink" title="如何清除浮动带来的影响？"></a>如何清除浮动带来的影响？</h5><p><strong>清除浮动</strong></p>
+<p><strong>clear</strong>：指定一个元素是否必须移动(清除浮动后)到在它之前的浮动元素下面。clear 属性适用于浮动和非浮动元素。</p>
+<p>值：none | left | right | both | inline-start | inline-end</p>
+<ul>
+<li>left：元素被向下移动用于清除之前的左浮动</li>
+<li>right：元素被向下移动用于清除之前的右浮动</li>
+</ul>
+<p><strong>闭合浮动</strong></p>
+<p>子元素设置为float，父元素塌陷，height=0</p>
+<p>解决方法</p>
+<ul>
+<li><p><strong>clearfix</strong>：通过伪元素在<strong>父元素</strong>中建立一个空的块级元素 ，让其 clear : both（<strong>注意</strong>是用在最近的块级祖先）</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#container::after &#123; </span><br><span class="line">  content: &quot;&quot;;</span><br><span class="line">  display: block; </span><br><span class="line">  clear: both;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>父元素触发BFC</strong></p>
+<p>overflow: hidden/ auto/ scroll;</p>
+<p>display: inline-block/ table-cell/ table/ flow-root;</p>
+<p>position: absolute/ fixed;</p>
+<p>float: left/ right;</p>
+</li>
+</ul>
+<p><strong>参考</strong></p>
+<p> <a href="https://developer.mozilla.org/zh-CN/" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/</a> </p>
+<p>《css权威指南》</p>
+]]></content>
+      <categories>
+        <category>css</category>
+      </categories>
+      <tags>
+        <tag>css</tag>
+        <tag>float</tag>
+        <tag>BFC</tag>
       </tags>
   </entry>
   <entry>

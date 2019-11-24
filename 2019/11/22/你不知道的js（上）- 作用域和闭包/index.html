@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="你不知道的js,javascript," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="花了几天时间断断续续的读完了这本书，这确实是一本进阶和巩固js的书。 这本书的一开始的节奏，其实有点让我犯困，不过第二部分实在是惊艳（从动态和静态来解析this，从[[prototype]]属性来关联对象，介绍委托设计模式…），它的观点很直接，从语言本身的设计角度来剖析对象和原型，用一些更深层的原理来解析，Javascript中的代码细节。发现之前，自己遇到一些的困惑，在这里都得到了解答。 不过不">
+<meta name="keywords" content="你不知道的js,javascript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="你不知道的js（上）- 作用域和闭包">
+<meta property="og:url" content="http:&#x2F;&#x2F;blog.eatcode.com&#x2F;2019&#x2F;11&#x2F;22&#x2F;%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84js%EF%BC%88%E4%B8%8A%EF%BC%89-%20%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%92%8C%E9%97%AD%E5%8C%85&#x2F;index.html">
+<meta property="og:site_name" content="Lory&#39;s Notes">
+<meta property="og:description" content="花了几天时间断断续续的读完了这本书，这确实是一本进阶和巩固js的书。 这本书的一开始的节奏，其实有点让我犯困，不过第二部分实在是惊艳（从动态和静态来解析this，从[[prototype]]属性来关联对象，介绍委托设计模式…），它的观点很直接，从语言本身的设计角度来剖析对象和原型，用一些更深层的原理来解析，Javascript中的代码细节。发现之前，自己遇到一些的困惑，在这里都得到了解答。 不过不">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-11-24T05:45:39.368Z">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.eatcode.com/2019/11/22/你不知道的js（上）- 作用域和闭包/"/>
+
+
+
+
+
+  <title>你不知道的js（上）- 作用域和闭包 | Lory's Notes</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Lory's Notes</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.eatcode.com/2019/11/22/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84js%EF%BC%88%E4%B8%8A%EF%BC%89-%20%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%92%8C%E9%97%AD%E5%8C%85/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="lory">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lory's Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">你不知道的js（上）- 作用域和闭包</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-22T13:39:39+08:00">
+                2019-11-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/books/" itemprop="url" rel="index">
+                    <span itemprop="name">books</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>花了几天时间断断续续的读完了这本书，这确实是一本进阶和巩固js的书。</p>
+<p>这本书的一开始的节奏，其实有点让我犯困，不过第二部分实在是惊艳（从动态和静态来解析this，从[[prototype]]属性来关联对象，介绍委托设计模式…），它的观点很直接，从语言本身的设计角度来剖析对象和原型，用一些更深层的原理来解析，Javascript中的代码细节。发现之前，自己遇到一些的困惑，在这里都得到了解答。</p>
+<p>不过不建议一开始初学就看这本书，建议在对语言有了一定了解之后，再来读这本书，肯定会有收获。</p>
+<h4 id="第一章作用域是什么？"><a href="#第一章作用域是什么？" class="headerlink" title="第一章作用域是什么？"></a>第一章作用域是什么？</h4><h5 id="编译原理"><a href="#编译原理" class="headerlink" title="编译原理"></a>编译原理</h5><ul>
+<li>分词/词法分析<ul>
+<li>将代码分解成词法单元（分割代码—面包原料）<ul>
+<li>分词和词法分析的区别：有状态还是无状态</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>解析/语法分析<ul>
+<li>将词法单元流转换成一个AST抽象语法树<ul>
+<li>{type : ‘’,value :’’ …}  ， 识别每个单元具体作用（盐-调料，烤箱-厨具）</li>
+<li>AST（img）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>代码生成<ul>
+<li>生成机器码</li>
+</ul>
+</li>
+</ul>
+<p><strong>总结</strong>： 分解成词法单元=》 构建语法树 =》 生成机器码</p>
+<h5 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h5><p>学习作用域的方式，是要取了解在代码编译和执行的过程中，作用域扮演何种角色。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var a = 1;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>编译  var a  （是否需要创建变量a）<ul>
+<li>在当前作用域中寻找变量a，如果无则声明，有则忽略</li>
+</ul>
+</li>
+<li>执行  a = 1  （给哪个变量a赋值）<ul>
+<li>在当前作用域中寻找变量a，有则赋值，没有则沿着作用域链向上查找</li>
+<li>如果在全局作用域中也未找到a，则新建一个全局变量a</li>
+</ul>
+</li>
+</ul>
+<p><strong>总结</strong>: 变量的赋值操作会执行两个动作，首先编译器会在当前作用域中声明一个变量（如 果之前没有声明过），然后在运行时引擎会在作用域中查找该变量，如果能够找到就会对 它赋值。</p>
+<h5 id="LHS-和-RHS"><a href="#LHS-和-RHS" class="headerlink" title="LHS 和 RHS"></a>LHS 和 RHS</h5><p>LHS : 左侧查询，用于赋值  var a = 1</p>
+<p>RHS : 右侧查询，用于取值  console.log(a)</p>
+<h5 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> b </span><br><span class="line"><span class="built_in">console</span>.log(b)  <span class="comment">//undefined</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">b</span><br><span class="line"><span class="comment">//Uncaught ReferenceError: b is not defined</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="第二章词法作用域"><a href="#第二章词法作用域" class="headerlink" title="第二章词法作用域"></a>第二章词法作用域</h4><h5 id="词法阶段"><a href="#词法阶段" class="headerlink" title="词法阶段"></a>词法阶段</h5><p>编译器的第一个工作阶段，叫作词法化（也叫单词化-词法分析）。词法化的过程会对源代码中的字符进行检查，如果是有状态的解析过程，还会赋予单词语义。</p>
+<h5 id="词法作用域"><a href="#词法作用域" class="headerlink" title="词法作用域"></a>词法作用域</h5><p>词法作用域就是定义在词法阶段的作用域。（<em>也就是在执行之前就确定了作用域</em>）换句话说，词法作用域是由你在写 代码时将变量和块作用域写在哪里来决定的，因此当词法分析器处理代码时会保持作用域 不变（大部分情况下是这样的。</p>
+<h5 id="作用域查找"><a href="#作用域查找" class="headerlink" title="作用域查找"></a><strong>作用域查找</strong></h5><p>当前的作用域位置，向外查找至全局作用域</p>
+<h5 id="函数作用域"><a href="#函数作用域" class="headerlink" title="函数作用域"></a>函数作用域</h5><p>函数中没有var是全局变量，有var是局部变量</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">b</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	a = <span class="number">1</span></span><br><span class="line">&#125;</span><br><span class="line">b()</span><br><span class="line"><span class="built_in">window</span>.a === <span class="number">1</span> </span><br><span class="line"><span class="comment">//函数中没有var的变量为全局变量</span></span><br><span class="line"><span class="comment">//a = 1 ，现在函数作用域中查找，然后再全局作用域中查找，没有则在全局作用域中创建a</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="欺骗词法"><a href="#欺骗词法" class="headerlink" title="欺骗词法"></a>欺骗词法</h5><ul>
+<li><p><strong>eval( )</strong></p>
+<ul>
+<li><p>执行时才运行eval中的代码，可能会改变原有作用域结构</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">str, a</span>) </span>&#123;     </span><br><span class="line">  <span class="built_in">eval</span>( str ); <span class="comment">// 欺骗！     </span></span><br><span class="line">  <span class="built_in">console</span>.log( a, b ); </span><br><span class="line">&#125; </span><br><span class="line"><span class="keyword">var</span> b = <span class="number">2</span>; </span><br><span class="line">foo( <span class="string">"var b = 3;"</span>, <span class="number">1</span> ); <span class="comment">// 1, 3</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在严格模式的程序中，eval(..) 在运行时有其自己的词法作用域，意味着其 中的声明无法修改所在的作用域</p>
+</li>
+</ul>
+</li>
+<li><p><strong>with()</strong></p>
+<ul>
+<li><p>with 通常被当作重复引用同一个对象中的多个属性的快捷方式，可以不需要重复引用对象 本身</p>
+</li>
+<li><p>with 可以将一个没有或有多个属性的对象处理为一个完全隔离的词法作用域 (相当于区别于函数或者全局作用域的第三种作用域，即对象作用域</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">with</span>(obj) &#123;</span><br><span class="line">        a = <span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> o1 = &#123;</span><br><span class="line">    a: <span class="number">3</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> o2 = &#123;</span><br><span class="line">    b: <span class="number">3</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">foo(o1);</span><br><span class="line"><span class="built_in">console</span>.log(o1.a); <span class="comment">// 2 </span></span><br><span class="line"></span><br><span class="line">foo(o2);</span><br><span class="line"><span class="built_in">console</span>.log(o2.a); </span><br><span class="line"><span class="comment">// undefined console.log( a ); // 2——不好，a 被泄漏到全局作用域上了！</span></span><br><span class="line"><span class="comment">// obj对象中没有a属性，向外查找a，全局中也没有，创建一个全局作用域a，赋值为2</span></span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h5><p>  词法作用域意味着作用域是由书写代码时函数声明的位置来决定的。编译的词法分析阶段基本能够知道全部标识符在哪里以及是如何声明的，从而能够预测在执行过程中如何对它 们进行查找。</p>
+<h4 id="第三章-函数作用域和块作用域"><a href="#第三章-函数作用域和块作用域" class="headerlink" title="第三章 函数作用域和块作用域"></a>第三章 函数作用域和块作用域</h4><h5 id="函数作用域-1"><a href="#函数作用域-1" class="headerlink" title="函数作用域"></a>函数作用域</h5><ul>
+<li><p>隐藏内部实现： 私有化变量，防止外部修改私有变量</p>
+</li>
+<li><p>规避冲突：防止同名标识符之间的冲突</p>
+</li>
+<li><p>函数表达式和函数声明的差别</p>
+<ul>
+<li><p>表达式：包装函数的声明以 (function… 而不仅是以 function… 开始</p>
+<ul>
+<li><p>foo 被绑定在所在作用域中，可以直接通过 foo() 来调用它</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123; <span class="comment">// &lt;-- 添加这一行 </span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> a = <span class="number">3</span>;</span><br><span class="line">    <span class="built_in">console</span>.log(a); <span class="comment">// 3 </span></span><br><span class="line"></span><br><span class="line">&#125; <span class="comment">// &lt;-- 以及这一行 foo(); // &lt;-- 以及这一行 </span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(a); <span class="comment">// 2</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>声明：function 开头</p>
+<ul>
+<li><p>foo 被绑定在函数表达式自身的函数中而不是所在作用域中</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123; <span class="comment">// &lt;-- 添加这一行 </span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> a = <span class="number">3</span>;</span><br><span class="line">    <span class="built_in">console</span>.log(a); <span class="comment">// 3 </span></span><br><span class="line"></span><br><span class="line">&#125;)(); <span class="comment">// &lt;-- 以及这一行 </span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(a); <span class="comment">// 2</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>IIFE，立即执行函数表达式 </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//两种写法</span></span><br><span class="line">(<span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>)</span>&#123; .. &#125;)()</span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123; .. &#125;())</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h5 id="块作用域"><a href="#块作用域" class="headerlink" title="块作用域"></a>块作用域</h5><ul>
+<li>with<ul>
+<li>用 with 从对象中创建出的作用域仅在 with 声明中而非外 部作用域中有效</li>
+</ul>
+</li>
+<li>try/catch<ul>
+<li>try/catch 的 catch 分句会创建一个块作 用域，其中声明的变量仅在 catch 内部有效</li>
+<li>⭐ 在同一个作用域使用多个catch，如果都使用err作为形参，很多静态工具会发出警告，但其实所有变量都被安全地限制在块级作用域内，很多开发者会将 catch 的参数命名为 err1、 err2 等。也有开发者干脆关闭了静态检查工具对重复变量名的检查。</li>
+</ul>
+</li>
+<li>let<ul>
+<li>let 关键字可以将变量绑定到所在的任意作用域中（通常是 { .. } 内部）</li>
+<li>for 循环</li>
+</ul>
+</li>
+<li>const<ul>
+<li>const，同样可以用来创建块作用域变量，但其值是固定的 （常量）。之后任何试图修改值的操作都会引起错误</li>
+</ul>
+</li>
+</ul>
+<h4 id="第四章-提升"><a href="#第四章-提升" class="headerlink" title="第四章 提升"></a>第四章 提升</h4><blockquote>
+<p>当你看到 var a = 2; 时，可能会认为这是一个声明。但 JavaScript 实际上会将其看成两个 声明：var a; 和 a = 2;。第一个定义声明是在编译阶段进行的。第二个赋值声明会被留在 原地等待执行阶段。</p>
+</blockquote>
+<p><strong>函数优先</strong> ： 函数声明和变量都会被提升，函数会首先被提升，然后才是变量（这个细节可以出现在有多个 “重复”声明的代码中）</p>
+<h4 id="第五章-作用域闭包"><a href="#第五章-作用域闭包" class="headerlink" title="第五章 作用域闭包"></a>第五章 作用域闭包</h4><h5 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h5><p>闭包使得函数可以继续访问定义时的词法作用域。(作用域查找和闭包的区别)</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//作用域查询</span></span><br><span class="line"><span class="keyword">var</span> b = <span class="number">1</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">a</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(b)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//闭包</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">a</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="keyword">var</span> b = <span class="number">1</span></span><br><span class="line">	<span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">		<span class="built_in">console</span>.log(b)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> c = a()</span><br><span class="line">c()</span><br><span class="line"><span class="comment">//如果没有闭包，调用完a，就会正常的销毁函数a（垃圾回收机制	），但是闭包，可以阻止函数作用域被销毁</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h5><p>将功能封装在函数中，通过函数调用的返回值暴露接口，通过返回值来获取模块的中方法，或者取值。（利用了闭包的特性）</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">CoolModule</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="keyword">var</span> something = <span class="string">"cool"</span></span><br><span class="line">	<span class="keyword">var</span> another = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">doSomthing</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">		<span class="built_in">console</span>.log(something)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">		<span class="built_in">console</span>.log( another.join(<span class="string">"!"</span>))</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//es6简写：（name和value命名相同，可省略value）</span></span><br><span class="line">	<span class="comment">//返回接口（模块的公共API）</span></span><br><span class="line">	<span class="keyword">return</span> &#123;</span><br><span class="line">		doSomthing,</span><br><span class="line">		doAnother</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> foo = CoolModule()</span><br><span class="line">foo.doSomething()  <span class="comment">// cool</span></span><br><span class="line">foo.doAnother() <span class="comment">// 1!2!3</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>一个具有函数属性的对象本身并不是真正的模块</li>
+<li>一个函数调用所返回的，只有数据属性而没有闭包函数的对象并不是真正的闭包</li>
+</ul>
+<h5 id="⭐现代的模块机制"><a href="#⭐现代的模块机制" class="headerlink" title="⭐现代的模块机制"></a>⭐现代的模块机制</h5><p>大多数模块依赖加载器 / 管理器本质上都是将这种模块定义封装进一个友好的 API</p>
+<ul>
+<li>核心： 函数调用（封装） +  返回对象（接口）<ul>
+<li>模块函数（内部定义多个变量或函数），调用模块函数</li>
+<li>返回对象（API接口），对象内的属性是对内部变量或函数的一个引用</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//manager ： 包装函数</span></span><br><span class="line"><span class="keyword">var</span> MyModules = (<span class="function"><span class="keyword">function</span> <span class="title">Manager</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="comment">//存放模块： name为模块名，value为模块函数返回的接口</span></span><br><span class="line">	<span class="keyword">var</span> modules = &#123;&#125;</span><br><span class="line">	<span class="comment">/* </span></span><br><span class="line"><span class="comment">	* define 定义模块</span></span><br><span class="line"><span class="comment">	* @param name &#123;string&#125; 模块名</span></span><br><span class="line"><span class="comment">	* @param deps &#123;Array&#125; 依赖的模块</span></span><br><span class="line"><span class="comment">	* @impl impl &#123;function&#125; 模块函数</span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">define</span>(<span class="params">name, deps, impl</span>) </span>&#123;</span><br><span class="line">        <span class="comment">//从modules读取依赖模块接口</span></span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; deps.length; i++)&#123;</span><br><span class="line">			deps[i] = modules[deps[i]]</span><br><span class="line">		&#125;</span><br><span class="line">        <span class="comment">//该句很关键，将执行模块函数，返回模块接口，以key=value的形式存入modules中</span></span><br><span class="line">        <span class="comment">//apply: 第二个参数为数组，数组元素将作为函数的参数</span></span><br><span class="line">        	<span class="comment">//@param deps &#123;Array&#125; 依赖模块的接口的集合</span></span><br><span class="line">		modules[name] = impl.apply(impl, deps)</span><br><span class="line">	&#125;</span><br><span class="line">    </span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">get</span>(<span class="params">name</span>) </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> modules[name]</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="comment">//返回接口（包括了定义模块和获取模块的接口）</span></span><br><span class="line">	<span class="keyword">return</span> &#123;</span><br><span class="line">		define,</span><br><span class="line">		<span class="keyword">get</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;)()</span><br></pre></td></tr></table></figure>
+
+<p>定义模块</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">MyModules.define(<span class="string">"bar"</span>, [], <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">hello</span>(<span class="params">who</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Let me introduce: "</span> + who;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        hello: hello</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">MyModules.define(<span class="string">"foo"</span>, [<span class="string">"bar"</span>], <span class="function"><span class="keyword">function</span> (<span class="params">bar</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> hungry = <span class="string">"hippo"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">awesome</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(bar.hello(hungry).toUpperCase());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        awesome: awesome</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> bar = MyModules.get(<span class="string">"bar"</span>);</span><br><span class="line"><span class="keyword">var</span> foo = MyModules.get(<span class="string">"foo"</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(bar.hello(<span class="string">"hippo"</span>)); <span class="comment">// Let me introduce: hippo </span></span><br><span class="line"></span><br><span class="line">foo.awesome(); <span class="comment">// LET ME INTRODUCE: HIPPO</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="未来的模块机制"><a href="#未来的模块机制" class="headerlink" title="未来的模块机制"></a>未来的模块机制</h5><p>es6模块 export 和 import</p>
+<p>export : 将当前模块的一个标识符（变量、函数）导出为公 共 API</p>
+<p>import:  将一个模块中的一个或多个 API 导入到当前作用域中，并分别绑定在一个变量 上</p>
+<p>module:  会将整个模块的 API 导入并绑定到一个变量上</p>
+<ul>
+<li><p>bar.js</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">hello</span>(<span class="params">who</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"Let me introduce: "</span> + who;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">export</span> hello;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>foo.js</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 仅从 "bar" 模块导入 hello() </span></span><br><span class="line"><span class="keyword">import</span> hello <span class="keyword">from</span> <span class="string">"bar"</span>; </span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> hungry = <span class="string">"hippo"</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">awesome</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(hello(hungry).toUpperCase());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> awesome;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>baz.js</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 导入完整的 "foo" 和 "bar" 模块 </span></span><br><span class="line"><span class="built_in">module</span> foo <span class="keyword">from</span> <span class="string">"foo"</span>;</span><br><span class="line"><span class="built_in">module</span> bar <span class="keyword">from</span> <span class="string">"bar"</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(bar.hello(<span class="string">"rhino"</span>)); <span class="comment">// Let me introduce: rhino </span></span><br><span class="line"></span><br><span class="line">foo.awesome(); <span class="comment">// LET ME INTRODUCE: HIPPO</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>比起require, es6 模块加载还是略微不同，还有一些其他的细节，后续再补。</p>
+<hr>
+<h5 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h5><p><font color="LightCoral"><strong>闭包</strong></font> ：</p>
+<p>当函数可以记住并访问所在的词法作用域，即使函数是在当前词法作用域之外执行，这时 就产生了闭包。</p>
+<p><font color="LightCoral"><strong>模块的两个主要的特征</strong></font>：</p>
+<ol>
+<li>为创建内部作用域二调用了一个包装函数</li>
+<li>包装函数的返回值必须至少包括一个内部函数引用，这样就会创建涵盖整个包装函数内部作用域的闭包</li>
+</ol>
+<h4 id="动态作用域"><a href="#动态作用域" class="headerlink" title="动态作用域"></a>动态作用域</h4><p>动态作用域不关心函数和作用域在何处被声明，只关心它们从何处调用。<font color="LightCoral" size="3">动态作用域是基于调用栈的</font>，而不是代码中的作用域嵌套。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//bar() =&gt; foo() , 基于调用栈的作用域链 </span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(a); <span class="comment">// 3（不是 2 ！）</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">bar</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> a = <span class="number">3</span>;</span><br><span class="line">    foo();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> a = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">bar();</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>词法作用域和动态作用域的差别</p>
+<p>词法作用域是在写代码或者说定义时确定的，而动态作用域是在运行时确定 的。（this 也是！）词法作用域关注函数在何处声明，而动态作用域关注函数从何处调用</p>
+</blockquote>
+<h4 id="块作用域的替代方案"><a href="#块作用域的替代方案" class="headerlink" title="块作用域的替代方案"></a>块作用域的替代方案</h4><p>es6之前如何实现块级作用域的效果？</p>
+<p>使用catch</p>
+<ul>
+<li><p>es6实现方式 – let</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;     </span><br><span class="line">	<span class="keyword">let</span> a = <span class="number">2</span>;     </span><br><span class="line">	<span class="built_in">console</span>.log( a ); <span class="comment">// 2 </span></span><br><span class="line">&#125; </span><br><span class="line"> </span><br><span class="line"><span class="built_in">console</span>.log( a ); <span class="comment">// ReferenceError</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>catch</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="number">2</span>;</span><br><span class="line">&#125; <span class="keyword">catch</span> (a) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(a); <span class="comment">// 2 </span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(a); <span class="comment">// ReferenceError</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//强制抛出错误的 try/catch，但是它抛出块作用域的替代方案的错误就是一个值 2，然后 catch 分句中的变量声明会接收到这个值。catch会形成一个块级作用域</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>google 的 Traceur项目 </p>
+<p>该项目正式用来将ES6代码转换成兼容ES6之前的环境</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="literal">undefined</span>;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (a) &#123;</span><br><span class="line">        a = <span class="number">2</span>;</span><br><span class="line">        <span class="built_in">console</span>.log(a);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(a);</span><br></pre></td></tr></table></figure>
+
+<h4 id="this词法"><a href="#this词法" class="headerlink" title="this词法"></a>this词法</h4><p>解决函数丢失与this绑定的问题</p>
+<p>⭐解决方式</p>
+<ul>
+<li><p>var self = this （作用域和闭包）</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = &#123;</span><br><span class="line">    count: <span class="number">0</span>,</span><br><span class="line">    cool: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> self = <span class="keyword">this</span></span><br><span class="line">        <span class="keyword">if</span>(self.count &lt; <span class="number">1</span>) &#123;</span><br><span class="line">            setTimeout(<span class="function"><span class="keyword">function</span> <span class="title">timer</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">                self.count++</span><br><span class="line">            &#125;,<span class="number">100</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">obj.cool()</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>箭头函数： 箭头函数本身不存在this，箭头函数的this取决于定义时的词法作用域</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = &#123;</span><br><span class="line">    count: <span class="number">0</span>,</span><br><span class="line">    cool: <span class="function"><span class="keyword">function</span> <span class="title">coolFn</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.count &lt; <span class="number">1</span>) &#123;</span><br><span class="line">            setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">            	<span class="comment">//继承了cool（）的this绑定，this指向obj</span></span><br><span class="line">                <span class="keyword">this</span>.count++;</span><br><span class="line">                <span class="built_in">console</span>.log(<span class="string">"awesome?"</span>);</span><br><span class="line">            &#125;, <span class="number">100</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">obj.cool();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>bind() 强绑定</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">setTimeout(<span class="function"><span class="keyword">function</span> <span class="title">timer</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.count++</span><br><span class="line">&#125;.bind(<span class="keyword">this</span>),<span class="number">100</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<p><strong>参考</strong></p>
+<p>《你不知道的js》</p>
+<p> <a href="https://developer.mozilla.org/zh-CN/" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/</a> </p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84js/" rel="tag"># 你不知道的js</a>
+          
+            <a href="/tags/javascript/" rel="tag"># javascript</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/20/%E5%9D%97%E7%BA%A7%E5%85%83%E7%B4%A0%E5%92%8C%E8%A1%8C%E5%86%85%E5%85%83%E7%B4%A0/" rel="next" title="块级元素和行内元素">
+                <i class="fa fa-chevron-left"></i> 块级元素和行内元素
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/11/24/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84js%EF%BC%88%E4%B8%8A%EF%BC%89this%E5%92%8C%E5%AF%B9%E8%B1%A1%E5%8E%9F%E5%9E%8B/" rel="prev" title="你不知道的js（上）- this和对象原型">
+                你不知道的js（上）- this和对象原型 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="lory" />
+            
+              <p class="site-author-name" itemprop="name">lory</p>
+              <p class="site-description motion-element" itemprop="description">(●'◡'●)</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/lory02" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#第一章作用域是什么？"><span class="nav-number">1.</span> <span class="nav-text">第一章作用域是什么？</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#编译原理"><span class="nav-number">1.1.</span> <span class="nav-text">编译原理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#作用域"><span class="nav-number">1.2.</span> <span class="nav-text">作用域</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#LHS-和-RHS"><span class="nav-number">1.3.</span> <span class="nav-text">LHS 和 RHS</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#异常"><span class="nav-number">1.4.</span> <span class="nav-text">异常</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第二章词法作用域"><span class="nav-number">2.</span> <span class="nav-text">第二章词法作用域</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#词法阶段"><span class="nav-number">2.1.</span> <span class="nav-text">词法阶段</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#词法作用域"><span class="nav-number">2.2.</span> <span class="nav-text">词法作用域</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#作用域查找"><span class="nav-number">2.3.</span> <span class="nav-text">作用域查找</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#函数作用域"><span class="nav-number">2.4.</span> <span class="nav-text">函数作用域</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#欺骗词法"><span class="nav-number">2.5.</span> <span class="nav-text">欺骗词法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#总结"><span class="nav-number">2.6.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第三章-函数作用域和块作用域"><span class="nav-number">3.</span> <span class="nav-text">第三章 函数作用域和块作用域</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#函数作用域-1"><span class="nav-number">3.1.</span> <span class="nav-text">函数作用域</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#块作用域"><span class="nav-number">3.2.</span> <span class="nav-text">块作用域</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第四章-提升"><span class="nav-number">4.</span> <span class="nav-text">第四章 提升</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第五章-作用域闭包"><span class="nav-number">5.</span> <span class="nav-text">第五章 作用域闭包</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#闭包"><span class="nav-number">5.1.</span> <span class="nav-text">闭包</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#模块"><span class="nav-number">5.2.</span> <span class="nav-text">模块</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#⭐现代的模块机制"><span class="nav-number">5.3.</span> <span class="nav-text">⭐现代的模块机制</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#未来的模块机制"><span class="nav-number">5.4.</span> <span class="nav-text">未来的模块机制</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#总结-1"><span class="nav-number">5.5.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#动态作用域"><span class="nav-number">6.</span> <span class="nav-text">动态作用域</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#块作用域的替代方案"><span class="nav-number">7.</span> <span class="nav-text">块作用域的替代方案</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#this词法"><span class="nav-number">8.</span> <span class="nav-text">this词法</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lory</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
