@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="css,float,BFC," />
+  <meta name="keywords" content="ssh,git," />
 
 
 
@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="BFCBFC：块格式化上下文（Block Formatting Context） BFC会包含创建它的元素内部的所有内容。具有BFC特性的元素可以看做是隔离了的独立容器，容器里面的元素不会在布局上影响到外面的元素   (A block formatting context contains everything inside of the element creating it) 创建BFC的方法">
-<meta name="keywords" content="css,float,BFC">
+<meta name="description" content="如何利用公私钥加密？ 这涉及到了ssh加密和解决中间人攻击。 首先，我们要在本地生成一个密钥对，其中公钥放到远程主机，私钥保存在本地，当本地主机需要登录远程主机时，本地主机向远程主机发送一个登录请求，远程收到消息后，返回一个随机生成的字符串，本地拿到该字符串，用存放在本地的私钥进行加密，再次发送到远程，远程用之前存放在远程的公钥对本地发送过来加密过的字符串进行解密，如果解密后与源字符串等同，则认证">
+<meta name="keywords" content="ssh,git">
 <meta property="og:type" content="article">
-<meta property="og:title" content="float &amp; BFC">
-<meta property="og:url" content="http:&#x2F;&#x2F;blog.eatcode.com&#x2F;2019&#x2F;11&#x2F;17&#x2F;float%20&amp;%20BFC&#x2F;index.html">
+<meta property="og:title" content="git设置ssh">
+<meta property="og:url" content="http:&#x2F;&#x2F;blog.eatcode.com&#x2F;2019&#x2F;12&#x2F;03&#x2F;git%E8%AE%BE%E7%BD%AEssh&#x2F;index.html">
 <meta property="og:site_name" content="Lory&#39;s Notes">
-<meta property="og:description" content="BFCBFC：块格式化上下文（Block Formatting Context） BFC会包含创建它的元素内部的所有内容。具有BFC特性的元素可以看做是隔离了的独立容器，容器里面的元素不会在布局上影响到外面的元素   (A block formatting context contains everything inside of the element creating it) 创建BFC的方法">
+<meta property="og:description" content="如何利用公私钥加密？ 这涉及到了ssh加密和解决中间人攻击。 首先，我们要在本地生成一个密钥对，其中公钥放到远程主机，私钥保存在本地，当本地主机需要登录远程主机时，本地主机向远程主机发送一个登录请求，远程收到消息后，返回一个随机生成的字符串，本地拿到该字符串，用存放在本地的私钥进行加密，再次发送到远程，远程用之前存放在远程的公钥对本地发送过来加密过的字符串进行解密，如果解密后与源字符串等同，则认证">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-11-19T15:56:55.917Z">
+<meta property="og:updated_time" content="2019-12-03T09:52:26.506Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -118,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://blog.eatcode.com/2019/11/17/float & BFC/"/>
+  <link rel="canonical" href="http://blog.eatcode.com/2019/12/03/git设置ssh/"/>
 
 
 
 
 
-  <title>float & BFC | Lory's Notes</title>
+  <title>git设置ssh | Lory's Notes</title>
   
 
 
@@ -251,7 +251,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.eatcode.com/2019/11/17/float%20&%20BFC/">
+    <link itemprop="mainEntityOfPage" href="http://blog.eatcode.com/2019/12/03/git%E8%AE%BE%E7%BD%AEssh/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="lory">
@@ -268,7 +268,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">float & BFC</h1>
+          <h1 class="post-title" itemprop="name headline">git设置ssh</h1>
         
 
         <div class="post-meta">
@@ -280,8 +280,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-17T12:39:39+08:00">
-                2019-11-17
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-03T17:42:42+08:00">
+                2019-12-03
               </time>
             
 
@@ -303,8 +303,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/css/" itemprop="url" rel="index">
-                    <span itemprop="name">css</span>
+                  <a href="/categories/git/" itemprop="url" rel="index">
+                    <span itemprop="name">git</span>
                   </a>
                 </span>
 
@@ -340,74 +340,62 @@
       
 
       
-        <h4 id="BFC"><a href="#BFC" class="headerlink" title="BFC"></a>BFC</h4><p>BFC：块格式化上下文（Block Formatting Context）</p>
-<p><strong>BFC会包含创建它的元素内部的所有内容。具有BFC特性的元素可以看做是隔离了的独立容器，容器里面的元素不会在布局上影响到外面的元素</strong>   (A block formatting context contains everything inside of the element creating it)</p>
-<h5 id="创建BFC的方法"><a href="#创建BFC的方法" class="headerlink" title="创建BFC的方法"></a>创建BFC的方法</h5><ul>
-<li><p>根元素</p>
-</li>
-<li><p>float的值不为none</p>
-</li>
-<li><p>overflow的值不为visible的块元素</p>
-<ul>
-<li>父元素：overflow：hidden | overflow: auto | overflow: visible</li>
-</ul>
-</li>
-<li><p>display:  inline-block、table-cell、table-caption</p>
-</li>
-<li><p>display：flow-root</p>
-</li>
-<li><ul>
-<li>一个新的 display 属性的值，它可以创建无副作用的BFC</li>
-</ul>
-</li>
-<li><p>position : absolute或fixed</p>
-</li>
-</ul>
-<h5 id="BFC的应用"><a href="#BFC的应用" class="headerlink" title="BFC的应用"></a>BFC的应用</h5><ol>
-<li>清除浮动</li>
-<li>防止相邻兄弟元素margin合并</li>
+        <p>如何利用公私钥加密？</p>
+<p>这涉及到了ssh加密和解决中间人攻击。</p>
+<p>首先，我们要在本地生成一个密钥对，其中公钥放到远程主机，私钥保存在本地，当本地主机需要登录远程主机时，本地主机向远程主机发送一个登录请求，远程收到消息后，返回一个随机生成的字符串，本地拿到该字符串，用存放在本地的私钥进行加密，再次发送到远程，远程用之前存放在远程的公钥对本地发送过来加密过的字符串进行解密，如果解密后与源字符串等同，则认证成功。</p>
+<h4 id="🔒github设置ssh-（这里用github为例）"><a href="#🔒github设置ssh-（这里用github为例）" class="headerlink" title="🔒github设置ssh （这里用github为例）"></a>🔒github设置ssh （这里用github为例）</h4><ol>
+<li><h5 id="本地打开git-bash-，用-ssh-keygen生成密钥"><a href="#本地打开git-bash-，用-ssh-keygen生成密钥" class="headerlink" title="本地打开git bash ，用 ssh-keygen生成密钥"></a>本地打开git bash ，用 <code>ssh-keygen</code>生成密钥</h5></li>
 </ol>
-<hr>
-<h4 id="float"><a href="#float" class="headerlink" title="float"></a>float</h4><h5 id="folat简介"><a href="#folat简介" class="headerlink" title="folat简介"></a>folat简介</h5><p>float ，指定一个元素应沿其容器的左侧或右侧放置，允许文本和内联元素环绕它。该元素从网页的常规流中移除，尽管仍然保持部分的流动性。</p>
-<p>当一个元素浮动之后，它会被<strong>移出常规流</strong>，然后向左或者向右平移，一直平移直到碰到了所处的容器的边框，或者碰到另外一个浮动的元素</p>
+<blockquote>
+<p><em>默认生成的文件名为（id_rsa 和 id_ras.pub）</em><br><em>如果本地已经有同名文件，为了防止覆盖，可以手动填写保存路径，比如 *</em>/c/Users/Gary/.ssh/id_rsa_github*** </p>
+<p><em>如果没有，就直接一路enter即可</em></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-keygen -t rsa -C &quot;your_email@example.com&quot;  （填写注册远程仓库的邮箱）</span><br></pre></td></tr></table></figure>
+
+
+
+<ol start="2">
+<li><h5 id="然后在本地-c-Users-username-ssh-会多两个文件夹"><a href="#然后在本地-c-Users-username-ssh-会多两个文件夹" class="headerlink" title="然后在本地 /c/Users/username/.ssh 会多两个文件夹"></a>然后在本地 /c/Users/username/.ssh 会多两个文件夹</h5></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">id_rsa</span><br><span class="line">id_ras.pub  （公钥）</span><br></pre></td></tr></table></figure>
+
+
+
+<ol start="3">
+<li><h5 id="登陆github，添加ssh公钥"><a href="#登陆github，添加ssh公钥" class="headerlink" title="登陆github，添加ssh公钥"></a>登陆github，添加ssh公钥</h5></li>
+</ol>
 <ul>
-<li><p>浮动元素触发BFC，所以浮动元素外边距不会合并</p>
+<li>可以给帐号设置SSH<ul>
+<li>个人设置 - SSH and GPG keys ,打开 id_ras.pub 复制内容，添加到 deploy key中 </li>
+</ul>
 </li>
-<li><p>除了块级元素，元素width都会尽然窄，元素设置float，<strong>如果元素没有指定width，会被压缩成0</strong>。为了浮动非替换元素，需要给定一个指定width。</p>
-</li>
-<li><p>浮动元素的包含块，是最近的块级祖先元素</p>
-</li>
-<li><p>与浮动元素重叠，行内元素浮于上方，块级元素在下方</p>
-</li>
-<li><p>块级元素不会浮动到之前的块级元素，后面的块级元素会忽略浮动元素，会重叠在float元素底部。</p>
-</li>
-<li><p>取值： left | right | none | inline-start | inline-end</p>
+<li>也可以给一个仓库设置一个独立的ssh公钥<ul>
+<li>进入单个仓库的repo， 点击 Settings 》 Deploy keys 》Add deploy key ， 打开 id_ras.pub 复制内容，添加到 deploy key中 </li>
+</ul>
 </li>
 </ul>
-<h5 id="如何清除浮动带来的影响？"><a href="#如何清除浮动带来的影响？" class="headerlink" title="如何清除浮动带来的影响？"></a>如何清除浮动带来的影响？</h5><p><strong>清除浮动</strong></p>
-<p><strong>clear</strong>：指定一个元素是否必须移动(清除浮动后)到在它之前的浮动元素下面。clear 属性适用于浮动和非浮动元素。</p>
-<p>值：none | left | right | both | inline-start | inline-end</p>
-<ul>
-<li>left：元素被向下移动用于清除之前的左浮动</li>
-<li>right：元素被向下移动用于清除之前的右浮动</li>
-</ul>
-<p><strong>闭合浮动</strong></p>
-<p>子元素设置为float，父元素塌陷，height=0</p>
-<p>解决方法</p>
-<ul>
-<li><p><strong>clearfix</strong>：通过伪元素在<strong>父元素</strong>中建立一个空的块级元素 ，让其 clear : both（<strong>注意</strong>是用在最近的块级祖先）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#container::after &#123; </span><br><span class="line">  content: &quot;&quot;;</span><br><span class="line">  display: block; </span><br><span class="line">  clear: both;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>父元素触发BFC</strong></p>
-<p>overflow: hidden/ auto/ scroll;</p>
-<p>display: inline-block/ table-cell/ table/ flow-root;</p>
-<p>position: absolute/ fixed;</p>
-<p>float: left/ right;</p>
-</li>
-</ul>
-<p><strong>参考</strong></p>
-<p> <a href="https://developer.mozilla.org/zh-CN/" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/</a> </p>
-<p>《css权威指南》</p>
+<ol start="4">
+<li><h5 id="测试配置shifouchengg"><a href="#测试配置shifouchengg" class="headerlink" title="测试配置shifouchengg"></a>测试配置shifouchengg</h5></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com</span><br></pre></td></tr></table></figure>
+
+<p> 如果出现以下内容即表示配置完成 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Hi username! You&apos;ve successfully authenticated, but GitHub does not</span><br><span class="line">provide shell access.</span><br></pre></td></tr></table></figure>
+
+
+
+<ol start="5">
+<li><h5 id="配置多个SSH-key"><a href="#配置多个SSH-key" class="headerlink" title="配置多个SSH key"></a>配置多个SSH key</h5></li>
+</ol>
+<p>创建config 文件，管理多个ssh key</p>
+<p>配置公钥和指定远程仓库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># gitee</span><br><span class="line">Host gitee.com</span><br><span class="line">    HostName gitee.com</span><br><span class="line">    PreferredAuthentications publickey</span><br><span class="line">    IdentityFile ~/.ssh/id_rsa</span><br><span class="line">    </span><br><span class="line"># github</span><br><span class="line">Host github.com</span><br><span class="line">    HostName github.com</span><br><span class="line">    PreferredAuthentications publickey</span><br><span class="line">    IdentityFile ~/.ssh/id_rsa_github</span><br></pre></td></tr></table></figure>
+
+
+
+<p>参考：<a href="https://blog.csdn.net/gediseer/article/details/54572731" target="_blank" rel="noopener">https://blog.csdn.net/gediseer/article/details/54572731</a></p>
+<p>参考：<a href="https://www.cnblogs.com/dzblog/p/6930147.html" target="_blank" rel="noopener">https://www.cnblogs.com/dzblog/p/6930147.html</a> </p>
+<p>参考：<a href="https://www.awaimai.com/2200.html" target="_blank" rel="noopener">https://www.awaimai.com/2200.html</a> </p>
 
       
     </div>
@@ -425,11 +413,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/css/" rel="tag"># css</a>
+            <a href="/tags/ssh/" rel="tag"># ssh</a>
           
-            <a href="/tags/float/" rel="tag"># float</a>
-          
-            <a href="/tags/BFC/" rel="tag"># BFC</a>
+            <a href="/tags/git/" rel="tag"># git</a>
           
         </div>
       
@@ -442,8 +428,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/11/17/hexo%E4%BD%BF%E7%94%A8/" rel="next" title="hexo使用">
-                <i class="fa fa-chevron-left"></i> hexo使用
+              <a href="/2019/11/24/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84js%EF%BC%88%E4%B8%8A%EF%BC%89this%E5%92%8C%E5%AF%B9%E8%B1%A1%E5%8E%9F%E5%9E%8B/" rel="next" title="你不知道的js（上）- this和对象原型">
+                <i class="fa fa-chevron-left"></i> 你不知道的js（上）- this和对象原型
               </a>
             
           </div>
@@ -451,10 +437,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/11/17/hexo%C2%B7%E5%9C%A8%E6%96%87%E7%AB%A0%E4%B8%AD%E6%8F%92%E5%85%A5%E5%9B%BE%E7%89%87/" rel="prev" title="hexo·在文章中插入图片">
-                hexo·在文章中插入图片 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -600,7 +582,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#BFC"><span class="nav-number">1.</span> <span class="nav-text">BFC</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#创建BFC的方法"><span class="nav-number">1.1.</span> <span class="nav-text">创建BFC的方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#BFC的应用"><span class="nav-number">1.2.</span> <span class="nav-text">BFC的应用</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#float"><span class="nav-number">2.</span> <span class="nav-text">float</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#folat简介"><span class="nav-number">2.1.</span> <span class="nav-text">folat简介</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#如何清除浮动带来的影响？"><span class="nav-number">2.2.</span> <span class="nav-text">如何清除浮动带来的影响？</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#🔒github设置ssh-（这里用github为例）"><span class="nav-number">1.</span> <span class="nav-text">🔒github设置ssh （这里用github为例）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#本地打开git-bash-，用-ssh-keygen生成密钥"><span class="nav-number">1.1.</span> <span class="nav-text">本地打开git bash ，用 ssh-keygen生成密钥</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#然后在本地-c-Users-username-ssh-会多两个文件夹"><span class="nav-number">1.2.</span> <span class="nav-text">然后在本地 /c/Users/username/.ssh 会多两个文件夹</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#登陆github，添加ssh公钥"><span class="nav-number">1.3.</span> <span class="nav-text">登陆github，添加ssh公钥</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#测试配置shifouchengg"><span class="nav-number">1.4.</span> <span class="nav-text">测试配置shifouchengg</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#配置多个SSH-key"><span class="nav-number">1.5.</span> <span class="nav-text">配置多个SSH key</span></a></li></ol></li></ol></div>
             
 
           </div>

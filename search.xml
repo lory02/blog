@@ -1,6 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>git设置ssh</title>
+    <url>/2019/12/03/git%E8%AE%BE%E7%BD%AEssh/</url>
+    <content><![CDATA[<p>如何利用公私钥加密？</p>
+<p>这涉及到了ssh加密和解决中间人攻击。</p>
+<p>首先，我们要在本地生成一个密钥对，其中公钥放到远程主机，私钥保存在本地，当本地主机需要登录远程主机时，本地主机向远程主机发送一个登录请求，远程收到消息后，返回一个随机生成的字符串，本地拿到该字符串，用存放在本地的私钥进行加密，再次发送到远程，远程用之前存放在远程的公钥对本地发送过来加密过的字符串进行解密，如果解密后与源字符串等同，则认证成功。</p>
+<h4 id="🔒github设置ssh-（这里用github为例）"><a href="#🔒github设置ssh-（这里用github为例）" class="headerlink" title="🔒github设置ssh （这里用github为例）"></a>🔒github设置ssh （这里用github为例）</h4><ol>
+<li><h5 id="本地打开git-bash-，用-ssh-keygen生成密钥"><a href="#本地打开git-bash-，用-ssh-keygen生成密钥" class="headerlink" title="本地打开git bash ，用 ssh-keygen生成密钥"></a>本地打开git bash ，用 <code>ssh-keygen</code>生成密钥</h5></li>
+</ol>
+<blockquote>
+<p><em>默认生成的文件名为（id_rsa 和 id_ras.pub）</em><br><em>如果本地已经有同名文件，为了防止覆盖，可以手动填写保存路径，比如 *</em>/c/Users/Gary/.ssh/id_rsa_github*** </p>
+<p><em>如果没有，就直接一路enter即可</em></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ ssh-keygen -t rsa -C &quot;your_email@example.com&quot;  （填写注册远程仓库的邮箱）</span><br></pre></td></tr></table></figure>
+
+
+
+<ol start="2">
+<li><h5 id="然后在本地-c-Users-username-ssh-会多两个文件夹"><a href="#然后在本地-c-Users-username-ssh-会多两个文件夹" class="headerlink" title="然后在本地 /c/Users/username/.ssh 会多两个文件夹"></a>然后在本地 /c/Users/username/.ssh 会多两个文件夹</h5></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">id_rsa</span><br><span class="line">id_ras.pub  （公钥）</span><br></pre></td></tr></table></figure>
+
+
+
+<ol start="3">
+<li><h5 id="登陆github，添加ssh公钥"><a href="#登陆github，添加ssh公钥" class="headerlink" title="登陆github，添加ssh公钥"></a>登陆github，添加ssh公钥</h5></li>
+</ol>
+<ul>
+<li>可以给帐号设置SSH<ul>
+<li>个人设置 - SSH and GPG keys ,打开 id_ras.pub 复制内容，添加到 deploy key中 </li>
+</ul>
+</li>
+<li>也可以给一个仓库设置一个独立的ssh公钥<ul>
+<li>进入单个仓库的repo， 点击 Settings 》 Deploy keys 》Add deploy key ， 打开 id_ras.pub 复制内容，添加到 deploy key中 </li>
+</ul>
+</li>
+</ul>
+<ol start="4">
+<li><h5 id="测试配置shifouchengg"><a href="#测试配置shifouchengg" class="headerlink" title="测试配置shifouchengg"></a>测试配置shifouchengg</h5></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ssh -T git@github.com</span><br></pre></td></tr></table></figure>
+
+<p> 如果出现以下内容即表示配置完成 </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Hi username! You&apos;ve successfully authenticated, but GitHub does not</span><br><span class="line">provide shell access.</span><br></pre></td></tr></table></figure>
+
+
+
+<ol start="5">
+<li><h5 id="配置多个SSH-key"><a href="#配置多个SSH-key" class="headerlink" title="配置多个SSH key"></a>配置多个SSH key</h5></li>
+</ol>
+<p>创建config 文件，管理多个ssh key</p>
+<p>配置公钥和指定远程仓库</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># gitee</span><br><span class="line">Host gitee.com</span><br><span class="line">    HostName gitee.com</span><br><span class="line">    PreferredAuthentications publickey</span><br><span class="line">    IdentityFile ~/.ssh/id_rsa</span><br><span class="line">    </span><br><span class="line"># github</span><br><span class="line">Host github.com</span><br><span class="line">    HostName github.com</span><br><span class="line">    PreferredAuthentications publickey</span><br><span class="line">    IdentityFile ~/.ssh/id_rsa_github</span><br></pre></td></tr></table></figure>
+
+
+
+<p>参考：<a href="https://blog.csdn.net/gediseer/article/details/54572731" target="_blank" rel="noopener">https://blog.csdn.net/gediseer/article/details/54572731</a></p>
+<p>参考：<a href="https://www.cnblogs.com/dzblog/p/6930147.html" target="_blank" rel="noopener">https://www.cnblogs.com/dzblog/p/6930147.html</a> </p>
+<p>参考：<a href="https://www.awaimai.com/2200.html" target="_blank" rel="noopener">https://www.awaimai.com/2200.html</a> </p>
+]]></content>
+      <categories>
+        <category>git</category>
+      </categories>
+      <tags>
+        <tag>ssh</tag>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>你不知道的js（上）- this和对象原型</title>
     <url>/2019/11/24/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84js%EF%BC%88%E4%B8%8A%EF%BC%89this%E5%92%8C%E5%AF%B9%E8%B1%A1%E5%8E%9F%E5%9E%8B/</url>
     <content><![CDATA[<h4 id="第一章-关于this"><a href="#第一章-关于this" class="headerlink" title="第一章 关于this"></a>第一章 关于this</h4><p>this是用于传递上下文对象的一种机制。</p>
@@ -643,8 +711,14 @@
   <entry>
     <title>块级元素和行内元素</title>
     <url>/2019/11/20/%E5%9D%97%E7%BA%A7%E5%85%83%E7%B4%A0%E5%92%8C%E8%A1%8C%E5%86%85%E5%85%83%E7%B4%A0/</url>
-    <content><![CDATA[<p>块级元素</p>
+    <content><![CDATA[<p>行内元素</p>
 <ul>
+<li><p>特性：</p>
+</li>
+<li><p>内联元素有：</p>
+</li>
+</ul>
+<h5 id="块级元素（display：block）"><a href="#块级元素（display：block）" class="headerlink" title="块级元素（display：block）"></a>块级元素（display：block）</h5><ul>
 <li><p>特性 </p>
 <ul>
 <li>独占一行，在不设置自己的宽度的情况下，块级元素会默认填满父级元素的宽度</li>
@@ -656,13 +730,69 @@
 <p>h1 - h6 ，table , ul , li , ol , p  , div, form , fieldset  , hr  ,pre ,blockquote  ….</p>
 </li>
 </ul>
-<p>行内元素</p>
+<p><font color="ligblue"><strong>块级元素的水平格式</strong></font></p>
+<p>默认，width是content-box宽度</p>
+<p>总结：常规流中，<strong>块级元素的水平部分总和等于父元素的width（内容区）</strong></p>
 <ul>
-<li><p>特性：</p>
+<li><p>水平属性（7个）</p>
 </li>
-<li><p>内联元素有：</p>
+<li><p>⭐三个值可以设置auto</p>
+<p><img src="/2019/11/20/%E5%9D%97%E7%BA%A7%E5%85%83%E7%B4%A0%E5%92%8C%E8%A1%8C%E5%86%85%E5%85%83%E7%B4%A0/C:%5CUsers%5C12%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20191125151420109.png" alt="image-20191125151420109"></p>
+<p>使用auto（只有margin-left，margin-right，width可以设置auto）</p>
+<p>❓ 水平部分总和等于父元素的width，width不设置值，一般占满整行</p>
+<ul>
+<li><p><strong>没有auto</strong></p>
+</li>
+<li><ul>
+<li>三个值相加不等于所需值</li>
+</ul>
+</li>
+<li><ul>
+<li>过分受限，重置margin-right为auto（从左到右阅读，反之margin-left重置为auto）</li>
+</ul>
+</li>
+<li><p><strong>一个auto</strong></p>
+</li>
+<li><ul>
+<li>用公式计算出值（总和-其他值）</li>
+</ul>
+</li>
+<li><p><strong>两个auto</strong></p>
+</li>
+<li><ul>
+<li>两个margin为auto，计算为相同的值</li>
+</ul>
+</li>
+<li><ul>
+<li><ul>
+<li>magin为auto，width不设值，width尽可能宽</li>
+</ul>
 </li>
 </ul>
+</li>
+<li><ul>
+<li>其中有一个auto给到了width，margin的auto为0</li>
+</ul>
+</li>
+<li><p><strong>三个auto</strong></p>
+</li>
+<li><ul>
+<li>两个margin都重置为0,width尽可能宽（与默认一样）</li>
+<li>margin-left为auto时无法计算出负值（对于从左往右的语言)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><font color="ligblue"><strong>块级元素的垂直格式</strong></font></p>
+<p>一个元素的默认高度由其内容决定。可以对元素设置显示高度。</p>
+<ul>
+<li>百分比高度 ： height = 包含块height*百分比</li>
+<li>高度不定高 ： padding-top：25% ，padding-top = width*25%=height （padding撑起高度）</li>
+</ul>
+<p><strong>注</strong>：如果height是定高，垂直方向是的margin，padding就能生效。</p>
+<p><strong>垂直auto</strong></p>
+<p>只有margin和height可以设置auto</p>
 ]]></content>
       <categories>
         <category>css</category>
@@ -941,110 +1071,6 @@
       </tags>
   </entry>
   <entry>
-    <title>html (三)  列表&表格</title>
-    <url>/2019/11/19/html%20(%E4%B8%89)%20%20%E5%88%97%E8%A1%A8&amp;%E8%A1%A8%E6%A0%BC/</url>
-    <content><![CDATA[<h4 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h4><ul>
-<li><p><strong>ol&amp;li</strong> </p>
-<ul>
-<li><p>ordered  list &amp; list item</p>
-</li>
-<li><p>有序列表，&lt; ol &gt;中只能嵌套&lt; li &gt;,&lt; li &gt;中可以嵌套其他元素</p>
-</li>
-</ul>
-</li>
-<li><p><strong>ul&amp;li</strong>  </p>
-<ul>
-<li><p>unordered list &amp; list item</p>
-</li>
-<li><p>无序列表，&lt; ul &gt;中只能嵌套&lt; li &gt;,&lt; li &gt;中可以嵌套其他元素</p>
-</li>
-</ul>
-</li>
-<li><p><strong>dl&amp;dt&amp;dd</strong>  </p>
-<ul>
-<li><p>desciption list &amp;   description term  &amp;   description description </p>
-</li>
-<li><p>自定义列表</p>
-</li>
-</ul>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dl</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">dt</span>&gt;</span>计算机<span class="tag">&lt;/<span class="name">dt</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">dd</span>&gt;</span>用来计算的仪器 ... ...<span class="tag">&lt;/<span class="name">dd</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">dt</span>&gt;</span>显示器<span class="tag">&lt;/<span class="name">dt</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">dd</span>&gt;</span>以视觉方式显示信息的装置 ... ...<span class="tag">&lt;/<span class="name">dd</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dl</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-
-
-</li>
-</ul>
-<h4 id="表格"><a href="#表格" class="headerlink" title="表格"></a>表格</h4><p><strong>table</strong> 标签定义 HTML 表格。简单的 HTML 表格由 table 元素以及一个或多个 <strong>tr</strong>、<strong>th</strong> 或 <strong>td</strong> 元素组成；由<strong>thead</strong>（一个tabel只能有一个thead），<strong>tbody，tfoot</strong>组成表单结构。</p>
-<p><strong>标签</strong></p>
-<ul>
-<li><p>table ： 表格</p>
-</li>
-<li><p>tr 行</p>
-</li>
-<li><p>th 表头</p>
-</li>
-<li><p>td 表数据</p>
-</li>
-<li><p>colgroup</p>
-<ul>
-<li>用于对<strong>col标签</strong>进行组合，以便对其进行格式化。添加class属性就能用css来设置样式。</li>
-</ul>
-</li>
-</ul>
-<p><strong>属性</strong></p>
-<ul>
-<li><p>colspan ： 设置跨列</p>
-</li>
-<li><p>rowspan： 设置跨行</p>
-<ul>
-<li>设置了跨行或跨列，相应需要删除多余的表格（td）</li>
-</ul>
-</li>
-<li><p>border-spacing：边框间距</p>
-</li>
-<li><p>cellspacing：边框间距</p>
-<p><strong>实例1</strong></p>
-</li>
-</ul>
-<p><img src="/2019/11/19/html%20(%E4%B8%89)%20%20%E5%88%97%E8%A1%A8&%E8%A1%A8%E6%A0%BC/table.png" alt="table"></p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">table</span> <span class="attr">border</span>=<span class="string">1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">caption</span>&gt;</span>表格标题<span class="tag">&lt;/<span class="name">caption</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">thead</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">th</span>&gt;</span>姓名<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">th</span>&gt;</span>性别<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">th</span>&gt;</span>年龄<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">th</span>&gt;</span>籍贯<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">th</span>&gt;</span>寝室<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">thead</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">tbody</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 第一行元素设置了跨行和跨列 ，相应需要减少第一行的td(5=2+2+1)，减少第二行的td（5=1+1+2+1）--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span> <span class="attr">colspan</span>=<span class="string">"2"</span> &gt;</span>tom<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span> <span class="attr">colspan</span>=<span class="string">"2"</span> <span class="attr">rowspan</span>=<span class="string">"2"</span>&gt;</span>男<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>201<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>1<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>2<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>3<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">tbody</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>实例2</strong></p>
-<p><img src="/2019/11/19/html%20(%E4%B8%89)%20%20%E5%88%97%E8%A1%A8&%E8%A1%A8%E6%A0%BC/colgroup.png" alt="colgroup"></p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">table</span> <span class="attr">border</span>=<span class="string">"1"</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 用于对列进行分组，以列为单位设置样式 --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">colgroup</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">col</span> <span class="attr">span</span>=<span class="string">"2"</span> <span class="attr">style</span>=<span class="string">"background-color:red"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">col</span> <span class="attr">style</span>=<span class="string">"background-color:yellow"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">colgroup</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">th</span>&gt;</span>ISBN<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">th</span>&gt;</span>Title<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">th</span>&gt;</span>Price<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>3476896<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>My first HTML<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>$53<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>5869207<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>My first CSS<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>$49<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h4 id="map-amp-area"><a href="#map-amp-area" class="headerlink" title="map &amp; area"></a>map &amp; area</h4><ul>
-<li><p>map :  映射标签</p>
-<ul>
-<li>usemap的属性值和map元素的“id”或者“name”相等</li>
-</ul>
-</li>
-<li><p>area ： 圈定map中位置</p>
-<blockquote>
-<p>​    shape=”rect”  矩形对角点坐标 “ x1，y1，x2，y2 ”</p>
-<p>​    shape=”circle” 圆坐标 圆心+半径  “  x1，y1，r “</p>
-<p>​    shape=”poly” 路径坐标 “ x1，y1，x2，y2，x3，y3，xn，yn ”    </p>
-</blockquote>
-</li>
-<li><p><a href="https://www.w3school.com.cn/tiy/t.asp?f=html_areamap" target="_blank" rel="noopener">实例</a></p>
-</li>
-</ul>
-<hr>
-<p><strong>参考</strong>：</p>
-<p> <a href="https://www.zhangxinxu.com/" target="_blank" rel="noopener">https://www.zhangxinxu.com/</a> </p>
-<p> <a href="https://babopo.github.io/" target="_blank" rel="noopener">https://babopo.github.io/</a> </p>
-<p> <a href="https://www.w3school.com.cn/" target="_blank" rel="noopener">https://www.w3school.com.cn/</a> </p>
-<p> <a href="https://www.runoob.com/" target="_blank" rel="noopener">https://www.runoob.com/</a> </p>
-]]></content>
-      <categories>
-        <category>html</category>
-      </categories>
-      <tags>
-        <tag>html</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>html（二）表单</title>
     <url>/2019/11/19/html%20(%E4%BA%8C)%20%20%E8%A1%A8%E5%8D%95/</url>
     <content><![CDATA[<h5 id="1-form"><a href="#1-form" class="headerlink" title="1.form"></a>1.form</h5><p>用于为用户输入创建 HTML 表单，表单用于向服务器传输数据。</p>
@@ -1166,6 +1192,110 @@
 
 
 
+<hr>
+<p><strong>参考</strong>：</p>
+<p> <a href="https://www.zhangxinxu.com/" target="_blank" rel="noopener">https://www.zhangxinxu.com/</a> </p>
+<p> <a href="https://babopo.github.io/" target="_blank" rel="noopener">https://babopo.github.io/</a> </p>
+<p> <a href="https://www.w3school.com.cn/" target="_blank" rel="noopener">https://www.w3school.com.cn/</a> </p>
+<p> <a href="https://www.runoob.com/" target="_blank" rel="noopener">https://www.runoob.com/</a> </p>
+]]></content>
+      <categories>
+        <category>html</category>
+      </categories>
+      <tags>
+        <tag>html</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>html (三)  列表&表格</title>
+    <url>/2019/11/19/html%20(%E4%B8%89)%20%20%E5%88%97%E8%A1%A8&amp;%E8%A1%A8%E6%A0%BC/</url>
+    <content><![CDATA[<h4 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h4><ul>
+<li><p><strong>ol&amp;li</strong> </p>
+<ul>
+<li><p>ordered  list &amp; list item</p>
+</li>
+<li><p>有序列表，&lt; ol &gt;中只能嵌套&lt; li &gt;,&lt; li &gt;中可以嵌套其他元素</p>
+</li>
+</ul>
+</li>
+<li><p><strong>ul&amp;li</strong>  </p>
+<ul>
+<li><p>unordered list &amp; list item</p>
+</li>
+<li><p>无序列表，&lt; ul &gt;中只能嵌套&lt; li &gt;,&lt; li &gt;中可以嵌套其他元素</p>
+</li>
+</ul>
+</li>
+<li><p><strong>dl&amp;dt&amp;dd</strong>  </p>
+<ul>
+<li><p>desciption list &amp;   description term  &amp;   description description </p>
+</li>
+<li><p>自定义列表</p>
+</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dl</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">dt</span>&gt;</span>计算机<span class="tag">&lt;/<span class="name">dt</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">dd</span>&gt;</span>用来计算的仪器 ... ...<span class="tag">&lt;/<span class="name">dd</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">dt</span>&gt;</span>显示器<span class="tag">&lt;/<span class="name">dt</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">dd</span>&gt;</span>以视觉方式显示信息的装置 ... ...<span class="tag">&lt;/<span class="name">dd</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dl</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<h4 id="表格"><a href="#表格" class="headerlink" title="表格"></a>表格</h4><p><strong>table</strong> 标签定义 HTML 表格。简单的 HTML 表格由 table 元素以及一个或多个 <strong>tr</strong>、<strong>th</strong> 或 <strong>td</strong> 元素组成；由<strong>thead</strong>（一个tabel只能有一个thead），<strong>tbody，tfoot</strong>组成表单结构。</p>
+<p><strong>标签</strong></p>
+<ul>
+<li><p>table ： 表格</p>
+</li>
+<li><p>tr 行</p>
+</li>
+<li><p>th 表头</p>
+</li>
+<li><p>td 表数据</p>
+</li>
+<li><p>colgroup</p>
+<ul>
+<li>用于对<strong>col标签</strong>进行组合，以便对其进行格式化。添加class属性就能用css来设置样式。</li>
+</ul>
+</li>
+</ul>
+<p><strong>属性</strong></p>
+<ul>
+<li><p>colspan ： 设置跨列</p>
+</li>
+<li><p>rowspan： 设置跨行</p>
+<ul>
+<li>设置了跨行或跨列，相应需要删除多余的表格（td）</li>
+</ul>
+</li>
+<li><p>border-spacing：边框间距</p>
+</li>
+<li><p>cellspacing：边框间距</p>
+<p><strong>实例1</strong></p>
+</li>
+</ul>
+<p><img src="/2019/11/19/html%20(%E4%B8%89)%20%20%E5%88%97%E8%A1%A8&%E8%A1%A8%E6%A0%BC/table.png" alt="table"></p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">table</span> <span class="attr">border</span>=<span class="string">1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">caption</span>&gt;</span>表格标题<span class="tag">&lt;/<span class="name">caption</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">thead</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">th</span>&gt;</span>姓名<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">th</span>&gt;</span>性别<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">th</span>&gt;</span>年龄<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">th</span>&gt;</span>籍贯<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">th</span>&gt;</span>寝室<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">thead</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">tbody</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 第一行元素设置了跨行和跨列 ，相应需要减少第一行的td(5=2+2+1)，减少第二行的td（5=1+1+2+1）--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span> <span class="attr">colspan</span>=<span class="string">"2"</span> &gt;</span>tom<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span> <span class="attr">colspan</span>=<span class="string">"2"</span> <span class="attr">rowspan</span>=<span class="string">"2"</span>&gt;</span>男<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>201<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>1<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>2<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>3<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">tbody</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>实例2</strong></p>
+<p><img src="/2019/11/19/html%20(%E4%B8%89)%20%20%E5%88%97%E8%A1%A8&%E8%A1%A8%E6%A0%BC/colgroup.png" alt="colgroup"></p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">table</span> <span class="attr">border</span>=<span class="string">"1"</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 用于对列进行分组，以列为单位设置样式 --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">colgroup</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">col</span> <span class="attr">span</span>=<span class="string">"2"</span> <span class="attr">style</span>=<span class="string">"background-color:red"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">col</span> <span class="attr">style</span>=<span class="string">"background-color:yellow"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">colgroup</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">th</span>&gt;</span>ISBN<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">th</span>&gt;</span>Title<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">th</span>&gt;</span>Price<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>3476896<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>My first HTML<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>$53<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>5869207<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>My first CSS<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>$49<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="map-amp-area"><a href="#map-amp-area" class="headerlink" title="map &amp; area"></a>map &amp; area</h4><ul>
+<li><p>map :  映射标签</p>
+<ul>
+<li>usemap的属性值和map元素的“id”或者“name”相等</li>
+</ul>
+</li>
+<li><p>area ： 圈定map中位置</p>
+<blockquote>
+<p>​    shape=”rect”  矩形对角点坐标 “ x1，y1，x2，y2 ”</p>
+<p>​    shape=”circle” 圆坐标 圆心+半径  “  x1，y1，r “</p>
+<p>​    shape=”poly” 路径坐标 “ x1，y1，x2，y2，x3，y3，xn，yn ”    </p>
+</blockquote>
+</li>
+<li><p><a href="https://www.w3school.com.cn/tiy/t.asp?f=html_areamap" target="_blank" rel="noopener">实例</a></p>
+</li>
+</ul>
 <hr>
 <p><strong>参考</strong>：</p>
 <p> <a href="https://www.zhangxinxu.com/" target="_blank" rel="noopener">https://www.zhangxinxu.com/</a> </p>
@@ -1592,8 +1722,8 @@
         <category>blog</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>ssh</tag>
+        <tag>hexo</tag>
       </tags>
   </entry>
 </search>
