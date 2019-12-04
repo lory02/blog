@@ -1,6 +1,354 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Git & Github</title>
+    <url>/2019/12/04/Git/</url>
+    <content><![CDATA[<h4 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h4><h5 id="版本控制工具应该具备的功能"><a href="#版本控制工具应该具备的功能" class="headerlink" title="版本控制工具应该具备的功能"></a>版本控制工具应该具备的功能</h5><ul>
+<li>协同修改<ul>
+<li>多人并行修改服务器的同一个文件</li>
+</ul>
+</li>
+<li>数据备份</li>
+<li>版本管理<ul>
+<li>SVN ：增量式管理<ul>
+<li>每次迭代，保存变动的部分，读取版本的时候（拼接原始版本和变动部分）</li>
+</ul>
+</li>
+<li>GIT:  文件系统快照<ul>
+<li>copy原文件（创建新的指针，指向同一个内存）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>权限控制</li>
+<li>历史记录</li>
+<li>⭐分支管理</li>
+</ul>
+<h5 id="版本控制工具-集中式-vs-分布式"><a href="#版本控制工具-集中式-vs-分布式" class="headerlink" title="版本控制工具 - 集中式 vs 分布式"></a>版本控制工具 - 集中式 vs 分布式</h5><p>集中式 ：版本库存在远程的中央服务器上，干活的时候，从远程服务器下载文件到自己电脑上，干完了，提交文件到远程服务器。(要是断网了都没法工作了🤦)。要是中央服务器挂了，那就尴尬了。（单点故障）</p>
+<ul>
+<li>比如SVN</li>
+</ul>
+<p><img src="/2019/12/04/Git/%E9%9B%86%E4%B8%AD%E5%BC%8F.png" alt="集中式"></p>
+<p>分布式：分布式版本控制系统根本没有“中央服务器”，每个人的电脑上都是一个完整的版本库。这样，就不需要联网了。 但是两个之间如何协作呢？分布式版本控制系统通常也有一台充当“中央服务器”的电脑，但这个服务器的作用仅仅是用来方便“交换”大家的修改 。</p>
+<p><img src="/2019/12/04/Git/%E5%88%86%E5%B8%83%E5%BC%8F.png" alt="分布式"></p>
+<h5 id="Git结构"><a href="#Git结构" class="headerlink" title="Git结构"></a>Git结构</h5><p>git分工作区，暂存区，本地库，远程库</p>
+<p>![git exp](git exp.png)</p>
+<p><img src="/2019/12/04/Git/git%E5%88%86%E5%8C%BA.png" alt="git分区"></p>
+<p><img src="/2019/12/04/Git/git%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.png" alt="git生命周期"></p>
+<h5 id="GiT和代码托管中心"><a href="#GiT和代码托管中心" class="headerlink" title="GiT和代码托管中心"></a>GiT和代码托管中心</h5><p>代码管理中心的作用使用来维护远程库。</p>
+<p>局域网下，GitLab服务器</p>
+<p>外网环境下 ，GitHub ， 码云</p>
+<h5 id="本地库和远程库"><a href="#本地库和远程库" class="headerlink" title="本地库和远程库"></a>本地库和远程库</h5><p>团队内部协作</p>
+<ul>
+<li><p>pull = fetch + merge</p>
+</li>
+<li><p>push ： 提交</p>
+</li>
+<li><p>clone：下载项目文件 </p>
+</li>
+</ul>
+<p><img src="/2019/12/04/Git/%E5%A4%9A%E4%BA%BA%E5%8D%8F%E4%BD%9C.png" alt="多人协作"></p>
+<p>跨团队合作</p>
+<ul>
+<li>fork：复制到自己的远程库</li>
+<li>pull request：提交 申请，需要对方审核通过后，merge</li>
+</ul>
+<p><img src="/2019/12/04/Git/%E8%B7%A8%E5%9B%A2%E9%98%9F.png" alt="跨团队"></p>
+<h5 id="⭐Git基本操作"><a href="#⭐Git基本操作" class="headerlink" title="⭐Git基本操作"></a>⭐Git基本操作</h5><ul>
+<li><p>git init  ： 初始化仓库，会生成隐藏文件 .git (存放本地库相关的文件)</p>
+</li>
+<li><p>git config 设置签名</p>
+<ul>
+<li><p>形式 ： 用户名 + Email地址</p>
+</li>
+<li><p>主要是用来区分不同的开发人员（总得知道是谁push的代码）</p>
+</li>
+<li><p>局部签名和全局签名</p>
+<ul>
+<li><strong>项目级别/仓库级别</strong>：仅在当前本地库范围内有效 </li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git config user.name xiaoming</span><br><span class="line">git config user.email  123456@qq.com</span><br></pre></td></tr></table></figure>
+
+<p>输入配置命令后，信息保存在当前本地库的 ./.git/config中</p>
+<ul>
+<li><strong>系统用户级别</strong>：登录当前操作系统的用户范围 （window xxx用户）</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git config --global user.name xiaoming</span><br><span class="line">git config --global user.email  123456@qq.com</span><br></pre></td></tr></table></figure>
+
+<p>输入命令后，信息保存在C盘的 ~/.gitconfig 文件</p>
+<p>局部签名优先级高于系统级别，操作远程库时，先在 ./.git/config寻找签名，</p>
+<p>然后在C盘的/.gitconfig中找，将找到签名作为标识符，用来辨别是哪个开发人员（二选一，一定要设置签名）</p>
+</li>
+</ul>
+</li>
+<li><p>git status ： 查看工作区，暂存区状态</p>
+</li>
+<li><p>git add [file name] ： 添加 “新建/修改” 到暂存区</p>
+</li>
+<li><p>git commit -m “commit message” [filename]  ： 将暂存区内容提交到本地库</p>
+</li>
+<li><p>git log ：查看历史记录</p>
+<ul>
+<li><p>历史纪录是一张哈希表，每个记录对应一个索引</p>
+</li>
+<li><p>其他格式显示历史纪录 ：</p>
+<ul>
+<li>gitlog–pretty=oneline</li>
+<li>gitlog–oneline  </li>
+<li>gitreflog</li>
+</ul>
+<p><img src="/2019/12/04/Git/Hard.png" alt="Hard"></p>
+</li>
+</ul>
+</li>
+<li><p>切换历史纪录（本质上是移动指针，指向不同的索引对应的记录）</p>
+<p>切换方式</p>
+<ul>
+<li><p>基于索引值操作</p>
+<ul>
+<li>git reset –hard [局部索引值] </li>
+<li>git reset –hard a6ace91 </li>
+</ul>
+</li>
+<li><p>使用^符号：只能后退 </p>
+<ul>
+<li>git reset –hard HEAD^ </li>
+<li>注：一个^表示后退一步，n 个表示后退 n 步 </li>
+</ul>
+</li>
+<li><p>使用~符号：只能后退 </p>
+<ul>
+<li>git reset –hard HEAD~n </li>
+<li>注：表示后退 n 步</li>
+</ul>
+</li>
+<li><p>reset 参数对比 （是否同步指针）</p>
+<p>git根据三个区指针的指向第几个版本，来判断进度，比如本地库和暂存区后退一个版本（指针向后移了一位），相当于工作区版本领先了一个版本，需要git add ，git commit，同步暂存区和本地库的版本为最新版</p>
+<p><img src="/2019/12/04/Git/mixed.png" alt="mixed"></p>
+<ul>
+<li>–soft<ul>
+<li>仅仅在本地库移动 HEAD 指针</li>
+</ul>
+</li>
+<li>–mixed<ul>
+<li>在本地库移动 HEAD 指针 </li>
+<li>重置暂存区</li>
+</ul>
+</li>
+<li>–hard<ul>
+<li>移动本地库的HEAD指针</li>
+<li>重置暂存区</li>
+<li>重置工作区</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>删除文件并找回  (实际上就是移动指针，指针移动到删除前的某个历史版本)</p>
+<ul>
+<li>前提：删除前，文件存在时的状态提交到了本地库（commit）。 （总得在hash表中生成对应的历史记录，才能通过索引查找到记录啊）</li>
+<li>操作：git reset–hard [指针位置]  <ul>
+<li>删除操作已经提交到本地库：指针位置指向历史记录 </li>
+<li>删除操作尚未提交到本地库：指针位置使用 HEAD</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>git diff : 比较文件差异（比较当前工作区文件和暂存区或者历史纪录）</p>
+<ul>
+<li>git diff [文件名]<ul>
+<li>比较工作区和暂存区的</li>
+</ul>
+</li>
+<li>git diff [本地库历史版本] [文件名]<ul>
+<li>比较工作区和本地库历史纪录</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="分支管理"><a href="#分支管理" class="headerlink" title="分支管理"></a>分支管理</h5><p>git可以创建分支，在不同的分支上干活，多条线同时推进多个任务</p>
+<p>比如A在web_nav分支上写导航栏代码，B在web_footer分支上写页脚，写完了，就将分支合并到master分支。</p>
+<p>如果两个分支上都同时修改了同一行代码，合并的过程中就会产生冲突，git会在冲突文件中标记冲突的位置。那如何解决冲突？自己手动解决呗😂（机器也不知道选哪段代码…）</p>
+<p>![branch manege](branch manege.png)</p>
+<p>分支操作</p>
+<ul>
+<li><p>创建分支</p>
+<p>git branch [branch name]</p>
+</li>
+<li><p>查看分支</p>
+<p>git branch -v</p>
+</li>
+<li><p>切换分支</p>
+<p>git checkout [branch name]</p>
+</li>
+<li><p>合并分支</p>
+<ul>
+<li><p>git checkout 主干道上（需要接收修改的分支上）</p>
+</li>
+<li><p>git merge [branch name]</p>
+<p>比如： git checkout master , git merge web_nav</p>
+</li>
+</ul>
+</li>
+<li><p>解决冲突</p>
+<ul>
+<li><p>冲突报错，冲突文件中标记了冲突位置</p>
+<p><img src="/2019/12/04/Git/conflict1.png" alt="conflict1"></p>
+<p><img src="/2019/12/04/Git/conflict.png" alt="conflict"></p>
+</li>
+</ul>
+</li>
+<li><p>冲突的解决 </p>
+<ul>
+<li>第一步：编辑文件，删除特殊符号 </li>
+<li>第二步：把文件修改到满意的程度，保存退出 </li>
+<li>第三步：gitadd[文件名] </li>
+<li>第四步：gitcommit-m”日志信息” <ul>
+<li>注意：此时 commit 一定不能带具体文件名</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="Git基本原理"><a href="#Git基本原理" class="headerlink" title="Git基本原理"></a>Git基本原理</h4><h5 id="哈希"><a href="#哈希" class="headerlink" title="哈希"></a>哈希</h5><p>哈希是一个系列的加密算法，各个不同的哈希算法虽然加密强度不同，但是有以下 几个共同点：</p>
+<p> ①不管输入数据的数据量有多大，输入同一个哈希算法，得到的加密结果长度固定。 </p>
+<p>②哈希算法确定，输入数据确定，输出数据能够保证不变 </p>
+<p>③哈希算法确定，输入数据有变化，输出数据一定有变化，而且通常变化很大 </p>
+<p>④哈希算法不可逆 Git 底层采用的是 SHA-1 算法。 </p>
+<h5 id="哈希校验文件"><a href="#哈希校验文件" class="headerlink" title="哈希校验文件"></a>哈希校验文件</h5><p>在远程和本地使用同一个hash算法，对同一个内容进行hash计算，如果得到的结果相同，说明传输的文件时完整的，没有受损（hash网络传输校验）。</p>
+<p>Git就是靠这种机制来从根本上保证数据的完整性</p>
+<p>![hash check](hash check.png)</p>
+<h5 id="Git保存版本机制"><a href="#Git保存版本机制" class="headerlink" title="Git保存版本机制"></a>Git保存版本机制</h5><p>Git 把数据看作是小型文件系统的一组快照。每次提交更新时 Git 都会对当前 的全部文件制作一个快照并保存这个快照的索引。<strong>为了高效，如果文件没有修改， Git 不再重新存储该文件，而是只保留一个链接指向之前存储的文件。</strong>所以 Git 的 工作方式可以称之为快照流。</p>
+<p><img src="/2019/12/04/Git/snap.png" alt="snap"></p>
+<h5 id="git-文件管理细节"><a href="#git-文件管理细节" class="headerlink" title="git 文件管理细节"></a>git 文件管理细节</h5><p>commit对象，内部保存了parent指针，指向上一次提交的对象</p>
+<p><img src="/2019/12/04/Git/parent%E6%8C%87%E9%92%88.png" alt="parent指针"></p>
+<h5 id="git分支管理机制（移动指针）"><a href="#git分支管理机制（移动指针）" class="headerlink" title="git分支管理机制（移动指针）"></a>git分支管理机制（移动指针）</h5><ul>
+<li><p>创建分支（新的指针指向当前记录）</p>
+<p><img src="/2019/12/04/Git/create.png" alt="create"></p>
+</li>
+<li><p>切换分支，移动HEAD指针</p>
+<p><img src="/2019/12/04/Git/move.png" alt="move"></p>
+</li>
+<li><p>不同分支生成新的记录，用parent指针连起来</p>
+<p><img src="/2019/12/04/Git/new.png" alt="new"></p>
+</li>
+</ul>
+<h4 id="github"><a href="#github" class="headerlink" title="github"></a>github</h4><p>在github上登陆注册帐号，创建远程仓库</p>
+<h5 id="本地仓库关联远程仓库地址"><a href="#本地仓库关联远程仓库地址" class="headerlink" title="本地仓库关联远程仓库地址"></a>本地仓库关联远程仓库地址</h5><ul>
+<li><p>创建远程库地址别名</p>
+<ul>
+<li>git remote -v 查看当前所有远程地址别名</li>
+<li>git remote add [别名] [远程地址]</li>
+<li>git remote add orign url</li>
+</ul>
+</li>
+<li><p>推送</p>
+<ul>
+<li>git push [别名] [分支名]</li>
+<li>git push origin master <ul>
+<li>第一次push，需要指定push到哪个分支</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>克隆</p>
+<ul>
+<li>git clone [远程地址]</li>
+<li>把完整的远程库下载到本地</li>
+<li>创建origin远程地址别名</li>
+<li>初始化本地库</li>
+</ul>
+</li>
+<li><p>拉取</p>
+<ul>
+<li>pull = fetch + merge</li>
+<li>git fetch[远程库地址别名] [远程分支名]  ： 将远程库下载到本地</li>
+<li>git merge [远程库地址别名/远程分支名]  ： 和本地库合并，可能会产生冲突</li>
+<li>git pull [远程库地址别名] [远程分支名]</li>
+</ul>
+</li>
+<li><p>解决冲突</p>
+<ul>
+<li>如果不是基于Github远程库的最新版本所作的修改，不能推送，必须先拉取</li>
+<li>拉取下来，如果进入冲突状态，按照分支冲突解决解决<ul>
+<li>git push ： 命令行报冲突错误</li>
+<li>git pull，然后手动解决冲突 </li>
+<li>解决完之后，git add ，git commit</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="跨团队协作"><a href="#跨团队协作" class="headerlink" title="跨团队协作"></a>跨团队协作</h5><p><img src="/2019/12/04/Git/%E8%B7%A8%E5%9B%A2%E9%98%9F.png" alt="跨团队"></p>
+<h5 id="github设置SSH"><a href="#github设置SSH" class="headerlink" title="github设置SSH"></a>github设置SSH</h5><ol>
+<li><p>cd ~  ： 进入当前用户目录</p>
+</li>
+<li><p>rm -rvf .ssh ： 删除.ssh目录</p>
+</li>
+<li><p>ssh-keygen -t rsa -C xxx邮箱（注册github的邮箱） ： 生成公私钥对</p>
+</li>
+<li><p>cd .ssh </p>
+<p>ls -lF</p>
+</li>
+<li><p>cat id_rsa.pub  查看公钥内容</p>
+</li>
+<li><p>复制 id_rsa.pub 文件内容，登录 GitHub，点击用户头像→Settings→SSHandGPG keys </p>
+</li>
+<li><p>New SSH Key，输入复制的公钥信息</p>
+</li>
+<li><p>然后git push ，就不用输入密码了</p>
+</li>
+</ol>
+<h5 id="gitconfig"><a href="#gitconfig" class="headerlink" title=".gitconfig"></a>.gitconfig</h5><p>配置忽略文件</p>
+<ul>
+<li><p>创建全局配置文件</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ git config --global core.excludesfile ~/.gitignore_global</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>只针对于单个仓库</p>
+<p>在项目文件夹中新建一个.gitignore文件</p>
+</li>
+<li><p>.gitignore示例</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># See https://help.github.com/articles/ignoring-files/ for more about ignoring files.</span><br><span class="line"></span><br><span class="line"># dependencies</span><br><span class="line">/node_modules （相对工作目录）</span><br><span class="line">/.pnp</span><br><span class="line">.pnp.js</span><br><span class="line"></span><br><span class="line"># testing</span><br><span class="line">/coverage</span><br><span class="line"></span><br><span class="line"># production</span><br><span class="line">/build</span><br><span class="line"></span><br><span class="line"># misc</span><br><span class="line">.DS_Store</span><br><span class="line">.env.local</span><br><span class="line">.env.development.local</span><br><span class="line">.env.test.local</span><br><span class="line">.env.production.local</span><br><span class="line"></span><br><span class="line">npm-debug.log*</span><br><span class="line">yarn-debug.log*</span><br><span class="line">yarn-error.log*</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Git-Flow"><a href="#Git-Flow" class="headerlink" title="Git Flow"></a>Git Flow</h4><p><img src="/2019/12/04/Git/flow.png" alt="flow"></p>
+<h4 id="vim-命令小结"><a href="#vim-命令小结" class="headerlink" title="vim 命令小结"></a>vim 命令小结</h4><ul>
+<li>i  切换到输入模式</li>
+<li>：切换到底线命令模式</li>
+<li>ESC ，退出时输入模式</li>
+<li>q 退出</li>
+<li>w 写入</li>
+<li>wq 写入退出</li>
+</ul>
+<h4 id="Linux-命令"><a href="#Linux-命令" class="headerlink" title="Linux 命令"></a>Linux 命令</h4><ul>
+<li>cat [filename]  输出文件内容</li>
+<li>mkdir [directory name] 新建目录</li>
+<li>ls  列举当前工作目录文件<ul>
+<li>ls -lA （列出隐藏文件）</li>
+</ul>
+</li>
+<li>pwd 显示当前工作目录（Print Woking Directory）</li>
+<li>cd 切换文件路径</li>
+<li>rm [filename] 删除文件</li>
+</ul>
+<p><strong>参考</strong></p>
+<p>尚硅谷git教程</p>
+<p>git官网</p>
+]]></content>
+      <categories>
+        <category>git</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+        <tag>github</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>git设置ssh</title>
     <url>/2019/12/03/git%E8%AE%BE%E7%BD%AEssh/</url>
     <content><![CDATA[<p>如何利用公私钥加密？</p>
@@ -10,8 +358,7 @@
 <li><h5 id="本地打开git-bash-，用-ssh-keygen生成密钥"><a href="#本地打开git-bash-，用-ssh-keygen生成密钥" class="headerlink" title="本地打开git bash ，用 ssh-keygen生成密钥"></a>本地打开git bash ，用 <code>ssh-keygen</code>生成密钥</h5></li>
 </ol>
 <blockquote>
-<p><em>默认生成的文件名为（id_rsa 和 id_ras.pub）</em><br><em>如果本地已经有同名文件，为了防止覆盖，可以手动填写保存路径，比如 *</em>/c/Users/Gary/.ssh/id_rsa_github*** </p>
-<p><em>如果没有，就直接一路enter即可</em></p>
+<p>默认生成的文件名为（id_rsa 和 id_ras.pub）<br>如果本地已经有同名文件，为了防止覆盖，可以手动填写保存路径，比如 /c/Users/Gary/.ssh/id_rsa_github如果没有，就直接一路enter即可</p>
 </blockquote>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ ssh-keygen -t rsa -C &quot;your_email@example.com&quot;  （填写注册远程仓库的邮箱）</span><br></pre></td></tr></table></figure>
 
@@ -56,16 +403,17 @@
 
 
 
-<p>参考：<a href="https://blog.csdn.net/gediseer/article/details/54572731" target="_blank" rel="noopener">https://blog.csdn.net/gediseer/article/details/54572731</a></p>
-<p>参考：<a href="https://www.cnblogs.com/dzblog/p/6930147.html" target="_blank" rel="noopener">https://www.cnblogs.com/dzblog/p/6930147.html</a> </p>
-<p>参考：<a href="https://www.awaimai.com/2200.html" target="_blank" rel="noopener">https://www.awaimai.com/2200.html</a> </p>
+<p><strong>参考</strong></p>
+<p><a href="https://blog.csdn.net/gediseer/article/details/54572731" target="_blank" rel="noopener">https://blog.csdn.net/gediseer/article/details/54572731</a></p>
+<p><a href="https://www.cnblogs.com/dzblog/p/6930147.html" target="_blank" rel="noopener">https://www.cnblogs.com/dzblog/p/6930147.html</a> </p>
+<p><a href="https://www.awaimai.com/2200.html" target="_blank" rel="noopener">https://www.awaimai.com/2200.html</a> </p>
 ]]></content>
       <categories>
         <category>git</category>
       </categories>
       <tags>
-        <tag>ssh</tag>
         <tag>git</tag>
+        <tag>ssh</tag>
       </tags>
   </entry>
   <entry>
@@ -1071,6 +1419,110 @@
       </tags>
   </entry>
   <entry>
+    <title>html (三)  列表&表格</title>
+    <url>/2019/11/19/html%20(%E4%B8%89)%20%20%E5%88%97%E8%A1%A8&amp;%E8%A1%A8%E6%A0%BC/</url>
+    <content><![CDATA[<h4 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h4><ul>
+<li><p><strong>ol&amp;li</strong> </p>
+<ul>
+<li><p>ordered  list &amp; list item</p>
+</li>
+<li><p>有序列表，&lt; ol &gt;中只能嵌套&lt; li &gt;,&lt; li &gt;中可以嵌套其他元素</p>
+</li>
+</ul>
+</li>
+<li><p><strong>ul&amp;li</strong>  </p>
+<ul>
+<li><p>unordered list &amp; list item</p>
+</li>
+<li><p>无序列表，&lt; ul &gt;中只能嵌套&lt; li &gt;,&lt; li &gt;中可以嵌套其他元素</p>
+</li>
+</ul>
+</li>
+<li><p><strong>dl&amp;dt&amp;dd</strong>  </p>
+<ul>
+<li><p>desciption list &amp;   description term  &amp;   description description </p>
+</li>
+<li><p>自定义列表</p>
+</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dl</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">dt</span>&gt;</span>计算机<span class="tag">&lt;/<span class="name">dt</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">dd</span>&gt;</span>用来计算的仪器 ... ...<span class="tag">&lt;/<span class="name">dd</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">dt</span>&gt;</span>显示器<span class="tag">&lt;/<span class="name">dt</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">dd</span>&gt;</span>以视觉方式显示信息的装置 ... ...<span class="tag">&lt;/<span class="name">dd</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dl</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<h4 id="表格"><a href="#表格" class="headerlink" title="表格"></a>表格</h4><p><strong>table</strong> 标签定义 HTML 表格。简单的 HTML 表格由 table 元素以及一个或多个 <strong>tr</strong>、<strong>th</strong> 或 <strong>td</strong> 元素组成；由<strong>thead</strong>（一个tabel只能有一个thead），<strong>tbody，tfoot</strong>组成表单结构。</p>
+<p><strong>标签</strong></p>
+<ul>
+<li><p>table ： 表格</p>
+</li>
+<li><p>tr 行</p>
+</li>
+<li><p>th 表头</p>
+</li>
+<li><p>td 表数据</p>
+</li>
+<li><p>colgroup</p>
+<ul>
+<li>用于对<strong>col标签</strong>进行组合，以便对其进行格式化。添加class属性就能用css来设置样式。</li>
+</ul>
+</li>
+</ul>
+<p><strong>属性</strong></p>
+<ul>
+<li><p>colspan ： 设置跨列</p>
+</li>
+<li><p>rowspan： 设置跨行</p>
+<ul>
+<li>设置了跨行或跨列，相应需要删除多余的表格（td）</li>
+</ul>
+</li>
+<li><p>border-spacing：边框间距</p>
+</li>
+<li><p>cellspacing：边框间距</p>
+<p><strong>实例1</strong></p>
+</li>
+</ul>
+<p><img src="/2019/11/19/html%20(%E4%B8%89)%20%20%E5%88%97%E8%A1%A8&%E8%A1%A8%E6%A0%BC/table.png" alt="table"></p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">table</span> <span class="attr">border</span>=<span class="string">1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">caption</span>&gt;</span>表格标题<span class="tag">&lt;/<span class="name">caption</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">thead</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">th</span>&gt;</span>姓名<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">th</span>&gt;</span>性别<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">th</span>&gt;</span>年龄<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">th</span>&gt;</span>籍贯<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">th</span>&gt;</span>寝室<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">thead</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">tbody</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 第一行元素设置了跨行和跨列 ，相应需要减少第一行的td(5=2+2+1)，减少第二行的td（5=1+1+2+1）--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span> <span class="attr">colspan</span>=<span class="string">"2"</span> &gt;</span>tom<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span> <span class="attr">colspan</span>=<span class="string">"2"</span> <span class="attr">rowspan</span>=<span class="string">"2"</span>&gt;</span>男<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>201<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>1<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>2<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>3<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">tbody</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>实例2</strong></p>
+<p><img src="/2019/11/19/html%20(%E4%B8%89)%20%20%E5%88%97%E8%A1%A8&%E8%A1%A8%E6%A0%BC/colgroup.png" alt="colgroup"></p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">table</span> <span class="attr">border</span>=<span class="string">"1"</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 用于对列进行分组，以列为单位设置样式 --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">colgroup</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">col</span> <span class="attr">span</span>=<span class="string">"2"</span> <span class="attr">style</span>=<span class="string">"background-color:red"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">col</span> <span class="attr">style</span>=<span class="string">"background-color:yellow"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">colgroup</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">th</span>&gt;</span>ISBN<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">th</span>&gt;</span>Title<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">th</span>&gt;</span>Price<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>3476896<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>My first HTML<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>$53<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>5869207<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>My first CSS<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>$49<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="map-amp-area"><a href="#map-amp-area" class="headerlink" title="map &amp; area"></a>map &amp; area</h4><ul>
+<li><p>map :  映射标签</p>
+<ul>
+<li>usemap的属性值和map元素的“id”或者“name”相等</li>
+</ul>
+</li>
+<li><p>area ： 圈定map中位置</p>
+<blockquote>
+<p>​    shape=”rect”  矩形对角点坐标 “ x1，y1，x2，y2 ”</p>
+<p>​    shape=”circle” 圆坐标 圆心+半径  “  x1，y1，r “</p>
+<p>​    shape=”poly” 路径坐标 “ x1，y1，x2，y2，x3，y3，xn，yn ”    </p>
+</blockquote>
+</li>
+<li><p><a href="https://www.w3school.com.cn/tiy/t.asp?f=html_areamap" target="_blank" rel="noopener">实例</a></p>
+</li>
+</ul>
+<hr>
+<p><strong>参考</strong>：</p>
+<p> <a href="https://www.zhangxinxu.com/" target="_blank" rel="noopener">https://www.zhangxinxu.com/</a> </p>
+<p> <a href="https://babopo.github.io/" target="_blank" rel="noopener">https://babopo.github.io/</a> </p>
+<p> <a href="https://www.w3school.com.cn/" target="_blank" rel="noopener">https://www.w3school.com.cn/</a> </p>
+<p> <a href="https://www.runoob.com/" target="_blank" rel="noopener">https://www.runoob.com/</a> </p>
+]]></content>
+      <categories>
+        <category>html</category>
+      </categories>
+      <tags>
+        <tag>html</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>html（二）表单</title>
     <url>/2019/11/19/html%20(%E4%BA%8C)%20%20%E8%A1%A8%E5%8D%95/</url>
     <content><![CDATA[<h5 id="1-form"><a href="#1-form" class="headerlink" title="1.form"></a>1.form</h5><p>用于为用户输入创建 HTML 表单，表单用于向服务器传输数据。</p>
@@ -1192,110 +1644,6 @@
 
 
 
-<hr>
-<p><strong>参考</strong>：</p>
-<p> <a href="https://www.zhangxinxu.com/" target="_blank" rel="noopener">https://www.zhangxinxu.com/</a> </p>
-<p> <a href="https://babopo.github.io/" target="_blank" rel="noopener">https://babopo.github.io/</a> </p>
-<p> <a href="https://www.w3school.com.cn/" target="_blank" rel="noopener">https://www.w3school.com.cn/</a> </p>
-<p> <a href="https://www.runoob.com/" target="_blank" rel="noopener">https://www.runoob.com/</a> </p>
-]]></content>
-      <categories>
-        <category>html</category>
-      </categories>
-      <tags>
-        <tag>html</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>html (三)  列表&表格</title>
-    <url>/2019/11/19/html%20(%E4%B8%89)%20%20%E5%88%97%E8%A1%A8&amp;%E8%A1%A8%E6%A0%BC/</url>
-    <content><![CDATA[<h4 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h4><ul>
-<li><p><strong>ol&amp;li</strong> </p>
-<ul>
-<li><p>ordered  list &amp; list item</p>
-</li>
-<li><p>有序列表，&lt; ol &gt;中只能嵌套&lt; li &gt;,&lt; li &gt;中可以嵌套其他元素</p>
-</li>
-</ul>
-</li>
-<li><p><strong>ul&amp;li</strong>  </p>
-<ul>
-<li><p>unordered list &amp; list item</p>
-</li>
-<li><p>无序列表，&lt; ul &gt;中只能嵌套&lt; li &gt;,&lt; li &gt;中可以嵌套其他元素</p>
-</li>
-</ul>
-</li>
-<li><p><strong>dl&amp;dt&amp;dd</strong>  </p>
-<ul>
-<li><p>desciption list &amp;   description term  &amp;   description description </p>
-</li>
-<li><p>自定义列表</p>
-</li>
-</ul>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dl</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">dt</span>&gt;</span>计算机<span class="tag">&lt;/<span class="name">dt</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">dd</span>&gt;</span>用来计算的仪器 ... ...<span class="tag">&lt;/<span class="name">dd</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">dt</span>&gt;</span>显示器<span class="tag">&lt;/<span class="name">dt</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">dd</span>&gt;</span>以视觉方式显示信息的装置 ... ...<span class="tag">&lt;/<span class="name">dd</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dl</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-
-
-</li>
-</ul>
-<h4 id="表格"><a href="#表格" class="headerlink" title="表格"></a>表格</h4><p><strong>table</strong> 标签定义 HTML 表格。简单的 HTML 表格由 table 元素以及一个或多个 <strong>tr</strong>、<strong>th</strong> 或 <strong>td</strong> 元素组成；由<strong>thead</strong>（一个tabel只能有一个thead），<strong>tbody，tfoot</strong>组成表单结构。</p>
-<p><strong>标签</strong></p>
-<ul>
-<li><p>table ： 表格</p>
-</li>
-<li><p>tr 行</p>
-</li>
-<li><p>th 表头</p>
-</li>
-<li><p>td 表数据</p>
-</li>
-<li><p>colgroup</p>
-<ul>
-<li>用于对<strong>col标签</strong>进行组合，以便对其进行格式化。添加class属性就能用css来设置样式。</li>
-</ul>
-</li>
-</ul>
-<p><strong>属性</strong></p>
-<ul>
-<li><p>colspan ： 设置跨列</p>
-</li>
-<li><p>rowspan： 设置跨行</p>
-<ul>
-<li>设置了跨行或跨列，相应需要删除多余的表格（td）</li>
-</ul>
-</li>
-<li><p>border-spacing：边框间距</p>
-</li>
-<li><p>cellspacing：边框间距</p>
-<p><strong>实例1</strong></p>
-</li>
-</ul>
-<p><img src="/2019/11/19/html%20(%E4%B8%89)%20%20%E5%88%97%E8%A1%A8&%E8%A1%A8%E6%A0%BC/table.png" alt="table"></p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">table</span> <span class="attr">border</span>=<span class="string">1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">caption</span>&gt;</span>表格标题<span class="tag">&lt;/<span class="name">caption</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">thead</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">th</span>&gt;</span>姓名<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">th</span>&gt;</span>性别<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">th</span>&gt;</span>年龄<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">th</span>&gt;</span>籍贯<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">th</span>&gt;</span>寝室<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">thead</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">tbody</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 第一行元素设置了跨行和跨列 ，相应需要减少第一行的td(5=2+2+1)，减少第二行的td（5=1+1+2+1）--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span> <span class="attr">colspan</span>=<span class="string">"2"</span> &gt;</span>tom<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span> <span class="attr">colspan</span>=<span class="string">"2"</span> <span class="attr">rowspan</span>=<span class="string">"2"</span>&gt;</span>男<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>201<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>1<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>2<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>3<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">tbody</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>实例2</strong></p>
-<p><img src="/2019/11/19/html%20(%E4%B8%89)%20%20%E5%88%97%E8%A1%A8&%E8%A1%A8%E6%A0%BC/colgroup.png" alt="colgroup"></p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">table</span> <span class="attr">border</span>=<span class="string">"1"</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 用于对列进行分组，以列为单位设置样式 --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">colgroup</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">col</span> <span class="attr">span</span>=<span class="string">"2"</span> <span class="attr">style</span>=<span class="string">"background-color:red"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">col</span> <span class="attr">style</span>=<span class="string">"background-color:yellow"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">colgroup</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">th</span>&gt;</span>ISBN<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">th</span>&gt;</span>Title<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">th</span>&gt;</span>Price<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>3476896<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>My first HTML<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>$53<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>5869207<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>My first CSS<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>$49<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h4 id="map-amp-area"><a href="#map-amp-area" class="headerlink" title="map &amp; area"></a>map &amp; area</h4><ul>
-<li><p>map :  映射标签</p>
-<ul>
-<li>usemap的属性值和map元素的“id”或者“name”相等</li>
-</ul>
-</li>
-<li><p>area ： 圈定map中位置</p>
-<blockquote>
-<p>​    shape=”rect”  矩形对角点坐标 “ x1，y1，x2，y2 ”</p>
-<p>​    shape=”circle” 圆坐标 圆心+半径  “  x1，y1，r “</p>
-<p>​    shape=”poly” 路径坐标 “ x1，y1，x2，y2，x3，y3，xn，yn ”    </p>
-</blockquote>
-</li>
-<li><p><a href="https://www.w3school.com.cn/tiy/t.asp?f=html_areamap" target="_blank" rel="noopener">实例</a></p>
-</li>
-</ul>
 <hr>
 <p><strong>参考</strong>：</p>
 <p> <a href="https://www.zhangxinxu.com/" target="_blank" rel="noopener">https://www.zhangxinxu.com/</a> </p>

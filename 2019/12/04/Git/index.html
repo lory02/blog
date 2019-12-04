@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="git,github," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Git版本控制工具应该具备的功能 协同修改 多人并行修改服务器的同一个文件   数据备份 版本管理 SVN ：增量式管理 每次迭代，保存变动的部分，读取版本的时候（拼接原始版本和变动部分）   GIT:  文件系统快照 copy原文件（创建新的指针，指向同一个内存）     权限控制 历史记录 ⭐分支管理  版本控制工具 - 集中式 vs 分布式集中式 ：版本库存在远程的中央服务器上，干活的时候，">
+<meta name="keywords" content="git,github">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git &amp; Github">
+<meta property="og:url" content="http:&#x2F;&#x2F;blog.eatcode.com&#x2F;2019&#x2F;12&#x2F;04&#x2F;Git&#x2F;index.html">
+<meta property="og:site_name" content="Lory&#39;s Notes">
+<meta property="og:description" content="Git版本控制工具应该具备的功能 协同修改 多人并行修改服务器的同一个文件   数据备份 版本管理 SVN ：增量式管理 每次迭代，保存变动的部分，读取版本的时候（拼接原始版本和变动部分）   GIT:  文件系统快照 copy原文件（创建新的指针，指向同一个内存）     权限控制 历史记录 ⭐分支管理  版本控制工具 - 集中式 vs 分布式集中式 ：版本库存在远程的中央服务器上，干活的时候，">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http:&#x2F;&#x2F;blog.eatcode.com&#x2F;2019&#x2F;12&#x2F;04&#x2F;Git&#x2F;%E9%9B%86%E4%B8%AD%E5%BC%8F.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;blog.eatcode.com&#x2F;2019&#x2F;12&#x2F;04&#x2F;Git&#x2F;%E5%88%86%E5%B8%83%E5%BC%8F.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;blog.eatcode.com&#x2F;2019&#x2F;12&#x2F;04&#x2F;Git&#x2F;git%E5%88%86%E5%8C%BA.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;blog.eatcode.com&#x2F;2019&#x2F;12&#x2F;04&#x2F;Git&#x2F;git%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;blog.eatcode.com&#x2F;2019&#x2F;12&#x2F;04&#x2F;Git&#x2F;%E5%A4%9A%E4%BA%BA%E5%8D%8F%E4%BD%9C.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;blog.eatcode.com&#x2F;2019&#x2F;12&#x2F;04&#x2F;Git&#x2F;%E8%B7%A8%E5%9B%A2%E9%98%9F.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;blog.eatcode.com&#x2F;2019&#x2F;12&#x2F;04&#x2F;Git&#x2F;Hard.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;blog.eatcode.com&#x2F;2019&#x2F;12&#x2F;04&#x2F;Git&#x2F;mixed.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;blog.eatcode.com&#x2F;2019&#x2F;12&#x2F;04&#x2F;Git&#x2F;conflict1.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;blog.eatcode.com&#x2F;2019&#x2F;12&#x2F;04&#x2F;Git&#x2F;conflict.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;blog.eatcode.com&#x2F;2019&#x2F;12&#x2F;04&#x2F;Git&#x2F;snap.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;blog.eatcode.com&#x2F;2019&#x2F;12&#x2F;04&#x2F;Git&#x2F;parent%E6%8C%87%E9%92%88.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;blog.eatcode.com&#x2F;2019&#x2F;12&#x2F;04&#x2F;Git&#x2F;create.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;blog.eatcode.com&#x2F;2019&#x2F;12&#x2F;04&#x2F;Git&#x2F;move.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;blog.eatcode.com&#x2F;2019&#x2F;12&#x2F;04&#x2F;Git&#x2F;new.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;blog.eatcode.com&#x2F;2019&#x2F;12&#x2F;04&#x2F;Git&#x2F;%E8%B7%A8%E5%9B%A2%E9%98%9F.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;blog.eatcode.com&#x2F;2019&#x2F;12&#x2F;04&#x2F;Git&#x2F;flow.png">
+<meta property="og:updated_time" content="2019-12-04T15:34:01.712Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;blog.eatcode.com&#x2F;2019&#x2F;12&#x2F;04&#x2F;Git&#x2F;%E9%9B%86%E4%B8%AD%E5%BC%8F.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.eatcode.com/2019/12/04/Git/"/>
+
+
+
+
+
+  <title>Git & Github | Lory's Notes</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Lory's Notes</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.eatcode.com/2019/12/04/Git/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="lory">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lory's Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Git & Github</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-04T22:40:23+08:00">
+                2019-12-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/git/" itemprop="url" rel="index">
+                    <span itemprop="name">git</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h4><h5 id="版本控制工具应该具备的功能"><a href="#版本控制工具应该具备的功能" class="headerlink" title="版本控制工具应该具备的功能"></a>版本控制工具应该具备的功能</h5><ul>
+<li>协同修改<ul>
+<li>多人并行修改服务器的同一个文件</li>
+</ul>
+</li>
+<li>数据备份</li>
+<li>版本管理<ul>
+<li>SVN ：增量式管理<ul>
+<li>每次迭代，保存变动的部分，读取版本的时候（拼接原始版本和变动部分）</li>
+</ul>
+</li>
+<li>GIT:  文件系统快照<ul>
+<li>copy原文件（创建新的指针，指向同一个内存）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>权限控制</li>
+<li>历史记录</li>
+<li>⭐分支管理</li>
+</ul>
+<h5 id="版本控制工具-集中式-vs-分布式"><a href="#版本控制工具-集中式-vs-分布式" class="headerlink" title="版本控制工具 - 集中式 vs 分布式"></a>版本控制工具 - 集中式 vs 分布式</h5><p>集中式 ：版本库存在远程的中央服务器上，干活的时候，从远程服务器下载文件到自己电脑上，干完了，提交文件到远程服务器。(要是断网了都没法工作了🤦)。要是中央服务器挂了，那就尴尬了。（单点故障）</p>
+<ul>
+<li>比如SVN</li>
+</ul>
+<p><img src="/2019/12/04/Git/%E9%9B%86%E4%B8%AD%E5%BC%8F.png" alt="集中式"></p>
+<p>分布式：分布式版本控制系统根本没有“中央服务器”，每个人的电脑上都是一个完整的版本库。这样，就不需要联网了。 但是两个之间如何协作呢？分布式版本控制系统通常也有一台充当“中央服务器”的电脑，但这个服务器的作用仅仅是用来方便“交换”大家的修改 。</p>
+<p><img src="/2019/12/04/Git/%E5%88%86%E5%B8%83%E5%BC%8F.png" alt="分布式"></p>
+<h5 id="Git结构"><a href="#Git结构" class="headerlink" title="Git结构"></a>Git结构</h5><p>git分工作区，暂存区，本地库，远程库</p>
+<p>![git exp](git exp.png)</p>
+<p><img src="/2019/12/04/Git/git%E5%88%86%E5%8C%BA.png" alt="git分区"></p>
+<p><img src="/2019/12/04/Git/git%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.png" alt="git生命周期"></p>
+<h5 id="GiT和代码托管中心"><a href="#GiT和代码托管中心" class="headerlink" title="GiT和代码托管中心"></a>GiT和代码托管中心</h5><p>代码管理中心的作用使用来维护远程库。</p>
+<p>局域网下，GitLab服务器</p>
+<p>外网环境下 ，GitHub ， 码云</p>
+<h5 id="本地库和远程库"><a href="#本地库和远程库" class="headerlink" title="本地库和远程库"></a>本地库和远程库</h5><p>团队内部协作</p>
+<ul>
+<li><p>pull = fetch + merge</p>
+</li>
+<li><p>push ： 提交</p>
+</li>
+<li><p>clone：下载项目文件 </p>
+</li>
+</ul>
+<p><img src="/2019/12/04/Git/%E5%A4%9A%E4%BA%BA%E5%8D%8F%E4%BD%9C.png" alt="多人协作"></p>
+<p>跨团队合作</p>
+<ul>
+<li>fork：复制到自己的远程库</li>
+<li>pull request：提交 申请，需要对方审核通过后，merge</li>
+</ul>
+<p><img src="/2019/12/04/Git/%E8%B7%A8%E5%9B%A2%E9%98%9F.png" alt="跨团队"></p>
+<h5 id="⭐Git基本操作"><a href="#⭐Git基本操作" class="headerlink" title="⭐Git基本操作"></a>⭐Git基本操作</h5><ul>
+<li><p>git init  ： 初始化仓库，会生成隐藏文件 .git (存放本地库相关的文件)</p>
+</li>
+<li><p>git config 设置签名</p>
+<ul>
+<li><p>形式 ： 用户名 + Email地址</p>
+</li>
+<li><p>主要是用来区分不同的开发人员（总得知道是谁push的代码）</p>
+</li>
+<li><p>局部签名和全局签名</p>
+<ul>
+<li><strong>项目级别/仓库级别</strong>：仅在当前本地库范围内有效 </li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config user.name xiaoming</span><br><span class="line">git config user.email  123456@qq.com</span><br></pre></td></tr></table></figure>
+
+<p>输入配置命令后，信息保存在当前本地库的 ./.git/config中</p>
+<ul>
+<li><strong>系统用户级别</strong>：登录当前操作系统的用户范围 （window xxx用户）</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name xiaoming</span><br><span class="line">git config --global user.email  123456@qq.com</span><br></pre></td></tr></table></figure>
+
+<p>输入命令后，信息保存在C盘的 ~/.gitconfig 文件</p>
+<p>局部签名优先级高于系统级别，操作远程库时，先在 ./.git/config寻找签名，</p>
+<p>然后在C盘的/.gitconfig中找，将找到签名作为标识符，用来辨别是哪个开发人员（二选一，一定要设置签名）</p>
+</li>
+</ul>
+</li>
+<li><p>git status ： 查看工作区，暂存区状态</p>
+</li>
+<li><p>git add [file name] ： 添加 “新建/修改” 到暂存区</p>
+</li>
+<li><p>git commit -m “commit message” [filename]  ： 将暂存区内容提交到本地库</p>
+</li>
+<li><p>git log ：查看历史记录</p>
+<ul>
+<li><p>历史纪录是一张哈希表，每个记录对应一个索引</p>
+</li>
+<li><p>其他格式显示历史纪录 ：</p>
+<ul>
+<li>gitlog–pretty=oneline</li>
+<li>gitlog–oneline  </li>
+<li>gitreflog</li>
+</ul>
+<p><img src="/2019/12/04/Git/Hard.png" alt="Hard"></p>
+</li>
+</ul>
+</li>
+<li><p>切换历史纪录（本质上是移动指针，指向不同的索引对应的记录）</p>
+<p>切换方式</p>
+<ul>
+<li><p>基于索引值操作</p>
+<ul>
+<li>git reset –hard [局部索引值] </li>
+<li>git reset –hard a6ace91 </li>
+</ul>
+</li>
+<li><p>使用^符号：只能后退 </p>
+<ul>
+<li>git reset –hard HEAD^ </li>
+<li>注：一个^表示后退一步，n 个表示后退 n 步 </li>
+</ul>
+</li>
+<li><p>使用~符号：只能后退 </p>
+<ul>
+<li>git reset –hard HEAD~n </li>
+<li>注：表示后退 n 步</li>
+</ul>
+</li>
+<li><p>reset 参数对比 （是否同步指针）</p>
+<p>git根据三个区指针的指向第几个版本，来判断进度，比如本地库和暂存区后退一个版本（指针向后移了一位），相当于工作区版本领先了一个版本，需要git add ，git commit，同步暂存区和本地库的版本为最新版</p>
+<p><img src="/2019/12/04/Git/mixed.png" alt="mixed"></p>
+<ul>
+<li>–soft<ul>
+<li>仅仅在本地库移动 HEAD 指针</li>
+</ul>
+</li>
+<li>–mixed<ul>
+<li>在本地库移动 HEAD 指针 </li>
+<li>重置暂存区</li>
+</ul>
+</li>
+<li>–hard<ul>
+<li>移动本地库的HEAD指针</li>
+<li>重置暂存区</li>
+<li>重置工作区</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>删除文件并找回  (实际上就是移动指针，指针移动到删除前的某个历史版本)</p>
+<ul>
+<li>前提：删除前，文件存在时的状态提交到了本地库（commit）。 （总得在hash表中生成对应的历史记录，才能通过索引查找到记录啊）</li>
+<li>操作：git reset–hard [指针位置]  <ul>
+<li>删除操作已经提交到本地库：指针位置指向历史记录 </li>
+<li>删除操作尚未提交到本地库：指针位置使用 HEAD</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>git diff : 比较文件差异（比较当前工作区文件和暂存区或者历史纪录）</p>
+<ul>
+<li>git diff [文件名]<ul>
+<li>比较工作区和暂存区的</li>
+</ul>
+</li>
+<li>git diff [本地库历史版本] [文件名]<ul>
+<li>比较工作区和本地库历史纪录</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="分支管理"><a href="#分支管理" class="headerlink" title="分支管理"></a>分支管理</h5><p>git可以创建分支，在不同的分支上干活，多条线同时推进多个任务</p>
+<p>比如A在web_nav分支上写导航栏代码，B在web_footer分支上写页脚，写完了，就将分支合并到master分支。</p>
+<p>如果两个分支上都同时修改了同一行代码，合并的过程中就会产生冲突，git会在冲突文件中标记冲突的位置。那如何解决冲突？自己手动解决呗😂（机器也不知道选哪段代码…）</p>
+<p>![branch manege](branch manege.png)</p>
+<p>分支操作</p>
+<ul>
+<li><p>创建分支</p>
+<p>git branch [branch name]</p>
+</li>
+<li><p>查看分支</p>
+<p>git branch -v</p>
+</li>
+<li><p>切换分支</p>
+<p>git checkout [branch name]</p>
+</li>
+<li><p>合并分支</p>
+<ul>
+<li><p>git checkout 主干道上（需要接收修改的分支上）</p>
+</li>
+<li><p>git merge [branch name]</p>
+<p>比如： git checkout master , git merge web_nav</p>
+</li>
+</ul>
+</li>
+<li><p>解决冲突</p>
+<ul>
+<li><p>冲突报错，冲突文件中标记了冲突位置</p>
+<p><img src="/2019/12/04/Git/conflict1.png" alt="conflict1"></p>
+<p><img src="/2019/12/04/Git/conflict.png" alt="conflict"></p>
+</li>
+</ul>
+</li>
+<li><p>冲突的解决 </p>
+<ul>
+<li>第一步：编辑文件，删除特殊符号 </li>
+<li>第二步：把文件修改到满意的程度，保存退出 </li>
+<li>第三步：gitadd[文件名] </li>
+<li>第四步：gitcommit-m”日志信息” <ul>
+<li>注意：此时 commit 一定不能带具体文件名</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="Git基本原理"><a href="#Git基本原理" class="headerlink" title="Git基本原理"></a>Git基本原理</h4><h5 id="哈希"><a href="#哈希" class="headerlink" title="哈希"></a>哈希</h5><p>哈希是一个系列的加密算法，各个不同的哈希算法虽然加密强度不同，但是有以下 几个共同点：</p>
+<p> ①不管输入数据的数据量有多大，输入同一个哈希算法，得到的加密结果长度固定。 </p>
+<p>②哈希算法确定，输入数据确定，输出数据能够保证不变 </p>
+<p>③哈希算法确定，输入数据有变化，输出数据一定有变化，而且通常变化很大 </p>
+<p>④哈希算法不可逆 Git 底层采用的是 SHA-1 算法。 </p>
+<h5 id="哈希校验文件"><a href="#哈希校验文件" class="headerlink" title="哈希校验文件"></a>哈希校验文件</h5><p>在远程和本地使用同一个hash算法，对同一个内容进行hash计算，如果得到的结果相同，说明传输的文件时完整的，没有受损（hash网络传输校验）。</p>
+<p>Git就是靠这种机制来从根本上保证数据的完整性</p>
+<p>![hash check](hash check.png)</p>
+<h5 id="Git保存版本机制"><a href="#Git保存版本机制" class="headerlink" title="Git保存版本机制"></a>Git保存版本机制</h5><p>Git 把数据看作是小型文件系统的一组快照。每次提交更新时 Git 都会对当前 的全部文件制作一个快照并保存这个快照的索引。<strong>为了高效，如果文件没有修改， Git 不再重新存储该文件，而是只保留一个链接指向之前存储的文件。</strong>所以 Git 的 工作方式可以称之为快照流。</p>
+<p><img src="/2019/12/04/Git/snap.png" alt="snap"></p>
+<h5 id="git-文件管理细节"><a href="#git-文件管理细节" class="headerlink" title="git 文件管理细节"></a>git 文件管理细节</h5><p>commit对象，内部保存了parent指针，指向上一次提交的对象</p>
+<p><img src="/2019/12/04/Git/parent%E6%8C%87%E9%92%88.png" alt="parent指针"></p>
+<h5 id="git分支管理机制（移动指针）"><a href="#git分支管理机制（移动指针）" class="headerlink" title="git分支管理机制（移动指针）"></a>git分支管理机制（移动指针）</h5><ul>
+<li><p>创建分支（新的指针指向当前记录）</p>
+<p><img src="/2019/12/04/Git/create.png" alt="create"></p>
+</li>
+<li><p>切换分支，移动HEAD指针</p>
+<p><img src="/2019/12/04/Git/move.png" alt="move"></p>
+</li>
+<li><p>不同分支生成新的记录，用parent指针连起来</p>
+<p><img src="/2019/12/04/Git/new.png" alt="new"></p>
+</li>
+</ul>
+<h4 id="github"><a href="#github" class="headerlink" title="github"></a>github</h4><p>在github上登陆注册帐号，创建远程仓库</p>
+<h5 id="本地仓库关联远程仓库地址"><a href="#本地仓库关联远程仓库地址" class="headerlink" title="本地仓库关联远程仓库地址"></a>本地仓库关联远程仓库地址</h5><ul>
+<li><p>创建远程库地址别名</p>
+<ul>
+<li>git remote -v 查看当前所有远程地址别名</li>
+<li>git remote add [别名] [远程地址]</li>
+<li>git remote add orign url</li>
+</ul>
+</li>
+<li><p>推送</p>
+<ul>
+<li>git push [别名] [分支名]</li>
+<li>git push origin master <ul>
+<li>第一次push，需要指定push到哪个分支</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>克隆</p>
+<ul>
+<li>git clone [远程地址]</li>
+<li>把完整的远程库下载到本地</li>
+<li>创建origin远程地址别名</li>
+<li>初始化本地库</li>
+</ul>
+</li>
+<li><p>拉取</p>
+<ul>
+<li>pull = fetch + merge</li>
+<li>git fetch[远程库地址别名] [远程分支名]  ： 将远程库下载到本地</li>
+<li>git merge [远程库地址别名/远程分支名]  ： 和本地库合并，可能会产生冲突</li>
+<li>git pull [远程库地址别名] [远程分支名]</li>
+</ul>
+</li>
+<li><p>解决冲突</p>
+<ul>
+<li>如果不是基于Github远程库的最新版本所作的修改，不能推送，必须先拉取</li>
+<li>拉取下来，如果进入冲突状态，按照分支冲突解决解决<ul>
+<li>git push ： 命令行报冲突错误</li>
+<li>git pull，然后手动解决冲突 </li>
+<li>解决完之后，git add ，git commit</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="跨团队协作"><a href="#跨团队协作" class="headerlink" title="跨团队协作"></a>跨团队协作</h5><p><img src="/2019/12/04/Git/%E8%B7%A8%E5%9B%A2%E9%98%9F.png" alt="跨团队"></p>
+<h5 id="github设置SSH"><a href="#github设置SSH" class="headerlink" title="github设置SSH"></a>github设置SSH</h5><ol>
+<li><p>cd ~  ： 进入当前用户目录</p>
+</li>
+<li><p>rm -rvf .ssh ： 删除.ssh目录</p>
+</li>
+<li><p>ssh-keygen -t rsa -C xxx邮箱（注册github的邮箱） ： 生成公私钥对</p>
+</li>
+<li><p>cd .ssh </p>
+<p>ls -lF</p>
+</li>
+<li><p>cat id_rsa.pub  查看公钥内容</p>
+</li>
+<li><p>复制 id_rsa.pub 文件内容，登录 GitHub，点击用户头像→Settings→SSHandGPG keys </p>
+</li>
+<li><p>New SSH Key，输入复制的公钥信息</p>
+</li>
+<li><p>然后git push ，就不用输入密码了</p>
+</li>
+</ol>
+<h5 id="gitconfig"><a href="#gitconfig" class="headerlink" title=".gitconfig"></a>.gitconfig</h5><p>配置忽略文件</p>
+<ul>
+<li><p>创建全局配置文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git config --global core.excludesfile ~/.gitignore_global</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>只针对于单个仓库</p>
+<p>在项目文件夹中新建一个.gitignore文件</p>
+</li>
+<li><p>.gitignore示例</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"># See https://help.github.com/articles/ignoring-files/ for more about ignoring files.</span><br><span class="line"></span><br><span class="line"># dependencies</span><br><span class="line">/node_modules （相对工作目录）</span><br><span class="line">/.pnp</span><br><span class="line">.pnp.js</span><br><span class="line"></span><br><span class="line"># testing</span><br><span class="line">/coverage</span><br><span class="line"></span><br><span class="line"># production</span><br><span class="line">/build</span><br><span class="line"></span><br><span class="line"># misc</span><br><span class="line">.DS_Store</span><br><span class="line">.env.local</span><br><span class="line">.env.development.local</span><br><span class="line">.env.test.local</span><br><span class="line">.env.production.local</span><br><span class="line"></span><br><span class="line">npm-debug.log*</span><br><span class="line">yarn-debug.log*</span><br><span class="line">yarn-error.log*</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Git-Flow"><a href="#Git-Flow" class="headerlink" title="Git Flow"></a>Git Flow</h4><p><img src="/2019/12/04/Git/flow.png" alt="flow"></p>
+<h4 id="vim-命令小结"><a href="#vim-命令小结" class="headerlink" title="vim 命令小结"></a>vim 命令小结</h4><ul>
+<li>i  切换到输入模式</li>
+<li>：切换到底线命令模式</li>
+<li>ESC ，退出时输入模式</li>
+<li>q 退出</li>
+<li>w 写入</li>
+<li>wq 写入退出</li>
+</ul>
+<h4 id="Linux-命令"><a href="#Linux-命令" class="headerlink" title="Linux 命令"></a>Linux 命令</h4><ul>
+<li>cat [filename]  输出文件内容</li>
+<li>mkdir [directory name] 新建目录</li>
+<li>ls  列举当前工作目录文件<ul>
+<li>ls -lA （列出隐藏文件）</li>
+</ul>
+</li>
+<li>pwd 显示当前工作目录（Print Woking Directory）</li>
+<li>cd 切换文件路径</li>
+<li>rm [filename] 删除文件</li>
+</ul>
+<p><strong>参考</strong></p>
+<p>尚硅谷git教程</p>
+<p>git官网</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/git/" rel="tag"># git</a>
+          
+            <a href="/tags/github/" rel="tag"># github</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/03/git%E8%AE%BE%E7%BD%AEssh/" rel="next" title="git设置ssh">
+                <i class="fa fa-chevron-left"></i> git设置ssh
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="lory" />
+            
+              <p class="site-author-name" itemprop="name">lory</p>
+              <p class="site-description motion-element" itemprop="description">(●'◡'●)</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/lory02" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Git"><span class="nav-number">1.</span> <span class="nav-text">Git</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#版本控制工具应该具备的功能"><span class="nav-number">1.1.</span> <span class="nav-text">版本控制工具应该具备的功能</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#版本控制工具-集中式-vs-分布式"><span class="nav-number">1.2.</span> <span class="nav-text">版本控制工具 - 集中式 vs 分布式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Git结构"><span class="nav-number">1.3.</span> <span class="nav-text">Git结构</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#GiT和代码托管中心"><span class="nav-number">1.4.</span> <span class="nav-text">GiT和代码托管中心</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#本地库和远程库"><span class="nav-number">1.5.</span> <span class="nav-text">本地库和远程库</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#⭐Git基本操作"><span class="nav-number">1.6.</span> <span class="nav-text">⭐Git基本操作</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#分支管理"><span class="nav-number">1.7.</span> <span class="nav-text">分支管理</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Git基本原理"><span class="nav-number">2.</span> <span class="nav-text">Git基本原理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#哈希"><span class="nav-number">2.1.</span> <span class="nav-text">哈希</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#哈希校验文件"><span class="nav-number">2.2.</span> <span class="nav-text">哈希校验文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Git保存版本机制"><span class="nav-number">2.3.</span> <span class="nav-text">Git保存版本机制</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#git-文件管理细节"><span class="nav-number">2.4.</span> <span class="nav-text">git 文件管理细节</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#git分支管理机制（移动指针）"><span class="nav-number">2.5.</span> <span class="nav-text">git分支管理机制（移动指针）</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#github"><span class="nav-number">3.</span> <span class="nav-text">github</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#本地仓库关联远程仓库地址"><span class="nav-number">3.1.</span> <span class="nav-text">本地仓库关联远程仓库地址</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#跨团队协作"><span class="nav-number">3.2.</span> <span class="nav-text">跨团队协作</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#github设置SSH"><span class="nav-number">3.3.</span> <span class="nav-text">github设置SSH</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#gitconfig"><span class="nav-number">3.4.</span> <span class="nav-text">.gitconfig</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Git-Flow"><span class="nav-number">4.</span> <span class="nav-text">Git Flow</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vim-命令小结"><span class="nav-number">5.</span> <span class="nav-text">vim 命令小结</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Linux-命令"><span class="nav-number">6.</span> <span class="nav-text">Linux 命令</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lory</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
