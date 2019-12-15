@@ -250,6 +250,272 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.eatcode.com/2019/11/19/html%20(%E4%BA%8C)%20%20%E8%A1%A8%E5%8D%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="lory">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lory's Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/19/html%20(%E4%BA%8C)%20%20%E8%A1%A8%E5%8D%95/" itemprop="url">html（二）表单</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-19T12:39:39+08:00">
+                2019-11-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/html/" itemprop="url" rel="index">
+                    <span itemprop="name">html</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h5 id="1-form"><a href="#1-form" class="headerlink" title="1.form"></a>1.form</h5><p>用于为用户输入创建 HTML 表单，表单用于向服务器传输数据。</p>
+<ul>
+<li><strong>form属性</strong>：（涉及到http协议的内容，后续再细写）<ul>
+<li>action :  action=“URL”, 点击按钮提交表单，向何处提交表单数据。</li>
+<li><a href="http://www.w3school.com.cn/tags/att_form_target.asp" target="_blank" rel="noopener">target</a>:  规定在何处打开 action URL。</li>
+<li>method ：get&amp;post，规定用于发送 form-data 的 HTTP 方法。</li>
+<li>enctype，编码方式。表单数据提交时使用的编码类型，默认使用”pplication/x-www-form-urlencoded”，如果是使用POST请求，则请求头中的content-type指定值就是该值。如果表单中有上传文件，编码类型需要使用”multipart/form-data”，类型，才能完成传递文件数据。<br>（content-type用于填写数据格式，服务器根据该信息可以知道如何对数据进行解码）<ul>
+<li>application/x-www-form-urlencoded<ul>
+<li>数据之间用&amp;相连 key1=val1&amp;key2=val2 </li>
+</ul>
+</li>
+<li>multipart/form-data <ul>
+<li>传输文件</li>
+</ul>
+</li>
+<li>text/plain </li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-input"><a href="#2-input" class="headerlink" title="2.input"></a>2.input</h5><p> 用于搜集用户信息。根据不同的type属性值，输入字段拥有很多形式。</p>
+<ul>
+<li><p><strong>type属性</strong></p>
+<ul>
+<li><p>text ： 当行文本输入</p>
+</li>
+<li><p>password： 密码输入框</p>
+</li>
+<li><p>radio : 单选</p>
+</li>
+<li><p>checkbox ： 复选框</p>
+</li>
+<li><p>button :  普通按钮</p>
+</li>
+<li><p>sumbit : 提交按钮</p>
+</li>
+<li><p>reset ： 重置按钮</p>
+</li>
+<li><p>file ： 文件上传</p>
+<ul>
+<li><p>accept ： 可接受的文件类型</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">      <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">name</span>=<span class="string">""</span> <span class="attr">id</span>=<span class="string">""</span> <span class="attr">accept</span>=<span class="string">"image/*,text/*"</span>&gt;</span></span><br><span class="line">      或</span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">name</span>=<span class="string">""</span> <span class="attr">id</span>=<span class="string">""</span> <span class="attr">accept</span>=<span class="string">"MIME_type"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>multiple ： 选择多文件，布尔值</p>
+</li>
+</ul>
+</li>
+<li><p>image ： 图像按钮</p>
+</li>
+<li><p>hidden ： 隐藏</p>
+<ul>
+<li>存放一些用户不可见、不可改的数据，在用户提交表单时，这些数据会一并发送出 </li>
+</ul>
+</li>
+<li><p>color: 颜色选择器</p>
+</li>
+<li><p>number : 数字字段</p>
+</li>
+<li><p>range ： 输入数值控件</p>
+</li>
+<li><p>month : 年月控件</p>
+</li>
+<li><p>date : 日期控件</p>
+</li>
+</ul>
+</li>
+<li><p><strong>其他属性</strong></p>
+<ul>
+<li>name <ul>
+<li>表单提交时，这个域/字段/框/FormControl的名字 </li>
+<li>在radio和checkbox阵列里，name相同的元素被分在一组里 </li>
+</ul>
+</li>
+<li>value :  input元素的值<ul>
+<li>date-value：”2019-01-10” (数据格式用 “-” 相连)</li>
+</ul>
+</li>
+<li>placeholder</li>
+<li>required ： 必选项</li>
+<li>disabled ： 进用</li>
+</ul>
+</li>
+</ul>
+<h5 id="3-button"><a href="#3-button" class="headerlink" title="3.button"></a>3.button</h5><p>按钮标签</p>
+<ul>
+<li><p>button有三种属性：</p>
+<ul>
+<li>submit（默认值）</li>
+<li>reset重置</li>
+<li>button 常规按钮</li>
+</ul>
+</li>
+<li><p><strong>&lt; button &gt;</strong>与&lt; input type=button&gt;用法类似，但是在 <strong>&lt; button &gt;</strong> 元素内部，可以放置内容，比如文本或图像。<code>&lt;button type=&quot;button&quot;&gt;点我!&lt;/button&gt;</code></p>
+</li>
+</ul>
+<h5 id="4-label"><a href="#4-label" class="headerlink" title="4.label"></a>4.label</h5><p>一般与checkbox及radio一起用，以扩大这两个按钮的可点击区域，提升用户体验。（比较典型的是与input:file一起用）。当用户选择该标签内容时，就会触发相关联的控件。</p>
+<p><strong>使用方式</strong> ： 使用for属性 或者 利用标签嵌套 </p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 使用for，利用id和for来关联input元素和label --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">form</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"radio"</span> <span class="attr">name</span>=<span class="string">"sex"</span> <span class="attr">id</span>=<span class="string">"male"</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">"male"</span>&gt;</span>Male<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 不使用for，而是嵌套的方式 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">form</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">label</span> &gt;</span><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"radio"</span> <span class="attr">name</span>=<span class="string">"sex"</span> &gt;</span>Female<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="5-select"><a href="#5-select" class="headerlink" title="5.select"></a>5.select</h5><p>可创建单选或多选菜单</p>
+<ul>
+<li>select元素的value值 = 选中选项的value值 （如果选项没有value属性，默认value为选项的textContent值）</li>
+<li>option： 用于定义列表选项</li>
+<li>opgroup： 用于选项分组</li>
+<li>opgoup的label属性 ： 选项组描述</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">name</span>=<span class="string">"age"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">""</span> <span class="attr">hidden</span>&gt;</span>请选择<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">optgroup</span> <span class="attr">label</span>=<span class="string">"少年"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">"1-6"</span>&gt;</span>1-6岁<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">"6-12"</span>&gt;</span>6-12岁<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">optgroup</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">optgroup</span> <span class="attr">label</span>=<span class="string">"青年"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">"13-15"</span>&gt;</span>13-15岁<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">"16-18"</span>&gt;</span>16-18岁<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">optgroup</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">optgroup</span> <span class="attr">label</span>=<span class="string">"少年"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">"18-22"</span>&gt;</span>18-22岁<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">"23-30"</span>&gt;</span>23-30岁<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">optgroup</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="6-textarea"><a href="#6-textarea" class="headerlink" title="6.textarea"></a>6.textarea</h5><p>定义多行的文本输入控件。可以通过 cols 和 rows 属性来规定 textarea 的尺寸，不过更好的办法是使用 CSS 的 height 和 width 属性。</p>
+<h5 id="7-filedset"><a href="#7-filedset" class="headerlink" title="7.filedset"></a>7.filedset</h5><p>可将表单内的相关元元素分组</p>
+<ul>
+<li>legend  ： 为filedset第一标题</li>
+<li>disabled ; 可以禁用表单</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">fieldset</span> <span class="attr">disabled</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">legend</span>&gt;</span>健康信息<span class="tag">&lt;/<span class="name">legend</span>&gt;</span></span><br><span class="line">    身高：<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> /&gt;</span></span><br><span class="line">    体重：<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">fieldset</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<hr>
+<p><strong>参考</strong>：</p>
+<p> <a href="https://www.zhangxinxu.com/" target="_blank" rel="noopener">https://www.zhangxinxu.com/</a> </p>
+<p> <a href="https://babopo.github.io/" target="_blank" rel="noopener">https://babopo.github.io/</a> </p>
+<p> <a href="https://www.w3school.com.cn/" target="_blank" rel="noopener">https://www.w3school.com.cn/</a> </p>
+<p> <a href="https://www.runoob.com/" target="_blank" rel="noopener">https://www.runoob.com/</a> </p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://blog.eatcode.com/2019/11/19/html%EF%BC%88%E4%B8%80%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1556,7 +1822,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-count">18</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
